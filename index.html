@@ -1,0 +1,790 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Skill2Hire - Learn with Purpose. Get Hired with Confidence.</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#2563eb',
+                        secondary: '#1e40af',
+                        accent: '#f9a826'
+                    },
+                    fontFamily: {
+                        poppins: ['Poppins', 'sans-serif'],
+                        roboto: ['Roboto', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            scroll-behavior: smooth;
+        }
+        h1, h2, h3, h4, h5 {
+            font-family: 'Poppins', sans-serif;
+        }
+        .hero-bg {
+            background: linear-gradient(120deg, rgba(37, 99, 235, 0.9) 0%, rgba(30, 64, 175, 0.85) 60%), 
+                        url('https://images.unsplash.com/photo-1543269865-cbf427effbad') center/cover;
+        }
+        .about-hero {
+            background: linear-gradient(110deg, rgba(37, 99, 235, 0.85) 0%, rgba(30, 64, 175, 0.8) 60%),
+                        url('https://images.unsplash.com/photo-1552664730-d307ca884978') center/cover;
+        }
+        .gradient-box {
+            background: linear-gradient(135deg, rgba(37, 99, 235, 0.1) 0%, rgba(30, 64, 175, 0.1) 100%);
+            border: 1px solid rgba(37, 99, 235, 0.15);
+        }
+        .training-card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .training-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+        .page-section {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.5s ease, transform 0.5s ease;
+        }
+        .page-section.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .modal {
+            display: none;
+            transition: opacity 0.3s ease;
+        }
+        .modal.active {
+            display: flex;
+            animation: fadeIn 0.3s ease forwards;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        .strength-bar {
+            transition: width 1s ease-in-out;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800">
+    <!-- Navigation Bar -->
+    <nav class="fixed w-full bg-white shadow-md z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <div class="flex items-center">
+                    <div class="flex-shrink-0 flex items-center">
+                        <div class="h-8 w-8 rounded-full bg-blue-600 flex items-center justify-center mr-2">
+                            <i class="fas fa-graduation-cap text-white"></i>
+                        </div>
+                        <span class="text-xl font-bold text-blue-600">Skill2<span class="text-accent">Hire</span></span>
+                    </div>
+                    <div class="hidden md:ml-6 md:flex md:space-x-8">
+                        <a href="#home" class="border-b-2 border-primary text-primary inline-flex items-center px-1 pt-1 text-sm font-medium">Home</a>
+                        <a href="#about" class="border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 inline-flex items-center px-1 pt-1 text-sm font-medium">About</a>
+                        <a href="#training" class="border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 inline-flex items-center px-1 pt-1 text-sm font-medium">Training</a>
+                        <a href="#assessment" class="border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 inline-flex items-center px-1 pt-1 text-sm font-medium">Assessment</a>
+                        <a href="#success" class="border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 inline-flex items-center px-1 pt-1 text-sm font-medium">Success Stories</a>
+                    </div>
+                </div>
+                <div class="flex items-center">
+                    <button class="bg-primary hover:bg-secondary text-white px-4 py-2 rounded-full text-sm font-medium flex items-center transition duration-300">
+                        <i class="fas fa-user-graduate mr-2"></i>Get Started
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="home" class="pt-24 h-screen hero-bg flex items-center page-section">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center">
+            <div class="w-full lg:w-1/2 py-12 md:py-24">
+                <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold text-white leading-tight mb-4">
+                    Lost After Graduation? Unsure Which Career Path Fits YOU Best?
+                </h1>
+                <p class="text-xl text-blue-100 mb-8">
+                    Unlock your potential! Take our Career Mapping Assessment today. We'll pinpoint the ideal field for your strengths and guide you towards lasting success.
+                </p>
+                <div class="flex flex-col sm:flex-row gap-4">
+                    <button class="bg-accent hover:bg-yellow-500 text-white font-bold py-3 px-8 rounded-full shadow-lg transition duration-300 transform hover:-translate-y-1 flex items-center justify-center">
+                        <span>Career Mapping Assessment</span>
+                        <i class="fas fa-arrow-right ml-2"></i>
+                    </button>
+                    <button id="discoverBtn" class="bg-white hover:bg-gray-100 text-primary font-bold py-3 px-8 rounded-full transition duration-300 flex items-center justify-center">
+                        <span>Discover Your Perfect Career Path!</span>
+                    </button>
+                </div>
+            </div>
+            <div class="hidden lg:block lg:w-1/2 flex justify-center">
+                <div class="relative">
+                    <div class="w-96 h-96 bg-white/10 backdrop-blur-sm rounded-full flex items-center justify-center border-4 border-white/20">
+                        <div class="w-80 h-80 bg-gradient-to-br from-white/20 to-white/10 rounded-full flex items-center justify-center">
+                            <i class="fas fa-lightbulb text-white text-7xl opacity-70"></i>
+                        </div>
+                    </div>
+                    <div class="absolute -bottom-10 -right-10 w-64 h-64 bg-secondary rounded-lg shadow-xl flex items-center justify-center animate-pulse-slow">
+                        <i class="fas fa-chart-line text-white text-5xl"></i>
+                    </div>
+                    <div class="absolute -top-10 -left-10 w-56 h-56 bg-primary rounded-full shadow-xl flex items-center justify-center animate-pulse-slow">
+                        <i class="fas fa-atom text-white text-4xl"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Inquiry Form Modal -->
+    <div id="inquiryModal" class="modal fixed z-50 inset-0 overflow-y-auto">
+        <div class="flex items-center justify-center min-h-screen px-4">
+            <div class="fixed inset-0 bg-black opacity-50 transition-opacity"></div>
+            <div class="bg-white rounded-lg shadow-xl max-w-md w-full p-6 z-50">
+                <div class="flex justify-between items-center mb-6">
+                    <h3 class="text-2xl font-bold text-primary">Career Inquiry</h3>
+                    <button id="closeModal" class="text-gray-400 hover:text-gray-500">
+                        <i class="fas fa-times text-xl"></i>
+                    </button>
+                </div>
+                <form class="space-y-4">
+                    <div>
+                        <label class="block text-gray-700 font-medium">Full Name</label>
+                        <input type="text" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary">
+                    </div>
+                    <div>
+                        <label class="block text-gray-700 font-medium">City</label>
+                        <input type="text" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary">
+                    </div>
+                    <div>
+                        <label class="block text-gray-700 font-medium">Highest Education</label>
+                        <select class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary">
+                            <option>High School</option>
+                            <option>Bachelor's Degree</option>
+                            <option>Master's Degree</option>
+                            <option>Diploma/Certification</option>
+                            <option>Other</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-gray-700 font-medium">Work Experience</label>
+                        <select class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary">
+                            <option>No Experience</option>
+                            <option>0-1 year</option>
+                            <option>1-3 years</option>
+                            <option>3-5 years</option>
+                            <option>5+ years</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-gray-700 font-medium">Phone Number</label>
+                        <input type="tel" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary">
+                    </div>
+                    <div>
+                        <label class="block text-gray-700 font-medium">Email Address</label>
+                        <input type="email" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary">
+                    </div>
+                    <div class="pt-4">
+                        <button class="w-full bg-primary hover:bg-secondary text-white font-medium py-3 rounded-md transition duration-300">
+                            Submit Information
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- About Section -->
+    <section id="about" class="py European Style 20 page-section">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+            <div class="about-hero rounded-3xl p-8 md:p-12 text-white">
+                <div class="grid md:grid-cols-2 gap-12">
+                    <div class="flex flex-col justify-center">
+                        <h2 class="text-3xl md:text-4xl font-bold mb-4">Empowering Your Career Journey with Real-World Expertise</h2>
+                        <p class="text-xl mb-6">At Skill2Hire, we're dedicated to transforming job seekers into job-ready professionals through practical, scenario-based training and unparalleled career support.</p>
+                        <div class="flex gap-4">
+                            <a href="#mission" class="bg-accent hover:bg-yellow-500 text-white font-medium py-3 px-6 rounded-full shadow-lg transition duration-300 flex items-center">
+                                <span>Learn More</span>
+                                <i class="fas fa-arrow-right ml-2"></i>
+                            </a>
+                            <a href="#training" class="bg-white/20 hover:bg-white/30 text-white font-medium py-3 px-6 rounded-full border-2 border-white transition duration-300 flex items-center">
+                                <span>Our Programs</span>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="bg-white/20 backdrop-blur rounded-xl p-4 flex flex-col items-center justify-center border border-white/30">
+                            <i class="fas fa-hands-helping text-4xl mb-3"></i>
+                            <h3 class="font-bold text-center">Personal Mentorship</h3>
+                        </div>
+                        <div class="bg-white/20 backdrop-blur rounded-xl p-4 flex flex-col items-center justify-center border border-white/30">
+                            <i class="fas fa-chalkboard-teacher text-4xl mb-3"></i>
+                            <h3 class="font-bold text-center">Practical Training</h3>
+                        </div>
+                        <div class="bg-white/20 backdrop-blur rounded-xl p-4 flex flex-col items-center justify-center border border-white/30">
+                            <i class="fas fa-briefcase text-4xl mb-3"></i>
+                            <h3 class="font-bold text-center">Job Placement</h3>
+                        </div>
+                        <div class="bg-white/20 backdrop-blur rounded-xl p-4 flex flex-col items-center justify-center border border-white/30">
+                            <i class="fas fa-chart-line text-4xl mb-3"></i>
+                            <h3 class="font-bold text-center">Career Growth</h3>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Mission Section -->
+    <section id="mission" class="py-20 bg-white page-section">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 class="text-3xl md:text-4xl font-bold text-center mb-20">Our Practical Training Philosophy at Skill2Hire</h2>
+            
+            <div class="grid md:grid-cols-2 gap-12 items-center mb-16">
+                <div>
+                    <h3 class="text-2xl font-bold text-primary mb-4">Experience Training That Truly Prepares You for the Real World</h3>
+                    <p class="text-lg text-gray-700 mb-4">At Skill2Hire, our mission is to empower your career. We achieve this through a unique, hands-on training philosophy designed to bridge the gap between theoretical knowledge and the practical skills demanded by the finance and accounting industries.</p>
+                </div>
+                <div class="bg-gradient-to-br from-primary/10 to-secondary/10 p-8 rounded-2xl shadow-lg">
+                    <div class="bg-white rounded-xl p-6 h-full">
+                        <h4 class="font-bold text-xl mb-3">Beyond Theory: Learning by Doing</h4>
+                        <h5 class="text-lg text-primary font-semibold mb-2">Immerse Yourself in Practical, Real-World Scenarios</h5>
+                        <p class="text-gray-700">We believe that true mastery comes from experience. Our training programs go far beyond lectures and textbooks. From day one, you'll be actively involved in real-world case studies and practical exercises that mirror workplace challenges.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-12 items-center mb-16">
+                <div class="order-last md:order-first">
+                    <div class="bg-primary/5 p-8 rounded-2xl h-full">
+                        <h4 class="font-bold text-xl mb-3">Mastering Through Case Studies</h4>
+                        <h5 class="text-lg text-primary font-semibold mb-2">Deep Dive into Relevant Industry Challenges</h5>
+                        <ul class="space-y-2 mt-4">
+                            <li class="flex items-start">
+                                <i class="fas fa-check-circle text-green-500 mt-1 mr-2"></i>
+                                <span>Analyze real business problems: Understand context, identify issues, and develop solutions.</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-check-circle text-green-500 mt-1 mr-2"></i>
+                                <span>Apply theoretical knowledge practically.</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-check-circle text-green-500 mt-1 mr-2"></i>
+                                <span>Develop critical thinking and decision-making skills.</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-check-circle text-green-500 mt-1 mr-2"></i>
+                                <span>Collaborate and problem-solve in team environments.</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div>
+                    <h3 class="text-2xl font-bold text-primary mb-4">Hands-On Practice with Industry Tools</h3>
+                    <p class="text-lg text-gray-700 mb-4">Gain Proficiency with Essential Software and Technologies. Our training incorporates extensive hands-on practice with essential software. Navigate SAP, manage accounts with QuickBooks, or prepare taxes with Drake. Gain practical experience and build confidence in using industry-standard applications.</p>
+                </div>
+            </div>
+
+            <div class="w-full bg-gradient-to-r from-primary to-secondary rounded-2xl p-1 mt-20">
+                <div class="bg-white rounded-xl p-8">
+                    <h3 class="text-2xl font-bold text-center mb-4">Ready to Make an Impact</h3>
+                    <p class="text-lg text-gray-700 text-center mb-8">Bridging the Gap to Employment. Our practical approach is specifically designed to make you job-ready:</p>
+                    
+                    <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                        <div class="text-center">
+                            <div class="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center mx-auto mb-4">
+                                <i class="fas fa-wrench text-primary text-2xl"></i>
+                            </div>
+                            <h4 class="font-bold">Practical Skills</h4>
+                            <p class="text-gray-700 text-sm">Directly applicable to real-world tasks</p>
+                        </div>
+                        <div class="text-center">
+                            <div class="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center mx-auto mb-4">
+                                <i class="fas fa-lightbulb text-primary text-2xl"></i>
+                            </div>
+                            <h4 class="font-bold">Problem-Solving</h4>
+                            <p class="text-gray-700 text-sm">Experience in realistic scenarios</p>
+                        </div>
+                        <div class="text-center">
+                            <div class="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center mx-auto mb-4">
+                                <i class="fas fa-user-check text-primary text-2xl"></i>
+                            </div>
+                            <h4 class="font-bold">Built Confidence</h4>
+                            <p class="text-gray-700 text-sm">Handle the demands of finance roles</p>
+                        </div>
+                        <div class="text-center">
+                            <div class="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center mx-auto mb-4">
+                                <i class="fas fa-laptop-code text-primary text-2xl"></i>
+                            </div>
+                            <h4 class="font-bold">Tool Familiarity</h4>
+                            <p class="text-gray-700 text-sm">Industry-standard software expertise</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="flex justify-center gap-4 mt-12">
+                <a href="#training" class="bg-primary hover:bg-secondary text-white font-medium py-3 px-8 rounded-full shadow-lg transition duration-300 flex items-center">
+                    <span>Explore Our Training Programs</span>
+                    <i class="fas fa-arrow-right ml-2"></i>
+                </a>
+                <button class="bg-accent hover:bg-yellow-500 text-black font-medium py-3 px-8 rounded-full border-2 border-accent transition duration-300 flex items-center">
+                    <span>Ready to Get Started?</span>
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Training Section -->
+    <section id="training" class="py-20 bg-gradient-to-br from-gray-50 to-blue-50 page-section">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl font-bold text-primary">Our Training Programs</h2>
+                <p class="text-xl text-gray-600 max-w-3xl mx-auto mt-4">Practical, Job-Oriented Modules Aligned with Industry. Each topic uses Skill2Hire's proven approach: hands-on, scenario-driven, and fully aligned with real business practices.</p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div class="training-card bg-white rounded-xl shadow-md overflow-hidden">
+                    <div class="p-6">
+                        <i class="fas fa-chart-line text-primary text-3xl mb-4"></i>
+                        <h3 class="text-xl font-bold text-gray-900 mb-2">Financial Planning & Analysis (FP&A)</h3>
+                        <p class="text-gray-700">Develop skills in budgeting, forecasting, variance analysis, financial modeling, and preparing insightful management reports with real company data.</p>
+                    </div>
+                </div>
+                
+                <div class="training-card bg-white rounded-xl shadow-md overflow-hidden">
+                    <div class="p-6">
+                        <i class="fas fa-building text-primary text-3xl mb-4"></i>
+                        <h3 class="text-xl font-bold text-gray-900 mb-2">Fund Accounting / Private Equity</h3>
+                        <p class="text-gray-700">Learn end-to-end fund accounting processes for investment firms, including capital calls, distributions, NAV calculations, and investor reporting.</p>
+                    </div>
+                </div>
+                
+                <div class="training-card bg-white rounded-xl shadow-md overflow-hidden">
+                    <div class="p-6">
+                        <i class="fas fa-globe text-primary text-3xl mb-4"></i>
+                        <h3 class="text-xl font-bold text-gray-900 mb-2">IFRS</h3>
+                        <p class="text-gray-700">Apply International Financial Reporting Standards to practical scenarios, analyze financial statements, and bridge IFRS with GAAP through real-world examples.</p>
+                    </div>
+                </div>
+                
+                <div class="training-card bg-white rounded-xl shadow-md overflow-hidden">
+                    <div class="p-6">
+                        <i class="fas fa-shield-alt text-primary text-3xl mb-4"></i>
+                        <h3 class="text-xl font-bold text-gray-900 mb-2">KYC and AML</h3>
+                        <p class="text-gray-700">Work through customer onboarding, due diligence, and fraud detection procedures using up-to-date compliance case studies.</p>
+                    </div>
+                </div>
+                
+                <div class="training-card bg-white rounded-xl shadow-md overflow-hidden">
+                    <div class="p-6">
+                        <i class="fas fa-exchange-alt text-primary text-3xl mb-4"></i>
+                        <h3 class="text-xl font-bold text-gray-900 mb-2">Order to Cash (O2C)</h3>
+                        <p class="text-gray-700">Simulate the full O2C lifecycle: order management, billing, collections, cash application, and dispute handling as seen in global organizations.</p>
+                    </div>
+                </div>
+                
+                <div class="training-card bg-white rounded-xl shadow-md overflow-hidden">
+                    <div class="p-6">
+                        <i class="fas fa-receipt text-primary text-3xl mb-4"></i>
+                        <h3 class="text-xl font-bold text-gray-900 mb-2">Procure to Pay (P2P)</h3>
+                        <p class="text-gray-700">Process end-to-end procurement scenarios, from purchase requisition to invoice processing and vendor payments, reinforcing compliance and controls.</p>
+                    </div>
+                </div>
+                
+                <div class="training-card bg-white rounded-xl shadow-md overflow-hidden">
+                    <div class="p-6">
+                        <i class="fas fa-book text-primary text-3xl mb-4"></i>
+                        <h3 class="text-xl font-bold text-gray-900 mb-2">Record to Report (R2R)</h3>
+                        <p class="text-gray-700">Experience the complete financial close process, balance sheet reconciliation, journal entries, and management reporting.</p>
+                    </div>
+                </div>
+                
+                <div class="training-card bg-white rounded-xl shadow-md overflow-hidden">
+                    <div class="p-6">
+                        <i class="fas fa-pound-sign text-primary text-3xl mb-4"></i>
+                        <h3 class="text-xl font-bold text-gray-900 mb-2">UK GAAP</h3>
+                        <p class="text-gray-700">Tackle UK GAAP requirements by preparing and analyzing reports, supported by real business situations and compliance exercises.</p>
+                    </div>
+                </div>
+                
+                <div class="training-card bg-white rounded-xl shadow-md overflow-hidden">
+                    <div class="p-6">
+                        <i class="fas fa-dollar-sign text-primary text-3xl mb-4"></i>
+                        <h3 class="text-xl font-bold text-gray-900 mb-2">US GAAP</h3>
+                        <p class="text-gray-700">Practice interpreting and applying US Generally Accepted Accounting Principles on real-life company scenarios.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="text-center mt-16">
+                <a href="#assessment" class="bg-primary hover:bg-secondary text-white font-medium py-3 px-8 rounded-full shadow-lg transition duration-300 flex items-center justify-center w-fit mx-auto">
+                    <span>Start Career Mapping Assessment</span>
+                    <i class="fas fa-chart-pie ml-2"></i>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Assessment Section -->
+    <section id="assessment" class="py-20 bg-gradient-to-b from-white to-blue-50 page-section">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid md:grid-cols-2 gap-12 items-center">
+                <div>
+                    <h2 class="text-3xl md:text-4xl font-bold text-primary mb-4">Discover Your Future:<br>Scientific Career Assessment</h2>
+                    <div class="w-20 h-1 bg-accent mb-6"></div>
+                    <p class="text-lg text-gray-700 mb-6">Unlike generic quizzes, our science-based assessment helps you objectively identify your natural strengths and align them to fields where you'll thrive.</p>
+                    
+                    <div class="space-y-6 mb-8">
+                        <div class="flex items-start">
+                            <div class="flex-shrink-0 mt-1">
+                                <div class="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary">
+                                    <i class="fas fa-atom"></i>
+                                </div>
+                            </div>
+                            <div class="ml-4">
+                                <h3 class="font-bold text-lg mb-2">Science-Based, Not Just a Quiz</h3>
+                                <p>Developed with HR experts and educators, our assessment covers 10 professionally validated attributes proven to predict career satisfaction and success.</p>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-start">
+                            <div class="flex-shrink-0 mt-1">
+                                <div class="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary">
+                                    <i class="fas fa-analytics"></i>
+                                </div>
+                            </div>
+                            <div class="ml-4">
+                                <h3 class="font-bold text-lg mb-2">Beyond Basic Career Tests</h3>
+                                <p>We use scenario analytics and benchmarking for insights beyond simple personality labels, delivering real career alignment recommendations.</p>
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-start">
+                            <div class="flex-shrink-0 mt-1">
+                                <div class="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary">
+                                    <i class="fas fa-brain"></i>
+                                </div>
+                            </div>
+                            <div class="ml-4">
+                                <h3 class="font-bold text-lg mb-2">Multi-Dimensional Insights</h3>
+                                <p>We analyze 10 core attributes to map your strengths and development areas across critical skill domains.</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <button class="bg-primary hover:bg-secondary text-white font-bold py-3 px-8 rounded-full shadow-lg transition">
+                        Take Assessment Now
+                    </button>
+                </div>
+                <div>
+                    <div class="bg-white rounded-2xl shadow-xl p-6">
+                        <h3 class="text-xl font-bold mb-6 text-center">10 Key Career Attributes We Assess</h3>
+                        <div class="space-y-5">
+                            <div>
+                                <div class="flex justify-between mb-1">
+                                    <span class="text-gray-700">Accounting Knowledge</span>
+                                    <span>84%</span>
+                                </div>
+                                <div class="h-3 rounded-full bg-gray-200">
+                                    <div class="h-full rounded-full bg-accent strength-bar" style="width:84%"></div>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="flex justify-between mb-1">
+                                    <span class="text-gray-700">Analytical Thinking</span>
+                                    <span>76%</span>
+                                </div>
+                                <div class="h-3 rounded-full bg-gray-200">
+                                    <div class="h-full rounded-full bg-accent strength-bar" style="width:76%"></div>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="flex justify-between mb-1">
+                                    <span class="text-gray-700">Attention to Detail</span>
+                                    <span>92%</span>
+                                </div>
+                                <div class="h-3 rounded-full bg-gray-200">
+                                    <div class="h-full rounded-full bg-accent strength-bar" style="width:92%"></div>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="flex justify-between mb-1">
+                                    <span class="text-gray-700">Business Acumen</span>
+                                    <span>68%</span>
+                                </div>
+                                <div class="h-3 rounded-full bg-gray-200">
+                                    <div class="h-full rounded-full bg-accent strength-bar" style="width:68%"></div>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="flex justify-between mb-1">
+                                    <span class="text-gray-700">Communication Skills</span>
+                                    <span>79%</span>
+                                </div>
+                                <div class="h-3 rounded-full bg-gray-200">
+                                    <div class="h-full rounded-full bg-accent strength-bar" style="width:79%"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="text-center mt-10">
+                            <p class="bg-gray-100 p-4 rounded-lg mb-4">"The assessment helped me understand my strongest skills and provided a clear map to the accounting specializations that fit me best." <br><span class="font-bold">- Priya, CPA Trainee</span></p>
+                            <button class="bg-accent hover:bg-yellow-500 text-black font-bold py-3 px-12 rounded-full transition">
+                                See Your Career Fit
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Success Stories Section -->
+    <section id="success" class="py-20 bg-white page-section">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl md:text-4xl font-bold">More Student Success Stories</h2>
+                <div class="w-20 h-1 bg-accent mx-auto mt-4"></div>
+                <p class="text-xl text-gray-600 max-w-3xl mx-auto mt-6">Winning Internships and Placements with Skill2Hire's Approach</p>
+            </div>
+            
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 mb-16">
+                <div class="p-8 bg-gradient-to-br from-blue-50 to-white rounded-3xl">
+                    <div class="flex items-center mb-4">
+                        <div class="w-16 h-16 rounded-full bg-primary flex items-center justify-center text-white text-xl font-bold">
+                            AS
+                        </div>
+                        <div class="ml-4">
+                            <h4 class="font-bold text-lg">Anjali S.</h4>
+                            <p class="text-accent">2024 Graduate</p>
+                        </div>
+                    </div>
+                    <p class="text-gray-700 italic mb-4">"Honestly, I was all over the place after graduating. After a couple of weeks of practical sessions, I felt like I was doing proper office work, not just learning."</p>
+                    <p>"I joined an accounting firm with Skill2Hire's referral. My first week there: I already knew the software and how to handle the work. My supervisor was surprised that I was a fresher!"</p>
+                </div>
+                
+                <div class="p-8 bg-gradient-to-br from-blue-50 to-white rounded-3xl">
+                    <div class="flex items-center mb-4">
+                        <div class="w-16 h-16 rounded-full bg-primary flex items-center justify-center text-white text-xl font-bold">
+                            NY
+                        </div>
+                        <div class="ml-4">
+                            <h4 class="font-bold text-lg">Naveen Y.</h4>
+                            <p class="text-accent">Accounting Graduate</p>
+                        </div>
+                    </div>
+                    <p class="text-gray-700 italic mb-4">"I applied to so many internships before, never got calls. After Skill2Hire, things flipped. I finally had something concrete to talk about in interviews."</p>
+                    <p>"The recruiter said, 'You sound like you've been in the field before!' Thanks to Skill2Hire's reference, I landed an audit internship. Now, I'm part of client meetings - not making coffee!"</p>
+                </div>
+                
+                <div class="p-8 bg-gradient-to-br from-blue-50 to-white rounded-3xl">
+                    <div class="flex items-center mb-4">
+                        <div class="w-16 h-16 rounded-full bg-primary flex items-center justify-center text-white text-xl font-bold">
+                            TP
+                        </div>
+                        <div class="ml-4">
+                            <h4 class="font-bold text-lg">Tanya P.</h4>
+                            <p class="text-accent">B.Com Graduate</p>
+                        </div>
+                    </div>
+                    <p class="text-gray-700 italic mb-4">"Before Skill2Hire, I didn't know which finance area was right for me. Their trainers helped me discover my path through interactive sessions."</p>
+                    <p>"The career mapping and resume help led to an interview at a finance company. I cracked it! Walking in, the environment was intense, but all my Skill2Hire practice came in handy."</p>
+                </div>
+                
+                <div class="p-8 bg-gradient-to-br from-blue-50 to-white rounded-3xl">
+                    <div class="flex items-center mb-4">
+                        <div class="w-16 h-16 rounded-full bg-primary flex items-center justify-center text-white text-xl font-bold">
+                            KS
+                        </div>
+                        <div class="ml-4">
+                            <h4 class="font-bold text-lg">Kriti S.</h4>
+                            <p class="text-accent">2023 Batch</p>
+                        </div>
+                    </div>
+                    <p class="text-gray-700 italic mb-4">"I was super nervous for my internship interview, but Skill2Hire prepped us with mock interviews and actual test cases."</p>
+                    <p>"When I joined as an intern, I knew how to handle most tools and could actually help others on my team. Made me forget I was a fresher! My mentor said it's rare to see someone jump in so quickly."</p>
+                </div>
+            </div>
+            
+            <div class="text-center py-10">
+                <h3 class="text-3xl font-bold text-gray-900 mb-4">Your Story Could Be Next</h3>
+                <p class="text-xl text-gray-600 mb-8 max-w-2xl mx-auto">Join Skill2Hire to gain practical skills, unlock new career opportunities, and stand out in today's competitive job market!</p>
+                <button id="startNowBtn" class="bg-primary hover:bg-secondary text-white font-bold py-3 px-12 rounded-full shadow-xl transition transform hover:-translate-y-1">
+                    Start Your Journey Today
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white pt-16 pb-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-12">
+                <div>
+                    <div class="flex items-center mb-6">
+                        <div class="h-10 w-10 rounded-full bg-blue-600 flex items-center justify-center mr-2">
+                            <i class="fas fa-graduation-cap text-white"></i>
+                        </div>
+                        <span class="text-2xl font-bold text-white">Skill2<span class="text-accent">Hire</span></span>
+                    </div>
+                    <p class="text-gray-400 mb-6">Learn with Purpose. Get Hired with Confidence.</p>
+                    <div class="flex space-x-4">
+                        <a href="#" class="text-gray-400 hover:text-white">
+                            <i class="fab fa-facebook-f"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-white">
+                            <i class="fab fa-twitter"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-white">
+                            <i class="fab fa-linkedin-in"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-white">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                    </div>
+                </div>
+                
+                <div>
+                    <h3 class="text-lg font-bold mb-6">Quick Links</h3>
+                    <ul class="space-y-3">
+                        <li><a href="#home" class="text-gray-400 hover:text-white transition">Home</a></li>
+                        <li><a href="#about" class="text-gray-400 hover:text-white transition">About Us</a></li>
+                        <li><a href="#training" class="text-gray-400 hover:text-white transition">Training Programs</a></li>
+                        <li><a href="#assessment" class="text-gray-400 hover:text-white transition">Career Assessment</a></li>
+                        <li><a href="#success" class="text-gray-400 hover:text-white transition">Success Stories</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h3 class="text-lg font-bold mb-6">Training Topics</h3>
+                    <ul class="space-y-3">
+                        <li><a href="#" class="text-gray-400 hover:text-white transition">Financial Planning & Analysis</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition">Private Equity Accounting</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition">IFRS & US GAAP</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition">Tax Preparation</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition">SAP & QuickBooks</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h3 class="text-lg font-bold mb-6">Contact Us</h3>
+                    <ul class="space-y-4">
+                        <li class="flex items-start">
+                            <i class="fas fa-map-marker-alt mt-1 mr-3 text-accent"></i>
+                            <span class="text-gray-400">Career Building Center, Financial Plaza, Mumbai 400001</span>
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fas fa-phone-alt mr-3 text-accent"></i>
+                            <span class="text-gray-400">+91 98765 43210</span>
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fas fa-envelope mr-3 text-accent"></i>
+                            <span class="text-gray-400">info@skill2hire.co.in</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="border-t border-gray-800 mt-12 pt-8 flex flex-col md:flex-row justify-between items-center">
+                <p class="text-gray-500 mb-4 md:mb-0">&copy; 2023 Skill2Hire. All rights reserved.</p>
+                <div>
+                    <a href="#" class="text-gray-500 hover:text-gray-400 mx-4">Privacy Policy</a>
+                    <a href="#" class="text-gray-500 hover:text-gray-400 mx-4">Terms of Service</a>
+                    <a href="#" class="text-gray-500 hover:text-gray-400 ml-4">FAQ</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Modal functionality
+        const discoverBtn = document.getElementById('discoverBtn');
+        const inquiryModal = document.getElementById('inquiryModal');
+        const closeModal = document.getElementById('closeModal');
+        const startNowBtn = document.getElementById('startNowBtn');
+
+        discoverBtn.addEventListener('click', () => {
+            inquiryModal.classList.add('active');
+        });
+        
+        startNowBtn.addEventListener('click', () => {
+            inquiryModal.classList.add('active');
+        });
+
+        closeModal.addEventListener('click', () => {
+            inquiryModal.classList.remove('active');
+        });
+
+        // Close modal on outside click
+        window.addEventListener('click', (e) => {
+            if (e.target === inquiryModal) {
+                inquiryModal.classList.remove('active');
+            }
+        });
+
+        // Page section animation on scroll
+        const pageSections = document.querySelectorAll('.page-section');
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                }
+            });
+        }, {
+            threshold: 0.15
+        });
+
+        pageSections.forEach(section => {
+            observer.observe(section);
+        });
+
+        // Animate strength bars on scroll
+        const strengthBars = document.querySelectorAll('.strength-bar');
+        const barObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    strengthBars.forEach(bar => {
+                        const width = bar.style.width;
+                        bar.style.width = '0';
+                        setTimeout(() => {
+                            bar.style.transition = "width 1.5s ease-out";
+                            bar.style.width = width;
+                        }, 300);
+                    });
+                }
+            });
+        }, { threshold: 0.1 });
+
+        strengthBars.forEach(bar => {
+            barObserver.observe(bar.parentElement.parentElement);
+        });
+
+        // Smooth scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                
+                const targetId = this.getAttribute('href').substring(1);
+                const targetElement = document.getElementById(targetId);
+                
+                if (targetElement) {
+                    window.scrollTo({
+                        top: targetElement.offsetTop - 80,
+                        behavior: 'smooth'
+                    });
+                    
+                    // Update active page if needed based on your page navigation
+                }
+            });
+        });
+    </script>
+</body>
+</html>
