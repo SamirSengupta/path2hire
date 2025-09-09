@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>index • Path2Hire</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: { primary: '#2563eb', secondary: '#1e40af', accent: '#f9a826' },
+          fontFamily: { poppins: ['Poppins','sans-serif'], roboto: ['Roboto','sans-serif'] }
+        }
+      }
+    }
+  </script>
+  <link rel="stylesheet" href="assets/css/custom.css" />
+</head>
+<body class="bg-gray-50 text-gray-800">
+
+    <nav id="navbar" class="fixed w-full bg-white shadow-md z-50 hover-card">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex justify-between h-16 items-center">
+          <a href="index.html" class="flex items-center">
+            <div class="h-8 w-8 rounded-full bg-blue-600 flex items-center justify-center mr-2 icon-hover">
+              <i class="fas fa-graduation-cap text-white"></i>
+            </div>
+            <span class="text-xl font-bold text-blue-600">Path2<span class="text-accent">Hire</span></span>
+          </a>
+          <div class="hidden md:flex md:space-x-8">
+            <a href="index.html" class="nav-link border-b-2 border-accent text-primary px-1 pt-1 text-sm font-medium">Home</a>
+<a href="about.html" class="nav-link border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 px-1 pt-1 text-sm font-medium">About</a>
+<a href="/training/index.html" class="nav-link border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 px-1 pt-1 text-sm font-medium">Training</a>
+<a href="/assessment" class="nav-link border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 px-1 pt-1 text-sm font-medium">Assessment</a>
+<a href="success.html" class="nav-link border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 px-1 pt-1 text-sm font-medium">Success</a>
+<a href="/jobs" class="nav-link border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 px-1 pt-1 text-sm font-medium">Jobs</a>
+<a href="contact.html" class="nav-link border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 px-1 pt-1 text-sm font-medium">Contact</a>
+
+          </div>
+          <div class="md:hidden">
+            <button id="menuBtn" class="focus:outline-none"><i class="fas fa-bars text-2xl text-primary"></i></button>
+          </div>
+          <div class="hidden md:block">
+            <a href="/login" class="btn-primary bg-primary hover:bg-secondary text-white px-4 py-2 rounded-full text-sm font-medium flex items-center">
+              <i class="fas fa-user-graduate mr-2"></i>Student Portal
+            </a>
+          </div>
+        </div>
+      </div>
+      <div id="mobileMenu" class="hidden md:hidden bg-white shadow-lg">
+        <div class="space-y-1 px-4 pb-3 pt-2">
+          <a href="index.html" class="nav-link border-b-2 border-accent text-primary px-1 pt-1 text-sm font-medium">Home</a>
+<a href="about.html" class="nav-link border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 px-1 pt-1 text-sm font-medium">About</a>
+<a href="/training/index.html" class="nav-link border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 px-1 pt-1 text-sm font-medium">Training</a>
+<a href="/assessment" class="nav-link border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 px-1 pt-1 text-sm font-medium">Assessment</a>
+<a href="success.html" class="nav-link border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 px-1 pt-1 text-sm font-medium">Success</a>
+<a href="/jobs" class="nav-link border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 px-1 pt-1 text-sm font-medium">Jobs</a>
+<a href="contact.html" class="nav-link border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 px-1 pt-1 text-sm font-medium">Contact</a>
+
+          <a href="/login" class="block w-full text-left nav-link px-1 pt-1 text-sm font-medium text-primary">Student Portal</a>
+        </div>
+      </div>
+    </nav>
+    
+<section class="pt-24 h-[88vh] hero-bg flex items-center">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center">
+    <div class="w-full lg:w-1/2 py-12 md:py-24">
+      <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold text-white leading-tight mb-4">
+        Lost After Graduation? Unsure Which Career Path Fits <span class="gradient-text font-extrabold">YOU</span> Best?
+      </h1>
+      <p class="text-xl text-blue-100 mb-8">
+        Unlock your potential! Take our Career Mapping Assessment today. We'll pinpoint the ideal field for your strengths and guide you towards lasting success.
+      </p>
+      <div class="flex flex-col sm:flex-row gap-4">
+        <a href="/assessment" class="btn-primary bg-accent hover:bg-yellow-500 text-white font-bold py-3 px-8 rounded-full shadow-lg flex items-center">
+          <span>Take Career Assessment</span><i class="fas fa-arrow-right ml-2"></i>
+        </a>
+        <button data-open-modal="inquiry" class="btn-primary bg-white hover:bg-gray-100 text-primary font-bold py-3 px-8 rounded-full">Schedule Career Consultation</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div id="inquiryModal" class="modal fixed z-50 inset-0">
+  <div class="flex items-center justify-center min-h-screen px-4">
+    <div class="fixed inset-0 bg-black opacity-50"></div>
+    <div class="bg-white rounded-lg shadow-xl max-w-md w-full p-6 z-50 hover-card">
+      <div class="flex justify-between items-center mb-4">
+        <h3 class="text-2xl font-bold text-primary">Career Consultation Request</h3>
+        <button data-close-modal="inquiry" class="text-gray-400 hover:text-gray-500 icon-hover"><i class="fas fa-times text-xl"></i></button>
+      </div>
+      <form class="space-y-4">
+        <div><label class="block text-gray-700 font-medium">Full Name</label><input type="text" class="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-primary hover:border-primary"></div>
+        <div><label class="block text-gray-700 font-medium">City</label><input type="text" class="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-primary hover:border-primary"></div>
+        <div><label class="block text-gray-700 font-medium">Highest Education</label>
+          <select class="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-primary hover:border-primary">
+            <option>High School</option><option>Bachelor's Degree</option><option>Master's Degree</option><option>Diploma/Certification</option><option>Other</option>
+          </select>
+        </div>
+        <div><label class="block text-gray-700 font-medium">Work Experience</label>
+          <select class="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-primary hover:border-primary">
+            <option>No Experience</option><option>0-1 year</option><option>1-3 years</option><option>3-5 years</option><option>5+ years</option>
+          </select>
+        </div>
+        <div><label class="block text-gray-700 font-medium">Phone Number</label><input type="tel" class="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-primary hover:border-primary"></div>
+        <div><label class="block text-gray-700 font-medium">Email Address</label><input type="email" class="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-primary hover:border-primary"></div>
+        <button class="btn-primary w-full bg-primary hover:bg-secondary text-white font-medium py-3 rounded-md">Submit Consultation Request</button>
+      </form>
+    </div>
+  </div>
+</div>
+
+<section class="py-16 bg-gradient-to-br from-gray-50 to-blue-50">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="text-center mb-12">
+      <h2 class="text-3xl md:text-4xl font-bold text-primary">Our Training Programs</h2>
+      <p class="text-lg text-gray-600 mt-3">Practical, job-oriented modules aligned with real business practices.</p>
+    </div>
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <a href="programs/fpna.html" class="training-card bg-white rounded-xl shadow-md p-6 block">
+        <i class="fas fa-chart-line text-primary text-3xl mb-2"></i>
+        <h3 class="font-bold mb-1">Financial Planning & Analysis</h3>
+        <p class="text-sm text-gray-600">Budgeting, forecasting, variance analysis, real data.</p>
+      </a>
+      <a href="programs/fund-accounting-pe.html" class="training-card bg-white rounded-xl shadow-md p-6 block">
+        <i class="fas fa-building text-primary text-3xl mb-2"></i>
+        <h3 class="font-bold mb-1">Fund Accounting / PE</h3>
+        <p class="text-sm text-gray-600">Capital calls, NAV, investor reporting.</p>
+      </a>
+      <a href="programs/ifrs.html" class="training-card bg-white rounded-xl shadow-md p-6 block">
+        <i class="fas fa-globe text-primary text-3xl mb-2"></i>
+        <h3 class="font-bold mb-1">IFRS</h3>
+        <p class="text-sm text-gray-600">Real-world IFRS application & GAAP bridge.</p>
+      </a>
+      <a href="programs/kyc-aml.html" class="training-card bg-white rounded-xl shadow-md p-6 block">
+        <i class="fas fa-shield-alt text-primary text-3xl mb-2"></i>
+        <h3 class="font-bold mb-1">KYC & AML</h3>
+        <p class="text-sm text-gray-600">Onboarding, due-diligence & fraud detection.</p>
+      </a>
+      <a href="programs/us-individual-tax.html" class="training-card bg-white rounded-xl shadow-md p-6 block">
+        <i class="fas fa-file-invoice-dollar text-primary text-3xl mb-2"></i>
+        <h3 class="font-bold mb-1">US Individual Tax</h3>
+        <p class="text-sm text-gray-600">1040 returns & deductions.</p>
+      </a>
+      <a href="/training/index.html" class="training-card bg-white rounded-xl shadow-md p-6 block">
+        <i class="fas fa-layer-group text-primary text-3xl mb-2"></i>
+        <h3 class="font-bold mb-1">See All Programs</h3>
+        <p class="text-sm text-gray-600">Explore 14+ topics and specializations.</p>
+      </a>
+    </div>
+  </div>
+</section>
+
+<section class="py-16 bg-white">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="text-center mb-10">
+      <h2 class="text-3xl md:text-4xl font-bold text-primary">Student Success Stories</h2>
+      <p class="text-lg text-gray-600 mt-3">Real graduates. Real results. Real career transformations.</p>
+    </div>
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+      <div class="hover-card p-8 rounded-2xl shadow-lg border border-blue-100 bg-white">
+        <div class="flex items-center mb-4">
+          <div class="w-12 h-12 bg-accent rounded-full flex items-center justify-center mr-4 pulse-glow">
+            <i class="fas fa-user-graduate text-white"></i>
+          </div>
+          <div>
+            <h4 class="font-bold text-lg text-primary">Anjali S.</h4>
+            <p class="text-sm text-gray-600">2024 Graduate → Financial Analyst at Tech Startup</p>
+          </div>
+        </div>
+        <p class="text-gray-700 italic">"The assessment pinpointed my analytical strengths, and the FP&A training was game-changing. Within 3 months, I landed a role at a fast-growing startup."</p>
+      </div>
+      <div class="hover-card p-8 rounded-2xl shadow-lg border border-blue-100 bg-white">
+        <div class="flex items-center mb-4">
+          <div class="w-12 h-12 bg-primary rounded-full flex items-center justify-center mr-4 pulse-glow">
+            <i class="fas fa-briefcase text-white"></i>
+          </div>
+          <div>
+            <h4 class="font-bold text-lg text-primary">Naveen Y.</h4>
+            <p class="text-sm text-gray-600">Accounting Graduate → Senior Associate at Big 4</p>
+          </div>
+        </div>
+        <p class="text-gray-700 italic">"The real-world scenarios in IFRS training made all the difference. During my interview they said, 'You sound like you've been in the field before!' "</p>
+      </div>
+    </div>
+    <div class="text-center mt-10">
+      <a href="success.html" class="btn-primary bg-primary hover:bg-secondary text-white font-bold py-3 px-8 rounded-full inline-flex items-center">
+        <i class="fas fa-rocket mr-2"></i>See More Stories
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+
+    <footer class="bg-gray-900 text-white pt-16 pb-12 mt-24">
+      <div class="max-w-7xl mx-auto px-4">
+        <div class="border-t border-gray-800 mt-12 pt-8 flex flex-col md:flex-row justify-between items-center">
+          <p class="text-gray-500 mb-4 md:mb-0">&copy; 2024 Path2Hire. All rights reserved.</p>
+        </div>
+      </div>
+    </footer>
+    <script src="assets/js/main.js"></script>
+    <script src="/assets/js/active-nav.js"></script>
+</body>
+    </html>
+    

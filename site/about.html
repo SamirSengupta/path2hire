@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>about • Path2Hire</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: { primary: '#2563eb', secondary: '#1e40af', accent: '#f9a826' },
+          fontFamily: { poppins: ['Poppins','sans-serif'], roboto: ['Roboto','sans-serif'] }
+        }
+      }
+    }
+  </script>
+  <link rel="stylesheet" href="assets/css/custom.css" />
+</head>
+<body class="bg-gray-50 text-gray-800">
+
+    <nav id="navbar" class="fixed w-full bg-white shadow-md z-50 hover-card">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex justify-between h-16 items-center">
+          <a href="index.html" class="flex items-center">
+            <div class="h-8 w-8 rounded-full bg-blue-600 flex items-center justify-center mr-2 icon-hover">
+              <i class="fas fa-graduation-cap text-white"></i>
+            </div>
+            <span class="text-xl font-bold text-blue-600">Path2<span class="text-accent">Hire</span></span>
+          </a>
+          <div class="hidden md:flex md:space-x-8">
+            <a href="index.html" class="nav-link border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 px-1 pt-1 text-sm font-medium">Home</a>
+<a href="about.html" class="nav-link border-b-2 border-accent text-primary px-1 pt-1 text-sm font-medium">About</a>
+<a href="/training/index.html" class="nav-link border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 px-1 pt-1 text-sm font-medium">Training</a>
+<a href="/assessment" class="nav-link border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 px-1 pt-1 text-sm font-medium">Assessment</a>
+<a href="success.html" class="nav-link border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 px-1 pt-1 text-sm font-medium">Success</a>
+<a href="contact.html" class="nav-link border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 px-1 pt-1 text-sm font-medium">Contact</a>
+
+          </div>
+          <div class="md:hidden">
+            <button id="menuBtn" class="focus:outline-none"><i class="fas fa-bars text-2xl text-primary"></i></button>
+          </div>
+          <div class="hidden md:block">
+            <a href="/login" class="btn-primary bg-primary hover:bg-secondary text-white px-4 py-2 rounded-full text-sm font-medium flex items-center">
+              <i class="fas fa-user-graduate mr-2"></i>Student Portal
+            </a>
+          </div>
+        </div>
+      </div>
+      <div id="mobileMenu" class="hidden md:hidden bg-white shadow-lg">
+        <div class="space-y-1 px-4 pb-3 pt-2">
+          <a href="index.html" class="nav-link border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 px-1 pt-1 text-sm font-medium">Home</a>
+<a href="about.html" class="nav-link border-b-2 border-accent text-primary px-1 pt-1 text-sm font-medium">About</a>
+<a href="/training/index.html" class="nav-link border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 px-1 pt-1 text-sm font-medium">Training</a>
+<a href="/assessment" class="nav-link border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 px-1 pt-1 text-sm font-medium">Assessment</a>
+<a href="success.html" class="nav-link border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 px-1 pt-1 text-sm font-medium">Success</a>
+<a href="contact.html" class="nav-link border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 px-1 pt-1 text-sm font-medium">Contact</a>
+
+          <a href="/login" class="block w-full text-left nav-link px-1 pt-1 text-sm font-medium text-primary">Student Portal</a>
+        </div>
+      </div>
+    </nav>
+    
+
+
+<section class="pt-24">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="about-hero rounded-3xl p-8 md:p-12 text-white hover-card mt-6">
+      <div class="grid md:grid-cols-2 gap-12">
+        <div class="flex flex-col justify-center">
+          <h1 class="text-4xl font-bold mb-4">Empowering Your Career Journey with Real-World Expertise</h1>
+          <p class="text-lg mb-6">We're dedicated to transforming job seekers into job‑ready professionals through practical, scenario‑based training and unparalleled career support.</p>
+          <div class="flex gap-4">
+            <a href="/assessment" class="btn-primary bg-accent hover:bg-yellow-500 text-white font-medium py-3 px-6 rounded-full shadow-lg inline-flex items-center">
+              <span>Explore Our Assessment</span><i class="fas fa-arrow-right ml-2"></i>
+            </a>
+            <a href="/training/index.html" class="btn-primary bg-white/20 hover:bg-white/30 text-white font-medium py-3 px-6 rounded-full border-2 border-white inline-flex items-center">View Training Programs</a>
+          </div>
+        </div>
+        <div class="grid grid-cols-2 gap-4">
+          <div class="bg-white/20 backdrop-blur rounded-xl p-4 flex flex-col items-center justify-center border border-white/30 hover-card">
+            <i class="fas fa-hands-helping text-4xl mb-3 icon-hover"></i><h3 class="font-bold text-center">Personal Mentorship</h3>
+          </div>
+          <div class="bg-white/20 backdrop-blur rounded-xl p-4 flex flex-col items-center justify-center border border-white/30 hover-card">
+            <i class="fas fa-chalkboard-teacher text-4xl mb-3 icon-hover"></i><h3 class="font-bold text-center">Practical Training</h3>
+          </div>
+          <div class="bg-white/20 backdrop-blur rounded-xl p-4 flex flex-col items-center justify-center border border-white/30 hover-card">
+            <i class="fas fa-briefcase text-4xl mb-3 icon-hover"></i><h3 class="font-bold text-center">Job Placement</h3>
+          </div>
+          <div class="bg-white/20 backdrop-blur rounded-xl p-4 flex flex-col items-center justify-center border border-white/30 hover-card">
+            <i class="fas fa-chart-line text-4xl mb-3 icon-hover"></i><h3 class="font-bold text-center">Career Growth</h3>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="py-20">
+  <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+    <h2 class="text-3xl font-bold text-primary text-center">Our Mission</h2>
+    <p class="mt-4 text-gray-700 text-lg text-center">To remove guesswork from early careers by combining rigorous skill assessment, industry‑grade training, and hands‑on project experience.</p>
+    <div class="grid md:grid-cols-3 gap-6 mt-10">
+      <div class="gradient-box p-6 rounded-xl">
+        <h3 class="font-semibold mb-2"><i class="fas fa-compass mr-2 text-primary"></i>Clarity</h3>
+        <p class="text-gray-600 text-sm">Identify strengths and align them to roles where you thrive.</p>
+      </div>
+      <div class="gradient-box p-6 rounded-xl">
+        <h3 class="font-semibold mb-2"><i class="fas fa-bolt mr-2 text-primary"></i>Momentum</h3>
+        <p class="text-gray-600 text-sm">Build real, demonstrable experience that impresses recruiters.</p>
+      </div>
+      <div class="gradient-box p-6 rounded-xl">
+        <h3 class="font-semibold mb-2"><i class="fas fa-user-shield mr-2 text-primary"></i>Confidence</h3>
+        <p class="text-gray-600 text-sm">Enter interviews with practical knowledge and project stories.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+
+<!-- FOOTER -->
+
+    <footer class="bg-gray-900 text-white pt-16 pb-12 mt-24">
+      <div class="max-w-7xl mx-auto px-4">
+        <div class="border-t border-gray-800 mt-12 pt-8 flex flex-col md:flex-row justify-between items-center">
+          <p class="text-gray-500 mb-4 md:mb-0">&copy; 2024 Path2Hire. All rights reserved.</p>
+        </div>
+      </div>
+    </footer>
+    <script src="assets/js/main.js"></script>
+    <script src="/assets/js/active-nav.js"></script>
+</body>
+    </html>
+    

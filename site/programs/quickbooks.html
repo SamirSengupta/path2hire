@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>quickbooks.html • Path2Hire</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: { primary: '#2563eb', secondary: '#1e40af', accent: '#f9a826' },
+          fontFamily: { poppins: ['Poppins','sans-serif'], roboto: ['Roboto','sans-serif'] }
+        }
+      }
+    }
+  </script>
+  <link rel="stylesheet" href="../assets/css/custom.css" />
+</head>
+<body class="bg-gray-50 text-gray-800">
+
+    <nav id="navbar" class="fixed w-full bg-white shadow-md z-50 hover-card">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex justify-between h-16 items-center">
+          <a href="../index.html" class="flex items-center">
+            <div class="h-8 w-8 rounded-full bg-blue-600 flex items-center justify-center mr-2 icon-hover">
+              <i class="fas fa-graduation-cap text-white"></i>
+            </div>
+            <span class="text-xl font-bold text-blue-600">Path2<span class="text-accent">Hire</span></span>
+          </a>
+          <div class="hidden md:flex md:space-x-8">
+            <a href="../index.html" class="nav-link border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 px-1 pt-1 text-sm font-medium">Home</a>
+<a href="../about.html" class="nav-link border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 px-1 pt-1 text-sm font-medium">About</a>
+<a href="../training/index.html" class="nav-link border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 px-1 pt-1 text-sm font-medium">Training</a>
+<a href="../assessment.html" class="nav-link border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 px-1 pt-1 text-sm font-medium">Assessment</a>
+<a href="../success.html" class="nav-link border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 px-1 pt-1 text-sm font-medium">Success</a>
+<a href="../contact.html" class="nav-link border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 px-1 pt-1 text-sm font-medium">Contact</a>
+
+          </div>
+          <div class="md:hidden">
+            <button id="menuBtn" class="focus:outline-none"><i class="fas fa-bars text-2xl text-primary"></i></button>
+          </div>
+          <div class="hidden md:block">
+            <a href="../login.html" class="btn-primary bg-primary hover:bg-secondary text-white px-4 py-2 rounded-full text-sm font-medium flex items-center">
+              <i class="fas fa-user-graduate mr-2"></i>Student Portal
+            </a>
+          </div>
+        </div>
+      </div>
+      <div id="mobileMenu" class="hidden md:hidden bg-white shadow-lg">
+        <div class="space-y-1 px-4 pb-3 pt-2">
+          <a href="../index.html" class="nav-link border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 px-1 pt-1 text-sm font-medium">Home</a>
+<a href="../about.html" class="nav-link border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 px-1 pt-1 text-sm font-medium">About</a>
+<a href="../training/index.html" class="nav-link border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 px-1 pt-1 text-sm font-medium">Training</a>
+<a href="../assessment.html" class="nav-link border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 px-1 pt-1 text-sm font-medium">Assessment</a>
+<a href="../success.html" class="nav-link border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 px-1 pt-1 text-sm font-medium">Success</a>
+<a href="../contact.html" class="nav-link border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 px-1 pt-1 text-sm font-medium">Contact</a>
+
+          <a href="../login.html" class="block w-full text-left nav-link px-1 pt-1 text-sm font-medium text-primary">Student Portal</a>
+        </div>
+      </div>
+    </nav>
+    
+
+
+<section class="pt-24 pb-12 bg-white">
+  <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="rounded-2xl p-8 md:p-10 bg-gradient-to-br from-blue-600 to-indigo-700 text-white hover-card">
+      <div class="flex items-start sm:items-center gap-4">
+        <div class="w-16 h-16 bg-white/20 rounded-xl flex items-center justify-center"><i class="fas fa-calculator text-2xl"></i></div>
+        <div>
+          <h1 class="text-3xl md:text-4xl font-bold">QuickBooks</h1>
+          <p class="mt-2 text-blue-100">Job‑ready, scenario‑based training to help you stand out in interviews and on the job.</p>
+        </div>
+      </div>
+      <div class="mt-6 flex gap-3">
+        <a href="/contact.html" class="btn-primary bg-accent hover:bg-yellow-500 text-white font-semibold py-2.5 px-6 rounded-full inline-flex items-center"><i class="fas fa-calendar-alt mr-2"></i>Schedule a Call</a>
+        <a href="/assessment" class="btn-primary bg-white/20 hover:bg-white/30 border border-white text-white py-2.5 px-6 rounded-full inline-flex items-center"><i class="fas fa-list-check mr-2"></i>Take Assessment</a>
+      </div>
+    </div>
+
+    <div class="grid md:grid-cols-2 gap-8 mt-10">
+      <div class="gradient-box p-6 rounded-xl">
+        <h2 class="text-xl font-semibold mb-3"><i class="fas fa-book-open mr-2 text-primary"></i>What You'll Learn</h2>
+        <ul class="space-y-2 text-gray-700 text-sm">
+          <li>• Company setup & chart of accounts</li>
+<li>• Bank feeds & reconciliations</li>
+<li>• Reports & closing</li>
+        </ul>
+      </div>
+      <div class="gradient-box p-6 rounded-xl">
+        <h2 class="text-xl font-semibold mb-3"><i class="fas fa-laptop-code mr-2 text-primary"></i>Hands‑on Projects</h2>
+        <ul class="space-y-2 text-gray-700 text-sm">
+          <li>• QB sample company build</li>
+<li>• Month‑end checklist</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="grid md:grid-cols-3 gap-6 mt-8">
+      <div class="bg-white p-6 rounded-xl shadow hover-card">
+        <h3 class="font-semibold mb-2"><i class="fas fa-users mr-2 text-primary"></i>Who It's For</h3>
+        <p class="text-gray-600 text-sm">Final‑year students, fresh graduates, and career‑switchers targeting QuickBooks roles.</p>
+      </div>
+      <div class="bg-white p-6 rounded-xl shadow hover-card">
+        <h3 class="font-semibold mb-2"><i class="fas fa-clock mr-2 text-primary"></i>Duration & Format</h3>
+        <p class="text-gray-600 text-sm">4–6 weeks • Live workshops + self‑paced labs • Mentor feedback.</p>
+      </div>
+      <div class="bg-white p-6 rounded-xl shadow hover-card">
+        <h3 class="font-semibold mb-2"><i class="fas fa-briefcase mr-2 text-primary"></i>Outcomes</h3>
+        <p class="text-gray-600 text-sm">Portfolio‑ready artifacts, interview stories, and role‑specific confidence.</p>
+      </div>
+    </div>
+
+    <div class="text-center mt-10">
+      <a href="/contact.html" class="btn-primary bg-primary hover:bg-secondary text-white font-bold py-3 px-10 rounded-full inline-flex items-center">
+        <i class="fas fa-paper-plane mr-2"></i> Enroll / Ask a Question
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+
+<!-- FOOTER -->
+
+    <footer class="bg-gray-900 text-white pt-16 pb-12 mt-24">
+      <div class="max-w-7xl mx-auto px-4">
+        <div class="border-t border-gray-800 mt-12 pt-8 flex flex-col md:flex-row justify-between items-center">
+          <p class="text-gray-500 mb-4 md:mb-0">&copy; 2024 Path2Hire. All rights reserved.</p>
+        </div>
+      </div>
+    </footer>
+    <script src="../assets/js/main.js"></script>
+    <script src="/assets/js/active-nav.js"></script>
+</body>
+    </html>
+    

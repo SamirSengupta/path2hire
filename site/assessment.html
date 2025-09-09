@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>assessment • Path2Hire</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: { primary: '#2563eb', secondary: '#1e40af', accent: '#f9a826' },
+          fontFamily: { poppins: ['Poppins','sans-serif'], roboto: ['Roboto','sans-serif'] }
+        }
+      }
+    }
+  </script>
+  <link rel="stylesheet" href="assets/css/custom.css" />
+</head>
+<body class="bg-gray-50 text-gray-800">
+
+    <nav id="navbar" class="fixed w-full bg-white shadow-md z-50 hover-card">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex justify-between h-16 items-center">
+          <a href="index.html" class="flex items-center">
+            <div class="h-8 w-8 rounded-full bg-blue-600 flex items-center justify-center mr-2 icon-hover">
+              <i class="fas fa-graduation-cap text-white"></i>
+            </div>
+            <span class="text-xl font-bold text-blue-600">Path2<span class="text-accent">Hire</span></span>
+          </a>
+          <div class="hidden md:flex md:space-x-8">
+            <a href="index.html" class="nav-link border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 px-1 pt-1 text-sm font-medium">Home</a>
+<a href="about.html" class="nav-link border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 px-1 pt-1 text-sm font-medium">About</a>
+<a href="/training/index.html" class="nav-link border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 px-1 pt-1 text-sm font-medium">Training</a>
+<a href="/assessment" class="nav-link border-b-2 border-accent text-primary px-1 pt-1 text-sm font-medium">Assessment</a>
+<a href="success.html" class="nav-link border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 px-1 pt-1 text-sm font-medium">Success</a>
+<a href="contact.html" class="nav-link border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 px-1 pt-1 text-sm font-medium">Contact</a>
+
+          </div>
+          <div class="md:hidden">
+            <button id="menuBtn" class="focus:outline-none"><i class="fas fa-bars text-2xl text-primary"></i></button>
+          </div>
+          <div class="hidden md:block">
+            <a href="/login" class="btn-primary bg-primary hover:bg-secondary text-white px-4 py-2 rounded-full text-sm font-medium flex items-center">
+              <i class="fas fa-user-graduate mr-2"></i>Student Portal
+            </a>
+          </div>
+        </div>
+      </div>
+      <div id="mobileMenu" class="hidden md:hidden bg-white shadow-lg">
+        <div class="space-y-1 px-4 pb-3 pt-2">
+          <a href="index.html" class="nav-link border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 px-1 pt-1 text-sm font-medium">Home</a>
+<a href="about.html" class="nav-link border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 px-1 pt-1 text-sm font-medium">About</a>
+<a href="/training/index.html" class="nav-link border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 px-1 pt-1 text-sm font-medium">Training</a>
+<a href="/assessment" class="nav-link border-b-2 border-accent text-primary px-1 pt-1 text-sm font-medium">Assessment</a>
+<a href="success.html" class="nav-link border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 px-1 pt-1 text-sm font-medium">Success</a>
+<a href="contact.html" class="nav-link border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 px-1 pt-1 text-sm font-medium">Contact</a>
+
+          <a href="/login" class="block w-full text-left nav-link px-1 pt-1 text-sm font-medium text-primary">Student Portal</a>
+        </div>
+      </div>
+    </nav>
+    
+
+
+<section class="pt-24 py-16 bg-white">
+  <div class="max-w-7xl mx-auto px-4">
+    <div class="grid md:grid-cols-2 gap-12 items-center">
+      <div>
+        <h1 class="text-3xl md:text-4xl font-bold text-primary mb-6">Discover Your Future:<br><span class="gradient-text">Scientific Career Assessment</span></h1>
+        <p class="text-lg text-gray-700 mb-6">Objectively identify your natural strengths and align them to the fields where you'll thrive.</p>
+        <div class="space-y-4 mb-8">
+          <div class="gradient-box p-4 rounded-lg border-l-4 border-primary">
+            <div class="flex items-center mb-1">
+              <i class="fas fa-bullseye text-primary mr-3"></i>
+              <h4 class="font-semibold text-gray-800">Precision Career Matching</h4>
+            </div>
+            <p class="text-sm text-gray-600">Our algorithm matches your unique strengths to 47+ career paths, eliminating guesswork.</p>
+          </div>
+          <div class="gradient-box p-4 rounded-lg border-l-4 border-accent">
+            <div class="flex items-center mb-1">
+              <i class="fas fa-rocket text-accent mr-3"></i>
+              <h4 class="font-semibold text-gray-800">Faster Job Placement</h4>
+            </div>
+            <p class="text-sm text-gray-600">Students who complete our assessment land jobs significantly faster with targeted roles.</p>
+          </div>
+        </div>
+        <div class="flex flex-col sm:flex-row gap-4">
+          <a href="/contact.html" class="btn-primary bg-primary hover:bg-secondary text-white font-bold py-3 px-8 rounded-full inline-flex items-center">
+            <i class="fas fa-play mr-2"></i>Begin Assessment
+          </a>
+          <a href="/about.html" class="btn-primary bg-gray-100 hover:bg-gray-200 text-primary font-medium py-3 px-8 rounded-full border-2 border-primary inline-flex items-center">
+            <i class="fas fa-info-circle mr-2"></i>How It Works
+          </a>
+        </div>
+      </div>
+
+      <!-- Attributes Card -->
+      <div class="bg-white rounded-2xl shadow-xl p-6 hover-card">
+        <div class="text-center mb-6">
+          <div class="w-16 h-16 bg-gradient-to-br from-primary to-secondary rounded-full flex items-center justify-center mx-auto mb-4">
+            <i class="fas fa-chart-pie text-white text-2xl"></i>
+          </div>
+          <h3 class="text-xl font-bold text-primary">10 Key Career Attributes We Assess</h3>
+          <p class="text-sm text-gray-600 mt-2">Comprehensive analysis of your professional potential</p>
+        </div>
+        <div class="space-y-4" id="strengthBars">
+          <div>
+            <div class="flex justify-between text-sm mb-1">
+              <span class="font-medium">Accounting Knowledge</span><span class="text-accent font-bold">84%</span>
+            </div>
+            <div class="h-3 rounded-full bg-gray-200 overflow-hidden">
+              <div class="strength-bar h-full rounded-full bg-gradient-to-r from-yellow-500 to-yellow-400" data-width="84"></div>
+            </div>
+          </div>
+          <div>
+            <div class="flex justify-between text-sm mb-1">
+              <span class="font-medium">Analytical & Critical Thinking</span><span class="text-primary font-bold">76%</span>
+            </div>
+            <div class="h-3 rounded-full bg-gray-200 overflow-hidden">
+              <div class="strength-bar h-full rounded-full bg-gradient-to-r from-blue-600 to-blue-400" data-width="76"></div>
+            </div>
+          </div>
+          <div>
+            <div class="flex justify-between text-sm mb-1">
+              <span class="font-medium">Attention to Detail</span><span class="text-green-500 font-bold">92%</span>
+            </div>
+            <div class="h-3 rounded-full bg-gray-200 overflow-hidden">
+              <div class="strength-bar h-full rounded-full bg-gradient-to-r from-green-500 to-green-400" data-width="92"></div>
+            </div>
+          </div>
+          <div>
+            <div class="flex justify-between text-sm mb-1">
+              <span class="font-medium">Tech & Tool Familiarity</span><span class="text-cyan-500 font-bold">81%</span>
+            </div>
+            <div class="h-3 rounded-full bg-gray-200 overflow-hidden">
+              <div class="strength-bar h-full rounded-full bg-gradient-to-r from-cyan-500 to-cyan-400" data-width="81"></div>
+            </div>
+          </div>
+          <div>
+            <div class="flex justify-between text-sm mb-1">
+              <span class="font-medium">Communication Skills</span><span class="text-purple-500 font-bold">79%</span>
+            </div>
+            <div class="h-3 rounded-full bg-gray-200 overflow-hidden">
+              <div class="strength-bar h-full rounded-full bg-gradient-to-r from-purple-500 to-purple-400" data-width="79"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+
+<!-- FOOTER -->
+
+    <footer class="bg-gray-900 text-white pt-16 pb-12 mt-24">
+      <div class="max-w-7xl mx-auto px-4">
+        <div class="border-t border-gray-800 mt-12 pt-8 flex flex-col md:flex-row justify-between items-center">
+          <p class="text-gray-500 mb-4 md:mb-0">&copy; 2024 Path2Hire. All rights reserved.</p>
+        </div>
+      </div>
+    </footer>
+    <script src="assets/js/main.js"></script>
+    <script src="/assets/js/active-nav.js"></script>
+</body>
+    </html>
+    

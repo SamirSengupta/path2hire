@@ -1,0 +1,105 @@
+
+/* ---------- Shared Styles (extracted from your one-page) ---------- */
+:root{ --p:#2563eb; --s:#1e40af; --a:#f9a826; }
+*{box-sizing:border-box}
+body{ font-family:'Roboto',sans-serif; scroll-behavior:smooth; }
+h1,h2,h3,h4,h5{ font-family:'Poppins',sans-serif; }
+
+.hero-bg{
+  background:linear-gradient(120deg, rgba(37,99,235,.9) 0%, rgba(30,64,175,.85) 60%),
+             url('https://images.unsplash.com/photo-1543269865-cbf427effbad') center/cover;
+}
+.about-hero{
+  background:linear-gradient(110deg, rgba(37,99,235,.85) 0%, rgba(30,64,175,.8) 60%),
+             url('https://images.unsplash.com/photo-1552664730-d307ca884978') center/cover;
+}
+
+.gradient-box{
+  background:linear-gradient(135deg, rgba(37,99,235,.08) 0%, rgba(30,64,175,.08) 100%);
+  border:1px solid rgba(37,99,235,.15);
+}
+
+.btn-primary{
+  transition:all .3s cubic-bezier(.4,0,.2,1);
+  position:relative; overflow:hidden;
+}
+.btn-primary:hover{
+  transform:translateY(-3px) scale(1.02);
+  box-shadow:0 15px 35px rgba(37,99,235,.35);
+}
+.btn-primary::before{
+  content:''; position:absolute; top:0; left:-100%;
+  width:100%; height:100%;
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,.35),transparent);
+  transition:left .6s ease;
+}
+.btn-primary:hover::before{ left:100%; }
+
+.hover-card{ transition:all .35s cubic-bezier(.4,0,.2,1); }
+.hover-card:hover{
+  transform:translateY(-6px) scale(1.02);
+  box-shadow:0 18px 38px rgba(0,0,0,.12);
+}
+
+.icon-hover{ transition:all .35s cubic-bezier(.4,0,.2,1); }
+.icon-hover:hover{ transform:scale(1.12) rotate(8deg); color:var(--a)!important; }
+
+.nav-link{ transition:all .25s ease; position:relative; }
+.nav-link:hover{ transform:translateY(-2px); }
+.nav-link::after{
+  content:''; position:absolute; width:0; height:2px; bottom:-2px; left:50%;
+  background:linear-gradient(90deg, transparent, var(--a), transparent);
+  transition:all .25s ease; transform:translateX(-50%);
+}
+.nav-link:hover::after{ width:100%; }
+
+#navbar{
+  backdrop-filter: blur(10px);
+  background:rgba(255,255,255,.95);
+  transition:all .3s ease;
+}
+#navbar.scrolled{
+  background:rgba(255,255,255,.98);
+  box-shadow:0 10px 30px rgba(0,0,0,.10);
+}
+
+/* decorative helpers */
+.gradient-text{
+  background: linear-gradient(-45deg, #2563eb, #f9a826, #1e40af, #fbbf24);
+  background-size:400% 400%;
+  -webkit-background-clip:text; background-clip:text;
+  -webkit-text-fill-color:transparent;
+  animation:gradientShift 3s ease infinite;
+  display:inline-block;
+}
+@keyframes gradientShift{ 0%{background-position:0% 50%} 50%{background-position:100% 50%} 100%{background-position:0% 50%} }
+
+.pulse-glow{ animation:pulse-glow 4s ease-in-out infinite; }
+@keyframes pulse-glow{
+  0%,100%{ box-shadow:0 0 30px rgba(37,99,235,.28); transform:scale(1); }
+  50%{ box-shadow:0 0 50px rgba(37,99,235,.55); transform:scale(1.03); }
+}
+
+/* cards & training grid */
+.training-card{ transition:all .35s cubic-bezier(.4,0,.2,1); border:2px solid transparent; transform:translateZ(0); }
+.training-card:hover{
+  transform:translateY(-10px) scale(1.02);
+  box-shadow:0 30px 60px -12px rgba(37,99,235,.25);
+  border-color:rgba(37,99,235,.25);
+}
+.training-card:hover i{ transform:scale(1.1) rotate(6deg); color:var(--a); }
+
+/* strength bars used on assessment page */
+.strength-bar{ width:0; transition:width 2s cubic-bezier(.4,0,.2,1); position:relative; overflow:hidden; }
+.strength-bar.animate{ width:var(--target-width); }
+.strength-bar::after{
+  content:''; position:absolute; top:0; left:-100%; width:100%; height:100%;
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,.6),transparent);
+  animation:shimmer 2s ease-in-out;
+}
+@keyframes shimmer{ 0%{left:-100%} 50%,100%{left:100%} }
+
+/* modal */
+.modal{ display:none; transition:all .25s ease; }
+.modal.active{ display:flex; animation:fadeIn .25s ease forwards; }
+@keyframes fadeIn{ from{opacity:0; transform:scale(.98)} to{opacity:1; transform:scale(1)} }

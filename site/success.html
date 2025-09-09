@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>success • Path2Hire</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: { primary: '#2563eb', secondary: '#1e40af', accent: '#f9a826' },
+          fontFamily: { poppins: ['Poppins','sans-serif'], roboto: ['Roboto','sans-serif'] }
+        }
+      }
+    }
+  </script>
+  <link rel="stylesheet" href="assets/css/custom.css" />
+  <style>
+    .stars {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      pointer-events: none;
+    }
+    
+    .star {
+      position: absolute;
+      background: #f9a826;
+      border-radius: 50%;
+      animation: twinkle 2s infinite;
+    }
+    
+    @keyframes twinkle {
+      0%, 100% { opacity: 0.3; transform: scale(1); }
+      50% { opacity: 1; transform: scale(1.2); }
+    }
+    
+    .success-card {
+      position: relative;
+      overflow: hidden;
+      transition: all 0.3s ease;
+    }
+    
+    .success-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 20px 40px rgba(37, 99, 235, 0.15);
+    }
+    
+    .gradient-bg {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    }
+    
+    .card-glow {
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .card-glow::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: linear-gradient(45deg, transparent, rgba(255,255,255,0.1), transparent);
+      transform: rotate(45deg);
+      transition: all 0.6s ease;
+      opacity: 0;
+    }
+    
+    .card-glow:hover::before {
+      animation: shine 0.6s ease-in-out;
+    }
+    
+    @keyframes shine {
+      0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); opacity: 0; }
+      50% { opacity: 1; }
+      100% { transform: translateX(100%) translateY(100%) rotate(45deg); opacity: 0; }
+    }
+  </style>
+</head>
+<body class="bg-gray-50 text-gray-800">
+
+    <nav id="navbar" class="fixed w-full bg-white shadow-md z-50 hover-card">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex justify-between h-16 items-center">
+          <a href="index.html" class="flex items-center">
+            <div class="h-8 w-8 rounded-full bg-blue-600 flex items-center justify-center mr-2 icon-hover">
+              <i class="fas fa-graduation-cap text-white"></i>
+            </div>
+            <span class="text-xl font-bold text-blue-600">Path2<span class="text-accent">Hire</span></span>
+          </a>
+          <div class="hidden md:flex md:space-x-8">
+            <a href="index.html" class="nav-link border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 px-1 pt-1 text-sm font-medium">Home</a>
+<a href="about.html" class="nav-link border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 px-1 pt-1 text-sm font-medium">About</a>
+<a href="/training/index.html" class="nav-link border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 px-1 pt-1 text-sm font-medium">Training</a>
+<a href="/assessment" class="nav-link border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 px-1 pt-1 text-sm font-medium">Assessment</a>
+<a href="success.html" class="nav-link border-b-2 border-accent text-primary px-1 pt-1 text-sm font-medium">Success</a>
+<a href="contact.html" class="nav-link border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 px-1 pt-1 text-sm font-medium">Contact</a>
+
+          </div>
+          <div class="md:hidden">
+            <button id="menuBtn" class="focus:outline-none"><i class="fas fa-bars text-2xl text-primary"></i></button>
+          </div>
+          <div class="hidden md:block">
+            <a href="/login" class="btn-primary bg-primary hover:bg-secondary text-white px-4 py-2 rounded-full text-sm font-medium flex items-center">
+              <i class="fas fa-user-graduate mr-2"></i>Student Portal
+            </a>
+          </div>
+        </div>
+      </div>
+      <div id="mobileMenu" class="hidden md:hidden bg-white shadow-lg">
+        <div class="space-y-1 px-4 pb-3 pt-2">
+          <a href="index.html" class="nav-link border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 px-1 pt-1 text-sm font-medium">Home</a>
+<a href="about.html" class="nav-link border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 px-1 pt-1 text-sm font-medium">About</a>
+<a href="/training/index.html" class="nav-link border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 px-1 pt-1 text-sm font-medium">Training</a>
+<a href="/assessment" class="nav-link border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 px-1 pt-1 text-sm font-medium">Assessment</a>
+<a href="success.html" class="nav-link border-b-2 border-accent text-primary px-1 pt-1 text-sm font-medium">Success</a>
+<a href="contact.html" class="nav-link border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 px-1 pt-1 text-sm font-medium">Contact</a>
+
+          <a href="/login" class="block w-full text-left nav-link px-1 pt-1 text-sm font-medium text-primary">Student Portal</a>
+        </div>
+      </div>
+    </nav>
+    
+
+<section class="pt-24 py-16 bg-gradient-to-br from-blue-50 to-white relative">
+  <div class="stars">
+    <div class="star" style="top: 10%; left: 20%; width: 3px; height: 3px; animation-delay: 0s;"></div>
+    <div class="star" style="top: 20%; left: 80%; width: 2px; height: 2px; animation-delay: 0.5s;"></div>
+    <div class="star" style="top: 60%; left: 10%; width: 4px; height: 4px; animation-delay: 1s;"></div>
+    <div class="star" style="top: 80%; left: 70%; width: 3px; height: 3px; animation-delay: 1.5s;"></div>
+    <div class="star" style="top: 30%; left: 50%; width: 2px; height: 2px; animation-delay: 2s;"></div>
+    <div class="star" style="top: 70%; left: 30%; width: 3px; height: 3px; animation-delay: 0.8s;"></div>
+    <div class="star" style="top: 15%; left: 60%; width: 2px; height: 2px; animation-delay: 1.2s;"></div>
+    <div class="star" style="top: 90%; left: 90%; width: 4px; height: 4px; animation-delay: 1.8s;"></div>
+  </div>
+  
+  <div class="max-w-7xl mx-auto px-4 relative z-10">
+    <div class="text-center mb-16">
+      <h1 class="text-4xl md:text-5xl font-bold text-primary mb-4">Student Success Stories</h1>
+      <p class="text-xl text-gray-600 max-w-3xl mx-auto">Real graduates, real results, real career transformations. Discover how Skill2Hire helped students land their dream internships and build successful careers.</p>
+    </div>
+
+    <!-- Internship Success Stories -->
+    <div class="mb-16">
+      <h2 class="text-3xl font-bold text-center text-primary mb-12">Winning Internships with Skill2Hire</h2>
+      
+      <!-- First Row -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
+        <div class="success-card card-glow bg-white rounded-2xl p-8 shadow-lg border border-blue-100">
+          <div class="flex items-center mb-6">
+            <div class="w-14 h-14 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center mr-4">
+              <i class="fas fa-star text-white text-xl"></i>
+            </div>
+            <div>
+              <h3 class="font-bold text-lg text-primary">Anjali S.</h3>
+              <p class="text-sm text-gray-600">2024 Graduate</p>
+            </div>
+          </div>
+          <p class="text-gray-700 leading-relaxed">"Overcame fresher challenges with Skill2Hire's practical training and resume help, leading to a successful accounting internship where I excelled from day one."</p>
+          <div class="mt-4 flex">
+            <i class="fas fa-star text-accent"></i>
+            <i class="fas fa-star text-accent"></i>
+            <i class="fas fa-star text-accent"></i>
+            <i class="fas fa-star text-accent"></i>
+            <i class="fas fa-star text-accent"></i>
+          </div>
+        </div>
+
+        <div class="success-card card-glow bg-white rounded-2xl p-8 shadow-lg border border-blue-100">
+          <div class="flex items-center mb-6">
+            <div class="w-14 h-14 bg-gradient-to-r from-green-500 to-teal-600 rounded-full flex items-center justify-center mr-4">
+              <i class="fas fa-briefcase text-white text-xl"></i>
+            </div>
+            <div>
+              <h3 class="font-bold text-lg text-primary">Naveen Y.</h3>
+              <p class="text-sm text-gray-600">Recent Accounting Grad</p>
+            </div>
+          </div>
+          <p class="text-gray-700 leading-relaxed">"Transformed internship applications after Skill2Hire, gaining practical project experience that impressed recruiters and secured an audit internship."</p>
+          <div class="mt-4 flex">
+            <i class="fas fa-star text-accent"></i>
+            <i class="fas fa-star text-accent"></i>
+            <i class="fas fa-star text-accent"></i>
+            <i class="fas fa-star text-accent"></i>
+            <i class="fas fa-star text-accent"></i>
+          </div>
+        </div>
+
+        <div class="success-card card-glow bg-white rounded-2xl p-8 shadow-lg border border-blue-100">
+          <div class="flex items-center mb-6">
+            <div class="w-14 h-14 bg-gradient-to-r from-pink-500 to-rose-600 rounded-full flex items-center justify-center mr-4">
+              <i class="fas fa-chart-line text-white text-xl"></i>
+            </div>
+            <div>
+              <h3 class="font-bold text-lg text-primary">Tanya P.</h3>
+              <p class="text-sm text-gray-600">B.Com Graduate</p>
+            </div>
+          </div>
+          <p class="text-gray-700 leading-relaxed">"Found her finance niche through Skill2Hire's interactive sessions and career mapping, leading to an internship that is now converting to a full-time job."</p>
+          <div class="mt-4 flex">
+            <i class="fas fa-star text-accent"></i>
+            <i class="fas fa-star text-accent"></i>
+            <i class="fas fa-star text-accent"></i>
+            <i class="fas fa-star text-accent"></i>
+            <i class="fas fa-star text-accent"></i>
+          </div>
+        </div>
+      </div>
+
+      <!-- Second Row -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
+        <div class="success-card card-glow bg-white rounded-2xl p-8 shadow-lg border border-blue-100">
+          <div class="flex items-center mb-6">
+            <div class="w-14 h-14 bg-gradient-to-r from-indigo-500 to-blue-600 rounded-full flex items-center justify-center mr-4">
+              <i class="fas fa-user-graduate text-white text-xl"></i>
+            </div>
+            <div>
+              <h3 class="font-bold text-lg text-primary">Kriti S.</h3>
+              <p class="text-sm text-gray-600">2023 Batch</p>
+            </div>
+          </div>
+          <p class="text-gray-700 leading-relaxed">"Gained confidence and practical skills from Skill2Hire's mock interviews and test cases, allowing her to quickly adapt and excel in her internship."</p>
+          <div class="mt-4 flex">
+            <i class="fas fa-star text-accent"></i>
+            <i class="fas fa-star text-accent"></i>
+            <i class="fas fa-star text-accent"></i>
+            <i class="fas fa-star text-accent"></i>
+            <i class="fas fa-star text-accent"></i>
+          </div>
+        </div>
+
+        <div class="success-card card-glow bg-white rounded-2xl p-8 shadow-lg border border-blue-100">
+          <div class="flex items-center mb-6">
+            <div class="w-14 h-14 bg-gradient-to-r from-orange-500 to-red-600 rounded-full flex items-center justify-center mr-4">
+              <i class="fas fa-trophy text-white text-xl"></i>
+            </div>
+            <div>
+              <h3 class="font-bold text-lg text-primary">Shivam R.</h3>
+              <p class="text-sm text-gray-600">Commerce Graduate</p>
+            </div>
+          </div>
+          <p class="text-gray-700 leading-relaxed">"Stood out in interviews and secured a pre-placement offer thanks to Skill2Hire's resume workshop and scenario-based training."</p>
+          <div class="mt-4 flex">
+            <i class="fas fa-star text-accent"></i>
+            <i class="fas fa-star text-accent"></i>
+            <i class="fas fa-star text-accent"></i>
+            <i class="fas fa-star text-accent"></i>
+            <i class="fas fa-star text-accent"></i>
+          </div>
+        </div>
+
+        <div class="success-card card-glow bg-white rounded-2xl p-8 shadow-lg border border-blue-100">
+          <div class="flex items-center mb-6">
+            <div class="w-14 h-14 bg-gradient-to-r from-purple-500 to-indigo-600 rounded-full flex items-center justify-center mr-4">
+              <i class="fas fa-rocket text-white text-xl"></i>
+            </div>
+            <div>
+              <h3 class="font-bold text-lg text-primary">Priya B.</h3>
+              <p class="text-sm text-gray-600">Class of '24</p>
+            </div>
+          </div>
+          <p class="text-gray-700 leading-relaxed">"Skill2Hire's hands-on training and recommendations led to a comfortable and successful internship at a reputable accounting firm, building a solid career foundation."</p>
+          <div class="mt-4 flex">
+            <i class="fas fa-star text-accent"></i>
+            <i class="fas fa-star text-accent"></i>
+            <i class="fas fa-star text-accent"></i>
+            <i class="fas fa-star text-accent"></i>
+            <i class="fas fa-star text-accent"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Career Change Success Stories -->
+    <div class="mb-16">
+      <h2 class="text-3xl font-bold text-center text-primary mb-12">Career Change Transformations</h2>
+      
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div class="success-card card-glow bg-white rounded-2xl p-8 shadow-lg border border-blue-100">
+          <div class="flex items-center mb-6">
+            <div class="w-14 h-14 bg-gradient-to-r from-teal-500 to-green-600 rounded-full flex items-center justify-center mr-4">
+              <i class="fas fa-exchange-alt text-white text-xl"></i>
+            </div>
+            <div>
+              <h3 class="font-bold text-lg text-primary">Varun K.</h3>
+              <p class="text-sm text-gray-600">Class of '23</p>
+            </div>
+          </div>
+          <p class="text-gray-700 leading-relaxed">"Skill2Hire's practical training helped him secure an excellent internship and stand out among experienced peers, proving that freshers can excel."</p>
+          <div class="mt-4 flex">
+            <i class="fas fa-star text-accent"></i>
+            <i class="fas fa-star text-accent"></i>
+            <i class="fas fa-star text-accent"></i>
+            <i class="fas fa-star text-accent"></i>
+            <i class="fas fa-star text-accent"></i>
+          </div>
+        </div>
+
+        <div class="success-card card-glow bg-white rounded-2xl p-8 shadow-lg border border-blue-100">
+          <div class="flex items-center mb-6">
+            <div class="w-14 h-14 bg-gradient-to-r from-yellow-500 to-orange-600 rounded-full flex items-center justify-center mr-4">
+              <i class="fas fa-arrows-alt text-white text-xl"></i>
+            </div>
+            <div>
+              <h3 class="font-bold text-lg text-primary">Ruchi M.</h3>
+              <p class="text-sm text-gray-600">HR to Finance</p>
+            </div>
+          </div>
+          <p class="text-gray-700 leading-relaxed">"Successfully transitioned from HR to finance with Skill2Hire's practical curriculum and active trainer guidance, now working as a junior financial analyst."</p>
+          <div class="mt-4 flex">
+            <i class="fas fa-star text-accent"></i>
+            <i class="fas fa-star text-accent"></i>
+            <i class="fas fa-star text-accent"></i>
+            <i class="fas fa-star text-accent"></i>
+            <i class="fas fa-star text-accent"></i>
+          </div>
+        </div>
+
+        <div class="success-card card-glow bg-white rounded-2xl p-8 shadow-lg border border-blue-100">
+          <div class="flex items-center mb-6">
+            <div class="w-14 h-14 bg-gradient-to-r from-red-500 to-pink-600 rounded-full flex items-center justify-center mr-4">
+              <i class="fas fa-heart text-white text-xl"></i>
+            </div>
+            <div>
+              <h3 class="font-bold text-lg text-primary">Sneha T.</h3>
+              <p class="text-sm text-gray-600">Marketing to Finance</p>
+            </div>
+          </div>
+          <p class="text-gray-700 leading-relaxed">"Successfully pivoted from marketing to financial analysis, crediting Skill2Hire's scenario-based curriculum and career mapping for finding her true passion."</p>
+          <div class="mt-4 flex">
+            <i class="fas fa-star text-accent"></i>
+            <i class="fas fa-star text-accent"></i>
+            <i class="fas fa-star text-accent"></i>
+            <i class="fas fa-star text-accent"></i>
+            <i class="fas fa-star text-accent"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Call to Action -->
+    <div class="text-center bg-gradient-to-r from-blue-600 to-purple-600 rounded-3xl p-12 text-white relative overflow-hidden">
+      <div class="stars">
+        <div class="star" style="top: 20%; left: 15%; width: 2px; height: 2px; animation-delay: 0s; background: white;"></div>
+        <div class="star" style="top: 70%; left: 85%; width: 3px; height: 3px; animation-delay: 0.7s; background: white;"></div>
+        <div class="star" style="top: 40%; left: 70%; width: 2px; height: 2px; animation-delay: 1.4s; background: white;"></div>
+        <div class="star" style="top: 80%; left: 20%; width: 4px; height: 4px; animation-delay: 2.1s; background: white;"></div>
+      </div>
+      <div class="relative z-10">
+        <h2 class="text-3xl md:text-4xl font-bold mb-6">Your Story Could Be Next!</h2>
+        <p class="text-xl mb-8 max-w-3xl mx-auto">Join Skill2Hire to gain practical skills, unlock new career opportunities, and stand out in today's competitive job market!</p>
+        <div class="flex flex-col sm:flex-row gap-4 justify-center">
+          <a href="/assessment" class="bg-white text-blue-600 px-8 py-4 rounded-full font-semibold text-lg hover:bg-gray-100 transition-colors inline-flex items-center">
+            <i class="fas fa-clipboard-check mr-2"></i>
+            Take Career Assessment
+          </a>
+          <a href="/training/index.html" class="bg-accent text-white px-8 py-4 rounded-full font-semibold text-lg hover:bg-yellow-500 transition-colors inline-flex items-center">
+            <i class="fas fa-graduation-cap mr-2"></i>
+            Explore Training Programs
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="bg-gray-900 text-white pt-16 pb-12 mt-24">
+  <div class="max-w-7xl mx-auto px-4">
+    <div class="border-t border-gray-800 mt-12 pt-8 flex flex-col md:flex-row justify-between items-center">
+      <p class="text-gray-500 mb-4 md:mb-0">&copy; 2024 Path2Hire. All rights reserved.</p>
+    </div>
+  </div>
+</footer>
+
+<script src="assets/js/main.js"></script>
+<script src="/assets/js/active-nav.js"></script>
+
+<script>
+// Add more dynamic stars
+function createStars() {
+  const starsContainer = document.querySelector('.stars');
+  const numStars = 15;
+  
+  for (let i = 0; i < numStars; i++) {
+    const star = document.createElement('div');
+    star.className = 'star';
+    star.style.top = Math.random() * 100 + '%';
+    star.style.left = Math.random() * 100 + '%';
+    star.style.width = (Math.random() * 3 + 1) + 'px';
+    star.style.height = star.style.width;
+    star.style.animationDelay = Math.random() * 2 + 's';
+    starsContainer.appendChild(star);
+  }
+}
+
+// Initialize stars when page loads
+document.addEventListener('DOMContentLoaded', createStars);
+</script>
+
+</body>
+</html>
+

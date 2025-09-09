@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>training • Path2Hire</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: { primary: '#2563eb', secondary: '#1e40af', accent: '#f9a826' },
+          fontFamily: { poppins: ['Poppins','sans-serif'], roboto: ['Roboto','sans-serif'] }
+        }
+      }
+    }
+  </script>
+  <link rel="stylesheet" href="../assets/css/custom.css" />
+</head>
+<body class="bg-gray-50 text-gray-800">
+
+    <nav id="navbar" class="fixed w-full bg-white shadow-md z-50 hover-card">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex justify-between h-16 items-center">
+          <a href="../index.html" class="flex items-center">
+            <div class="h-8 w-8 rounded-full bg-blue-600 flex items-center justify-center mr-2 icon-hover">
+              <i class="fas fa-graduation-cap text-white"></i>
+            </div>
+            <span class="text-xl font-bold text-blue-600">Path2<span class="text-accent">Hire</span></span>
+          </a>
+          <div class="hidden md:flex md:space-x-8">
+            <a href="../index.html" class="nav-link border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 px-1 pt-1 text-sm font-medium">Home</a>
+<a href="../about.html" class="nav-link border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 px-1 pt-1 text-sm font-medium">About</a>
+<a href="../training/index.html" class="nav-link border-b-2 border-accent text-primary px-1 pt-1 text-sm font-medium">Training</a>
+<a href="../assessment.html" class="nav-link border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 px-1 pt-1 text-sm font-medium">Assessment</a>
+<a href="../success.html" class="nav-link border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 px-1 pt-1 text-sm font-medium">Success</a>
+<a href="../contact.html" class="nav-link border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 px-1 pt-1 text-sm font-medium">Contact</a>
+
+          </div>
+          <div class="md:hidden">
+            <button id="menuBtn" class="focus:outline-none"><i class="fas fa-bars text-2xl text-primary"></i></button>
+          </div>
+          <div class="hidden md:block">
+            <a href="../login.html" class="btn-primary bg-primary hover:bg-secondary text-white px-4 py-2 rounded-full text-sm font-medium flex items-center">
+              <i class="fas fa-user-graduate mr-2"></i>Student Portal
+            </a>
+          </div>
+        </div>
+      </div>
+      <div id="mobileMenu" class="hidden md:hidden bg-white shadow-lg">
+        <div class="space-y-1 px-4 pb-3 pt-2">
+          <a href="../index.html" class="nav-link border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 px-1 pt-1 text-sm font-medium">Home</a>
+<a href="../about.html" class="nav-link border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 px-1 pt-1 text-sm font-medium">About</a>
+<a href="../training/index.html" class="nav-link border-b-2 border-accent text-primary px-1 pt-1 text-sm font-medium">Training</a>
+<a href="../assessment.html" class="nav-link border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 px-1 pt-1 text-sm font-medium">Assessment</a>
+<a href="../success.html" class="nav-link border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 px-1 pt-1 text-sm font-medium">Success</a>
+<a href="../contact.html" class="nav-link border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 px-1 pt-1 text-sm font-medium">Contact</a>
+
+          <a href="../login.html" class="block w-full text-left nav-link px-1 pt-1 text-sm font-medium text-primary">Student Portal</a>
+        </div>
+      </div>
+    </nav>
+    
+
+<section class="pt-24 py-16 bg-gradient-to-br from-gray-50 to-blue-50">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="text-center mb-10">
+      <h1 class="text-4xl font-bold text-primary">All Training Programs</h1>
+      <p class="text-gray-600 mt-2">Practical, job‑oriented modules aligned with real business practices.</p>
+    </div>
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+  </div>
+</section>
+<script>
+  const cards = document.currentScript.previousElementSibling.querySelector('.grid');
+  const programs = [
+    ["fpna","Financial Planning & Analysis","fas fa-chart-line","Budgeting, forecasting, variance analysis."],
+    ["fund-accounting-pe","Fund Accounting / PE","fas fa-building","Capital calls, NAV, investor reporting."],
+    ["ifrs","IFRS","fas fa-globe","Real‑world IFRS application & GAAP bridge."],
+    ["kyc-aml","KYC & AML","fas fa-shield-alt","Onboarding, due‑diligence & fraud detection."],
+    ["o2c","Order to Cash (O2C)","fas fa-exchange-alt","End‑to‑end O2C lifecycle."],
+    ["p2p","Procure to Pay (P2P)","fas fa-receipt","Requisition to vendor payment."],
+    ["r2r","Record to Report (R2R)","fas fa-book","Close, reconciliation & reporting."],
+    ["uk-gaap","UK GAAP","fas fa-pound-sign","UK standards & compliance."],
+    ["us-gaap","US GAAP","fas fa-dollar-sign","US standards & practical cases."],
+    ["us-individual-tax","US Individual Tax","fas fa-file-invoice-dollar","1040 returns & deductions."],
+    ["us-business-tax","US Business Tax","fas fa-building-columns","C‑corp, S‑corp & partnerships."],
+    ["us-payroll","US Payroll","fas fa-money-check-alt","Withholdings & year‑end forms."],
+    ["sap","SAP","fab fa-suse","SAP FI/CO & controlling modules."],
+    ["quickbooks","QuickBooks","fas fa-calculator","Company setup & employer‑ready skills."]
+  ];
+  cards.innerHTML = programs.map(([slug,title,icon,desc]) => `
+    <a href="../programs/${slug}.html" class="training-card bg-white rounded-xl shadow-md p-6 block">
+      <i class="${icon} text-primary text-3xl mb-2"></i>
+      <h3 class="font-bold mb-1">${title}</h3>
+      <p class="text-sm text-gray-600">${desc}</p>
+    </a>`).join('');
+</script>
+
+<!-- FOOTER -->
+
+    <footer class="bg-gray-900 text-white pt-16 pb-12 mt-24">
+      <div class="max-w-7xl mx-auto px-4">
+        <div class="border-t border-gray-800 mt-12 pt-8 flex flex-col md:flex-row justify-between items-center">
+          <p class="text-gray-500 mb-4 md:mb-0">&copy; 2024 Path2Hire. All rights reserved.</p>
+        </div>
+      </div>
+    </footer>
+    <script src="../assets/js/main.js"></script>
+    <script src="/assets/js/active-nav.js"></script>
+</body>
+    </html>
+    

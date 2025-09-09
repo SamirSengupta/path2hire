@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>login • Path2Hire</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: { primary: '#2563eb', secondary: '#1e40af', accent: '#f9a826' },
+          fontFamily: { poppins: ['Poppins','sans-serif'], roboto: ['Roboto','sans-serif'] }
+        }
+      }
+    }
+  </script>
+  <link rel="stylesheet" href="assets/css/custom.css" />
+</head>
+<body class="bg-gray-50 text-gray-800">
+
+    <nav id="navbar" class="fixed w-full bg-white shadow-md z-50 hover-card">
+      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex justify-between h-16 items-center">
+          <a href="index.html" class="flex items-center">
+            <div class="h-8 w-8 rounded-full bg-blue-600 flex items-center justify-center mr-2 icon-hover">
+              <i class="fas fa-graduation-cap text-white"></i>
+            </div>
+            <span class="text-xl font-bold text-blue-600">Path2<span class="text-accent">Hire</span></span>
+          </a>
+          <div class="hidden md:flex md:space-x-8">
+            <a href="index.html" class="nav-link border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 px-1 pt-1 text-sm font-medium">Home</a>
+<a href="about.html" class="nav-link border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 px-1 pt-1 text-sm font-medium">About</a>
+<a href="/training/index.html" class="nav-link border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 px-1 pt-1 text-sm font-medium">Training</a>
+<a href="/assessment" class="nav-link border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 px-1 pt-1 text-sm font-medium">Assessment</a>
+<a href="success.html" class="nav-link border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 px-1 pt-1 text-sm font-medium">Success</a>
+<a href="contact.html" class="nav-link border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 px-1 pt-1 text-sm font-medium">Contact</a>
+
+          </div>
+          <div class="md:hidden">
+            <button id="menuBtn" class="focus:outline-none"><i class="fas fa-bars text-2xl text-primary"></i></button>
+          </div>
+          <div class="hidden md:block">
+            <a href="/login" class="btn-primary bg-primary hover:bg-secondary text-white px-4 py-2 rounded-full text-sm font-medium flex items-center">
+              <i class="fas fa-user-graduate mr-2"></i>Student Portal
+            </a>
+          </div>
+        </div>
+      </div>
+      <div id="mobileMenu" class="hidden md:hidden bg-white shadow-lg">
+        <div class="space-y-1 px-4 pb-3 pt-2">
+          <a href="index.html" class="nav-link border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 px-1 pt-1 text-sm font-medium">Home</a>
+<a href="about.html" class="nav-link border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 px-1 pt-1 text-sm font-medium">About</a>
+<a href="/training/index.html" class="nav-link border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 px-1 pt-1 text-sm font-medium">Training</a>
+<a href="/assessment" class="nav-link border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 px-1 pt-1 text-sm font-medium">Assessment</a>
+<a href="success.html" class="nav-link border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 px-1 pt-1 text-sm font-medium">Success</a>
+<a href="contact.html" class="nav-link border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 px-1 pt-1 text-sm font-medium">Contact</a>
+
+          <a href="/login" class="block w-full text-left nav-link px-1 pt-1 text-sm font-medium text-primary">Student Portal</a>
+        </div>
+      </div>
+    </nav>
+    
+
+
+
+<section class="pt-24 py-16 bg-white">
+  
+  <div class="max-w-md mx-auto px-4">
+    <h1 class="text-3xl font-bold text-primary text-center mb-6">Student Portal</h1>
+    <div class="bg-white rounded-2xl shadow-xl p-6 hover-card">
+      <div class="flex justify-center mb-6">
+        <button id="showSignin" type="button" class="px-4 py-2 font-medium text-white bg-primary rounded-l-full">Sign In</button>
+        <button id="showSignup" type="button" class="px-4 py-2 font-medium text-primary bg-gray-200 rounded-r-full">Sign Up</button>
+      </div>
+      <div id="signinForm">
+        <form method="POST" action="/login" class="space-y-4">
+          <input type="hidden" name="next" id="nextInputSignin" value="">
+          <div><label class="block text-gray-700 font-medium">Email</label><input name="email" type="email" required class="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-primary hover:border-primary"></div>
+          <div><label class="block text-gray-700 font-medium">Password</label><input name="password" type="password" required class="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-primary hover:border-primary"></div>
+          <button class="btn-primary w-full bg-primary hover:bg-secondary text-white font-medium py-3 rounded-md">Sign In</button>
+        </form>
+      </div>
+      <div id="signupForm" class="hidden">
+        <form method="POST" action="/signup" class="space-y-4">
+          <input type="hidden" name="next" id="nextInputSignup" value="">
+          <div><label class="block text-gray-700 font-medium">Full Name</label><input name="name" type="text" required class="w-full px-3 py-2 border rounded-md"></div>
+          <div><label class="block text-gray-700 font-medium">Email</label><input name="email" type="email" required class="w-full px-3 py-2 border rounded-md"></div>
+          <div><label class="block text-gray-700 font-medium">Password</label><input name="password" type="password" required class="w-full px-3 py-2 border rounded-md"></div>
+          <div><label class="block text-gray-700 font-medium">Confirm Password</label><input name="confirm_password" type="password" required class="w-full px-3 py-2 border rounded-md"></div>
+          <button class="btn-primary w-full bg-accent hover:bg-yellow-500 text-white font-medium py-3 rounded-md">Sign Up</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+<script>
+const showSignin=document.getElementById('showSignin');
+const showSignup=document.getElementById('showSignup');
+const signinForm=document.getElementById('signinForm');
+const signupForm=document.getElementById('signupForm');
+function toggleForms(show){
+  if(show==='signin'){
+    signinForm.classList.remove('hidden');
+    signupForm.classList.add('hidden');
+    showSignin.classList.add('bg-primary','text-white');
+    showSignin.classList.remove('bg-gray-200','text-primary');
+    showSignup.classList.add('bg-gray-200','text-primary');
+    showSignup.classList.remove('bg-primary','text-white');
+  } else {
+    signinForm.classList.add('hidden');
+    signupForm.classList.remove('hidden');
+    showSignup.classList.add('bg-primary','text-white');
+    showSignup.classList.remove('bg-gray-200','text-primary');
+    showSignin.classList.add('bg-gray-200','text-primary');
+    showSignin.classList.remove('bg-primary','text-white');
+  }
+}
+showSignin.addEventListener('click',()=>toggleForms('signin'));
+showSignup.addEventListener('click',()=>toggleForms('signup'));
+
+// populate next hidden inputs from ?next= parameter
+(function(){
+  try{
+    const params = new URLSearchParams(window.location.search);
+    const nextVal = params.get('next') || '';
+    if(nextVal){
+      const s = document.getElementById('nextInputSignin');
+      const u = document.getElementById('nextInputSignup');
+      if(s) s.value = nextVal;
+      if(u) u.value = nextVal;
+    }
+  }catch(e){}
+})();
+</script>
+
+<script>
+const showSignin=document.getElementById('showSignin');
+const showSignup=document.getElementById('showSignup');
+const signinForm=document.getElementById('signinForm');
+const signupForm=document.getElementById('signupForm');
+function toggleForms(show){
+  if(show==='signin'){
+    signinForm.classList.remove('hidden');
+    signupForm.classList.add('hidden');
+    showSignin.classList.add('bg-primary','text-white');
+    showSignin.classList.remove('bg-gray-200','text-primary');
+    showSignup.classList.add('bg-gray-200','text-primary');
+    showSignup.classList.remove('bg-primary','text-white');
+  } else {
+    signinForm.classList.add('hidden');
+    signupForm.classList.remove('hidden');
+    showSignup.classList.add('bg-primary','text-white');
+    showSignup.classList.remove('bg-gray-200','text-primary');
+    showSignin.classList.add('bg-gray-200','text-primary');
+    showSignin.classList.remove('bg-primary','text-white');
+  }
+}
+showSignin.addEventListener('click',()=>toggleForms('signin'));
+showSignup.addEventListener('click',()=>toggleForms('signup'));
+</script>
+
+
+<!-- FOOTER -->
+
+<!-- FOOTER -->
+
+    <footer class="bg-gray-900 text-white pt-16 pb-12 mt-24">
+      <div class="max-w-7xl mx-auto px-4">
+        <div class="border-t border-gray-800 mt-12 pt-8 flex flex-col md:flex-row justify-between items-center">
+          <p class="text-gray-500 mb-4 md:mb-0">&copy; 2024 Path2Hire. All rights reserved.</p>
+        </div>
+      </div>
+    </footer>
+    <script src="assets/js/main.js"></script>
+    <script src="/assets/js/active-nav.js"></script>
+</body>
+    </html>
+    
