@@ -21,85 +21,230 @@
 </head>
 <body class="bg-gray-50 text-gray-800">
 
-    <nav id="navbar" class="fixed w-full bg-white shadow-md z-50 hover-card">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="flex justify-between h-16 items-center">
-          <a href="index.html" class="flex items-center">
-            <div class="h-8 w-8 rounded-full bg-blue-600 flex items-center justify-center mr-2 icon-hover">
-              <i class="fas fa-graduation-cap text-white"></i>
-            </div>
-            <span class="text-xl font-bold text-blue-600">Path2<span class="text-accent">Hire</span></span>
-          </a>
-          <div class="hidden md:flex md:space-x-8">
-            <a href="index.html" class="nav-link border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 px-1 pt-1 text-sm font-medium">Home</a>
-<a href="about.html" class="nav-link border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 px-1 pt-1 text-sm font-medium">About</a>
-<a href="/training/index.html" class="nav-link border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 px-1 pt-1 text-sm font-medium">Training</a>
-<a href="/assessment" class="nav-link border-b-2 border-accent text-primary px-1 pt-1 text-sm font-medium">Assessment</a>
-<a href="success.html" class="nav-link border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 px-1 pt-1 text-sm font-medium">Success</a>
-<a href="contact.html" class="nav-link border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 px-1 pt-1 text-sm font-medium">Contact</a>
+  <!-- Assessment-specific navigation bar -->
+  <nav id="navbar" class="fixed w-full bg-white shadow-md z-50 hover-card">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="flex justify-between h-16 items-center">
+        <!-- Logo (not clickable during assessment) -->
+        <div class="flex items-center">
+          <div class="h-8 w-8 rounded-full bg-blue-600 flex items-center justify-center mr-2">
+            <i class="fas fa-graduation-cap text-white"></i>
+          </div>
+          <span class="text-xl font-bold text-blue-600">Path2<span class="text-accent">Hire</span></span>
+        </div>
+        
+        <!-- Assessment progress indicator -->
+        <div class="hidden md:flex items-center">
+          <div class="text-sm text-gray-600 mr-4">
+            <i class="fas fa-clock mr-2"></i>Assessment in Progress
+          </div>
+          <div class="bg-gray-200 rounded-full h-2 w-32 mr-4">
+            <div class="bg-primary h-2 rounded-full" style="width: {{ ((idx+1) / total * 100)|round }}%;"></div>
+          </div>
+          <span class="text-sm text-gray-600">{{ idx+1 }}/{{ total }}</span>
+        </div>
 
+        <!-- User profile and logout -->
+        <div class="flex items-center space-x-4">
+          <div class="flex items-center text-sm text-gray-600">
+            <i class="fas fa-user-circle mr-2"></i>
+            <span>{{ session.user.name or session.user.email }}</span>
           </div>
-          <div class="md:hidden">
-            <button id="menuBtn" class="focus:outline-none"><i class="fas fa-bars text-2xl text-primary"></i></button>
-          </div>
-          <div class="hidden md:block">
-            <a href="/login" class="btn-primary bg-primary hover:bg-secondary text-white px-4 py-2 rounded-full text-sm font-medium flex items-center">
-              <i class="fas fa-user-graduate mr-2"></i>Student Portal
-            </a>
-          </div>
+          <button onclick="showLogoutConfirm()" class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-full text-sm font-medium flex items-center">
+            <i class="fas fa-sign-out-alt mr-2"></i>Logout
+          </button>
         </div>
       </div>
-      <div id="mobileMenu" class="hidden md:hidden bg-white shadow-lg">
-        <div class="space-y-1 px-4 pb-3 pt-2">
-          <a href="index.html" class="nav-link border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 px-1 pt-1 text-sm font-medium">Home</a>
-<a href="about.html" class="nav-link border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 px-1 pt-1 text-sm font-medium">About</a>
-<a href="/training/index.html" class="nav-link border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 px-1 pt-1 text-sm font-medium">Training</a>
-<a href="/assessment" class="nav-link border-b-2 border-accent text-primary px-1 pt-1 text-sm font-medium">Assessment</a>
-<a href="success.html" class="nav-link border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 px-1 pt-1 text-sm font-medium">Success</a>
-<a href="contact.html" class="nav-link border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 px-1 pt-1 text-sm font-medium">Contact</a>
+    </div>
+  </nav>
 
-          <a href="/login" class="block w-full text-left nav-link px-1 pt-1 text-sm font-medium text-primary">Student Portal</a>
+  <!-- Assessment warning modal -->
+  <div id="navigationWarning" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden">
+    <div class="flex items-center justify-center min-h-screen px-4">
+      <div class="bg-white rounded-lg shadow-xl max-w-md w-full p-6">
+        <div class="flex items-center mb-4">
+          <i class="fas fa-exclamation-triangle text-yellow-500 text-2xl mr-3"></i>
+          <h3 class="text-xl font-bold text-gray-800">Assessment in Progress</h3>
+        </div>
+        <p class="text-gray-600 mb-6">You must complete or exit the assessment before navigating to other pages. Your progress will be saved.</p>
+        <div class="flex justify-end space-x-3">
+          <button onclick="closeNavigationWarning()" class="px-4 py-2 bg-gray-300 text-gray-700 rounded-lg hover:bg-gray-400">Continue Assessment</button>
+          <button onclick="confirmLogout()" class="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600">Exit Assessment</button>
         </div>
       </div>
-    </nav>
-  <main class="max-w-4xl mx-auto py-12 px-4">
+    </div>
+  </div>
+
+  <!-- Logout confirmation modal -->
+  <div id="logoutConfirm" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden">
+    <div class="flex items-center justify-center min-h-screen px-4">
+      <div class="bg-white rounded-lg shadow-xl max-w-md w-full p-6">
+        <div class="flex items-center mb-4">
+          <i class="fas fa-question-circle text-blue-500 text-2xl mr-3"></i>
+          <h3 class="text-xl font-bold text-gray-800">Exit Assessment?</h3>
+        </div>
+        <p class="text-gray-600 mb-6">Are you sure you want to logout? Your current progress will be saved and you can resume later.</p>
+        <div class="flex justify-end space-x-3">
+          <button onclick="closeLogoutConfirm()" class="px-4 py-2 bg-gray-300 text-gray-700 rounded-lg hover:bg-gray-400">Cancel</button>
+          <button onclick="confirmLogout()" class="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600">Yes, Logout</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <main class="max-w-4xl mx-auto py-24 px-4">
     <div class="bg-white rounded-xl shadow-md p-6">
-      <h2 class="text-2xl font-semibold mb-4">Assessment</h2>
+      <div class="flex justify-between items-center mb-6">
+        <h2 class="text-2xl font-semibold text-primary">Career Assessment</h2>
+        <div class="text-sm text-gray-500">
+          <i class="fas fa-save mr-1"></i>Auto-saved
+        </div>
+      </div>
+      
+      <!-- Mobile progress bar -->
+      <div class="md:hidden mb-6">
+        <div class="flex justify-between text-sm text-gray-600 mb-2">
+          <span>Progress</span>
+          <span>{{ idx+1 }} of {{ total }}</span>
+        </div>
+        <div class="bg-gray-200 rounded-full h-2">
+          <div class="bg-primary h-2 rounded-full transition-all duration-300" style="width: {{ ((idx+1) / total * 100)|round }}%;"></div>
+        </div>
+      </div>
+
       <div id="assessment-area" class="space-y-4">
         <form method="post" action="/answer" id="answerForm">
           <input type="hidden" name="qno" value="{{ question['No'] }}" />
           <input type="hidden" name="idx" value="{{ idx }}" />
-          <div class="mb-6 p-4 border rounded-lg shadow-sm">
-            <p class="font-medium mb-2">Question {{ idx+1 }} of {{ total }}: {{ question['Scenario'] | safe }}</p>
-            <div class="space-y-2">
+          <div class="mb-6 p-6 border rounded-lg shadow-sm bg-gray-50">
+            <div class="mb-4">
+              <span class="inline-block bg-primary text-white px-3 py-1 rounded-full text-sm font-medium">
+                Question {{ idx+1 }} of {{ total }}
+              </span>
+            </div>
+            <p class="font-medium mb-6 text-lg leading-relaxed">{{ question['Scenario'] | safe }}</p>
+            <div class="space-y-3">
               {% for opt in question['Options'] %}
-                <label class="block cursor-pointer p-2 rounded hover:bg-gray-50">
-                  <input type="radio" name="choice" value="{{ opt['code'] }}" {% if selected == opt['code'] %} checked {% endif %} required> {{ opt['text'] | safe }}
+                <label class="flex items-start cursor-pointer p-4 rounded-lg border hover:bg-blue-50 hover:border-blue-200 transition-colors">
+                  <input type="radio" name="choice" value="{{ opt['code'] }}" {% if selected == opt['code'] %} checked {% endif %} required class="mt-1 mr-4 text-primary"> 
+                  <span class="text-gray-800">{{ opt['text'] | safe }}</span>
                 </label>
               {% endfor %}
             </div>
           </div>
           <div class="flex justify-between items-center">
             {% if idx > 0 %}
-            <a href="{{ url_for('assessment_question', idx=idx-1) }}" class="px-4 py-2 rounded border">Previous</a>
+            <a href="{{ url_for('assessment_question', idx=idx-1) }}" class="px-6 py-2 rounded-lg border border-gray-300 hover:bg-gray-50 transition-colors">
+              <i class="fas fa-arrow-left mr-2"></i>Previous
+            </a>
             {% else %}
             <span></span>
             {% endif %}
-            <button type="submit" class="px-6 py-2 rounded bg-primary text-white"> {% if idx+1 == total %} Submit Assessment {% else %} Next {% endif %} </button>
+            <button type="submit" class="px-6 py-2 rounded-lg bg-primary text-white hover:bg-secondary transition-colors font-medium">
+              {% if idx+1 == total %}
+                <i class="fas fa-check mr-2"></i>Submit Assessment
+              {% else %}
+                Next<i class="fas fa-arrow-right ml-2"></i>
+              {% endif %}
+            </button>
           </div>
         </form>
       </div>
     </div>
   </main>
-<footer class="bg-gray-900 text-white pt-16 pb-12 mt-24">
-      <div class="max-w-7xl mx-auto px-4">
-        <div class="border-t border-gray-800 mt-12 pt-8 flex flex-col md:flex-row justify-between items-center">
-          <p class="text-gray-500 mb-4 md:mb-0">&copy; 2024 Path2Hire. All rights reserved.</p>
-        </div>
+
+  <footer class="bg-gray-900 text-white pt-16 pb-12 mt-24">
+    <div class="max-w-7xl mx-auto px-4">
+      <div class="border-t border-gray-800 mt-12 pt-8 flex flex-col md:flex-row justify-between items-center">
+        <p class="text-gray-500 mb-4 md:mb-0">&copy; 2024 Path2Hire. All rights reserved.</p>
       </div>
-    </footer>
-    <script src="assets/js/main.js"></script>
-    <script src="/assets/js/active-nav.js"></script>
+    </div>
+  </footer>
+
+  <script>
+    // Navigation restriction functionality
+    let assessmentInProgress = true;
+
+    // Override default link behavior
+    document.addEventListener('DOMContentLoaded', function() {
+      // Disable browser back/forward buttons
+      window.history.pushState(null, null, window.location.href);
+      window.onpopstate = function() {
+        window.history.pushState(null, null, window.location.href);
+        showNavigationWarning();
+      };
+
+      // Prevent page unload without confirmation
+      window.addEventListener('beforeunload', function(e) {
+        if (assessmentInProgress) {
+          e.preventDefault();
+          e.returnValue = '';
+          return '';
+        }
+      });
+
+      // Disable all navigation links except assessment-related ones
+      const navLinks = document.querySelectorAll('a:not([href^="/assessment"]):not([href^="/answer"]):not([href^="/submit"])');
+      navLinks.forEach(link => {
+        if (!link.href.includes('/logout') && !link.href.includes('/assessment') && !link.href.includes('/answer') && !link.href.includes('/submit')) {
+          link.addEventListener('click', function(e) {
+            e.preventDefault();
+            showNavigationWarning();
+          });
+        }
+      });
+    });
+
+    function showNavigationWarning() {
+      document.getElementById('navigationWarning').classList.remove('hidden');
+    }
+
+    function closeNavigationWarning() {
+      document.getElementById('navigationWarning').classList.add('hidden');
+    }
+
+    function showLogoutConfirm() {
+      document.getElementById('logoutConfirm').classList.remove('hidden');
+    }
+
+    function closeLogoutConfirm() {
+      document.getElementById('logoutConfirm').classList.add('hidden');
+    }
+
+    function confirmLogout() {
+      assessmentInProgress = false;
+      window.location.href = '/logout';
+    }
+
+    // Auto-save functionality (optional)
+    let autoSaveTimer;
+    const form = document.getElementById('answerForm');
+    const radioInputs = form.querySelectorAll('input[type="radio"]');
+    
+    radioInputs.forEach(input => {
+      input.addEventListener('change', function() {
+        clearTimeout(autoSaveTimer);
+        autoSaveTimer = setTimeout(() => {
+          // Auto-save logic here if needed
+          console.log('Answer auto-saved');
+        }, 1000);
+      });
+    });
+
+    // Keyboard shortcuts
+    document.addEventListener('keydown', function(e) {
+      // Prevent F5 refresh
+      if (e.key === 'F5' || (e.ctrlKey && e.key === 'r')) {
+        e.preventDefault();
+        showNavigationWarning();
+      }
+      
+      // Prevent Ctrl+W (close tab)
+      if (e.ctrlKey && e.key === 'w') {
+        e.preventDefault();
+        showNavigationWarning();
+      }
+    });
+  </script>
 </body>
-    </html>
 </html>
