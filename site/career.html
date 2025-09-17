@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Careers — Join Us</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&amp;family=Roboto:wght@300;400;500;700&amp;display=swap" rel="stylesheet"/>
+<script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: { primary: '#2563eb', secondary: '#1e40af', accent: '#f9a826' },
+          fontFamily: { poppins: ['Poppins','sans-serif'], roboto: ['Roboto','sans-serif'] }
+        }
+      }
+    }
+  </script>
+<link href="assets/css/custom.css" rel="stylesheet">
+</link></head>
+<body class="bg-gray-50 text-gray-800">
+<nav class="fixed w-full bg-white shadow-md z-50 hover-card" id="navbar">
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+<div class="flex justify-between h-16 items-center">
+<a class="flex items-center" href="index.html">
+<div class="h-8 w-8 rounded-full bg-blue-600 flex items-center justify-center mr-2 icon-hover">
+<i class="fas fa-graduation-cap text-white"></i>
+</div>
+<span class="text-xl font-bold text-blue-600">Path2<span class="text-accent">Hire</span></span>
+</a>
+<div class="hidden md:flex md:space-x-8">
+<a class="nav-link border-b-2 border-accent text-primary px-1 pt-1 text-sm font-medium" href="index.html">Home</a>
+<a class="nav-link border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 px-1 pt-1 text-sm font-medium" href="about.html">About</a>
+<a class="nav-link border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 px-1 pt-1 text-sm font-medium" href="/training/index.html">Training</a>
+<a class="nav-link border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 px-1 pt-1 text-sm font-medium" href="assessment-info.html">Assessment</a>
+<a class="nav-link border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 px-1 pt-1 text-sm font-medium" href="success.html">Success</a>
+<a class="nav-link border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 px-1 pt-1 text-sm font-medium" href="/jobs">Jobs</a>
+<a class="nav-link border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 px-1 pt-1 text-sm font-medium" href="contact.html">Contact</a>
+</div>
+<div class="md:hidden">
+<button class="focus:outline-none" id="menuBtn"><i class="fas fa-bars text-2xl text-primary"></i></button>
+</div>
+<div class="hidden md:flex space-x-4">
+<a class="btn-primary bg-primary hover:bg-secondary text-white px-4 py-2 rounded-full text-sm font-medium flex items-center" href="../login.html">
+<i class="fas fa-user-graduate mr-2"></i>Student Portal
+            </a>
+<a class="btn-primary bg-primary hover:bg-secondary text-white px-4 py-2 rounded-full text-sm font-medium flex items-center" href="./career.html">
+<i class="fas fa-briefcase mr-2"></i>Career Portal
+</a>
+</div>
+</div>
+</div>
+
+<div class="hidden md:hidden bg-white shadow-lg" id="mobileMenu">
+<div class="space-y-1 px-4 pb-3 pt-2">
+<a class="nav-link border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 px-1 pt-1 text-sm font-medium" href="index.html">Home</a>
+<a class="nav-link border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 px-1 pt-1 text-sm font-medium" href="about.html">About</a>
+<a class="nav-link border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 px-1 pt-1 text-sm font-medium" href="/training/index.html">Training</a>
+<a class="nav-link border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 px-1 pt-1 text-sm font-medium" href="assessment-info.html">Assessment</a>
+<a class="nav-link border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 px-1 pt-1 text-sm font-medium" href="success.html">Success</a>
+<a class="nav-link border-b-2 border-accent text-primary px-1 pt-1 text-sm font-medium" href="contact.html">Contact</a>
+<a class="block w-full text-left nav-link px-1 pt-1 text-sm font-medium text-primary" href="/login">Student Portal</a>
+</div>
+</div>
+</nav>
+<section class="pt-24 py-16 bg-white">
+<div class="max-w-5xl mx-auto px-4">
+<h1 class="text-3xl md:text-4xl font-bold text-primary text-center">Join Our Team</h1>
+<p class="text-center text-gray-600 mt-2">Have questions? Want a demo or consultation? Send us a message.</p>
+<div class="bg-white rounded-2xl shadow-xl p-6 mt-8 hover-card">
+
+<form action="#" class="max-w-3xl mx-auto space-y-4" id="career-form" method="post" novalidate="">
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+<label class="block">
+<span class="text-sm font-medium">Full name</span>
+<input class="mt-1 block w-full rounded-lg border p-2" name="full_name" placeholder="Jane Doe" required=""/>
+</label>
+<label class="block">
+<span class="text-sm font-medium">Email</span>
+<input class="mt-1 block w-full rounded-lg border p-2" name="email" placeholder="you@example.com" required="" type="email"/>
+</label>
+<label class="block">
+<span class="text-sm font-medium">Phone</span>
+<input class="mt-1 block w-full rounded-lg border p-2" name="phone" placeholder="+1 555 555 5555" type="tel"/>
+</label>
+<label class="block">
+<span class="text-sm font-medium">Position applying for</span>
+<input class="mt-1 block w-full rounded-lg border p-2" name="position" placeholder="e.g. Frontend Engineer"/>
+</label>
+</div>
+<label class="block">
+<span class="text-sm font-medium">LinkedIn / Portfolio URL</span>
+<input class="mt-1 block w-full rounded-lg border p-2" name="portfolio" placeholder="https://"/>
+</label>
+<label class="block">
+<span class="text-sm font-medium">Location (City, Country)</span>
+<input class="mt-1 block w-full rounded-lg border p-2" name="location" placeholder="New York, USA"/>
+</label>
+<label class="block">
+<span class="text-sm font-medium">Work authorization</span>
+<select class="mt-1 block w-full rounded-lg border p-2" name="authorization">
+<option value="">Select</option>
+<option>Authorized to work in the country</option>
+<option>Require sponsorship</option>
+<option>Other</option>
+</select>
+</label>
+<label class="block">
+<span class="text-sm font-medium">Resume (paste link or text)</span>
+<input class="mt-1 block w-full rounded-lg border p-2" name="resume_link" placeholder="Paste a link to your resume or upload later"/>
+</label>
+<label class="block">
+<span class="text-sm font-medium">Cover letter / Why you want to join</span>
+<textarea class="mt-1 block w-full rounded-lg border p-2" name="cover_letter" placeholder="Tell us about your experience and why you'd be a great fit" rows="6"></textarea>
+</label>
+<label class="block">
+<span class="text-sm font-medium">Salary expectations</span>
+<input class="mt-1 block w-full rounded-lg border p-2" name="salary_expectation" placeholder="$... or market rate"/>
+</label>
+<label class="block">
+<span class="text-sm font-medium">Available start date</span>
+<input class="mt-1 block w-full rounded-lg border p-2" name="start_date" type="date"/>
+</label>
+<div class="flex items-center space-x-3">
+<button class="btn-primary bg-primary hover:bg-secondary text-white px-4 py-2 rounded-full" type="submit">Submit application</button>
+<button class="btn-secondary border px-4 py-2 rounded-full" type="reset">Reset</button>
+</div>
+<p class="text-xs text-gray-500 mt-2">By submitting you agree to our privacy policy.</p>
+</form>
+
+<div class="mt-6 text-gray-600 text-sm">
+<p><i class="fas fa-map-marker-alt mr-2 text-accent"></i>Career Building Center, Financial Plaza, Mumbai 400001</p>
+<p class="mt-1"><i class="fas fa-phone-alt mr-2 text-accent"></i>+91 98765 43210</p>
+<p class="mt-1"><i class="fas fa-envelope mr-2 text-accent"></i>info@path2hire.co.in</p>
+</div>
+</div>
+</div>
+</section>
+<!-- FOOTER -->
+<!-- FOOTER -->
+<footer class="bg-gray-900 text-white pt-16 pb-12 mt-24">
+<div class="max-w-7xl mx-auto px-4">
+<div class="border-t border-gray-800 mt-12 pt-8 flex flex-col md:flex-row justify-between items-center">
+<p class="text-gray-500 mb-4 md:mb-0">© 2024 Path2Hire. All rights reserved.</p>
+</div>
+</div>
+</footer>
+<script src="assets/js/main.js"></script>
+<script src="/assets/js/active-nav.js"></script>
+</body>
+</html>

@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for, session, jsonify, send_from_directory, Response
+from flask import Flask, render_template, request, redirect, url_for, session, jsonify, send_from_directory, Response, abort
 import os, json, random, uuid
 import pandas as pd
 import re
@@ -505,7 +505,7 @@ def api_jobs():
             'success': True,
             'jobs': jobs,
             'total': len(jobs),
-            'timestamp': datetime.now().isoformat()
+            'timestamp': datetime.now().isoformat() 
         })
     except Exception as e:
         return jsonify({
