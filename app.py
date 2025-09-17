@@ -493,6 +493,10 @@ def jobs_page():
     """
     return render_template('jobs.html')
 
+@app.route('/health')
+def health_check():
+    return {'status': 'ok', 'timestamp': datetime.now().isoformat()}, 200
+
 @app.route('/api/jobs')
 def api_jobs():
     """
