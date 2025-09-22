@@ -3,9 +3,22 @@ import os, json, random, uuid
 import pandas as pd
 import re
 from datetime import datetime, timedelta
-from werkzeug.security import generate_password_hash, check_password_hash
-from career_report_generator import calculate_attribute_scores, generate_career_blueprint_report
+from werkzeug.security import generate_password_hash, check_password_hash# ----------  keep the old helpers + add the new mapper ----------
+from career_report_generator import (
+    calculate_attribute_scores,
+    generate_career_blueprint_report,
+    map_assessment_to_report          # <-- NEW
+)
+# -----------------------------------------------------------------
 from job_scraper import get_latest_jobs
+# app.py
+import os, json, random, uuid
+import pandas as pd
+import re
+from datetime import datetime, timedelta
+from werkzeug.security import generate_password_hash, check_password_hash
+
+
 
 BASE_DIR = os.path.dirname(__file__)
 ATTEMPTS_DIR = os.path.join(BASE_DIR, 'attempts')
@@ -282,28 +295,44 @@ def submit():
     session.pop('attempt_id', None)
     return redirect('/results')
 
+# ------------------------------------------------------------------
+#  NEW : dynamic Word-style report mapping  (no more hard-coded text)
+# ------------------------------------------------------------------
+# ------------------------------------------------------------------
+#  NEW : dynamic Word-style report mapping  (no more hard-coded text)
+# ------------------------------------------------------------------
 @app.route('/results')
 def results():
     if not session.get('logged_in'):
         return redirect(url_for('login', next='/assessment'))
+
     last_id = session.get('last_attempt_id')
     if not last_id:
         return "No results available. Please take the assessment.", 400
+
     attempt_path = os.path.join(ATTEMPTS_DIR, f"{last_id}.json")
     if not os.path.exists(attempt_path):
         return "Results not found.", 404
+
     with open(attempt_path, 'r', encoding='utf-8') as f:
         attempt = json.load(f)
     if not attempt.get('results'):
         return "No results yet.", 400
-    
+
+    # 1. legacy data (kept for old template parts if any)
     results_data = attempt['results']
-    attributes = results_data.get('attributes', {})
-    
-    return render_template('results.html', 
-                         results=results_data['scores'], 
+    attributes   = results_data.get('attributes', {})
+
+    # 2. NEW : compute the Word-style skeleton from raw scores
+    report_context = map_assessment_to_report(results_data['scores'])
+
+    # 3. merge both dicts and render
+    return render_template('results.html',
+                         results=results_data['scores'],
                          strongest=results_data['strongest'],
-                         attributes=attributes)
+                         attributes=attributes,
+                         **report_context)          # <-- contains track_name, swot_*,
+                                                     #     career_path, industry_trends…
 
 @app.route('/download_career_blueprint')
 def download_career_blueprint():

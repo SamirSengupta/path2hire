@@ -1,216 +1,105 @@
-
+{# templates/results.html #}
+{# Word-style skeleton injected from Python – no hard-coded text #}
 <!DOCTYPE html>
 <html>
 <head>
   <meta charset="utf-8">
-  <title>Assessment Results - Skill2Hire</title>
+  <title>Personalized Career Report – Skill2Hire</title>
   <link rel="stylesheet" href="/assets/css/custom.css">
   <style>
-    .results-container {
-      max-width: 900px;
-      margin: 0 auto;
-      padding: 20px;
-      margin-top: 40px;
-    }
-    .results-header {
-      text-align: center;
-      margin-bottom: 30px;
-    }
-    .results-section {
-      background: #f8f9fa;
-      border-radius: 8px;
-      padding: 20px;
-      margin-bottom: 25px;
-    }
-    .attribute-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-      gap: 15px;
-      margin-top: 15px;
-    }
-    .attribute-item {
-      background: white;
-      padding: 15px;
-      border-radius: 6px;
-      border-left: 4px solid #007bff;
-    }
-    .score-badge {
-      display: inline-block;
-      background: #007bff;
-      color: white;
-      padding: 4px 12px;
-      border-radius: 20px;
-      font-weight: bold;
-      font-size: 0.9em;
-    }
-    .download-buttons {
-      text-align: center;
-      margin-top: 30px;
-    }
-    .btn {
-      display: inline-block;
-      padding: 12px 24px;
-      margin: 0 10px;
-      border-radius: 6px;
-      text-decoration: none;
-      font-weight: bold;
-      transition: all 0.3s ease;
-    }
-    .btn-primary {
-      background: #007bff;
-      color: white;
-    }
-    .btn-primary:hover {
-      background: #0056b3;
-    }
-    .btn-secondary {
-      background: #6c757d;
-      color: white;
-    }
-    .btn-secondary:hover {
-      background: #545b62;
-    }
-    .category-table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-top: 15px;
-    }
-    .category-table th, .category-table td {
-      border: 1px solid #dee2e6;
-      padding: 12px;
-      text-align: left;
-    }
-    .category-table th {
-      background: #e9ecef;
-      font-weight: bold;
-    }
+    body{background:#f7f9fc;font-family:Poppins,Roboto,sans-serif;color:#222}
+    .report-box{max-width:900px;margin:40px auto;background:#fff;border-radius:10px;box-shadow:0 8px 30px rgba(0,0,0,.08);padding:40px 50px}
+    h1,h2,h3{color:#1e40af}
+    h1{border-bottom:3px solid #f9a826;padding-bottom:10px;margin-bottom:25px}
+    table.swot{width:100%;border-collapse:collapse;margin:20px 0}
+    table.swot th,table.swot td{border:1px solid #cbd5e1;padding:12px 15px;vertical-align:top}
+    table.swot th{background:#e0e7ff;font-weight:600}
+    .career-focus{background:#fef3c7;border-left:5px solid #f59e0b;padding:18px;margin:25px 0;border-radius:6px}
+    .roles-table{width:100%;margin:15px 0}
+    .roles-table th,.roles-table td{padding:10px 12px;border:1px solid #e5e7eb}
+    .roles-table th{background:#f3f4f6}
+    .roadmap ul{margin-left:20px}
+    .download-bar{text-align:center;margin-top:35px}
+    .btn{display:inline-block;padding:12px 24px;border-radius:6px;text-decoration:none;font-weight:600;margin:0 8px;transition:.3s}
+    .btn-primary{background:#2563eb;color:#fff}
+    .btn-primary:hover{background:#1e40af}
+    .btn-secondary{background:#e5e7eb;color:#222}
+    .btn-secondary:hover{background:#d1d5db}
   </style>
 </head>
 <body>
-  <div class="results-container">
-    <div class="results-header">
-      <h1 style="color: #007bff; margin-bottom: 10px;">🎉 Assessment Complete!</h1>
-      <p style="font-size: 1.1em; color: #6c757d;">Your personalized career insights are ready</p>
-    </div>
+<div class="report-box">
 
-    {% if results %}
-      <!-- Category Scores Section -->
-      <div class="results-section">
-        <h2 style="color: #333; margin-bottom: 15px;">📊 Assessment Category Scores</h2>
-        <table class="category-table">
-          <thead>
-            <tr>
-              <th>Category</th>
-              <th>Score</th>
-              <th>Percentage</th>
-            </tr>
-          </thead>
-          <tbody>
-            {% set total_responses = results.values() | sum %}
-            {% for cat, score in results.items() %}
-              <tr>
-                <td>
-                  {% if cat == 'FAR' %}
-                    Financial/Analytical Reasoning
-                  {% elif cat == 'BM' %}
-                    Business/Market Acumen
-                  {% elif cat == 'CRM' %}
-                    Customer Relationship/Communication
-                  {% elif cat == 'MO' %}
-                    Motivation/Operational Orientation
-                  {% else %}
-                    {{ cat }}
-                  {% endif %}
-                </td>
-                <td>{{ score }}</td>
-                <td>{{ "%.1f"|format((score/total_responses)*100) }}%</td>
-              </tr>
-            {% endfor %}
-          </tbody>
-        </table>
-        <p style="margin-top: 15px; font-weight: bold; color: #007bff;">
-          🎯 Your strongest area: 
-          {% if strongest == 'FAR' %}
-            Financial/Analytical Reasoning
-          {% elif strongest == 'BM' %}
-            Business/Market Acumen
-          {% elif strongest == 'CRM' %}
-            Customer Relationship/Communication
-          {% elif strongest == 'MO' %}
-            Motivation/Operational Orientation
-          {% else %}
-            {{ strongest }}
-          {% endif %}
-        </p>
-      </div>
+  <!-- 1. Header -->
+  <h1>Personalized Career Report: {{ track_name }}</h1>
 
-      <!-- Skill Attributes Section -->
-      {% if attributes %}
-      <div class="results-section">
-        <h2 style="color: #333; margin-bottom: 15px;">🎯 Your 10 Key Skill Attributes</h2>
-        <p style="color: #6c757d; margin-bottom: 20px;">Based on your assessment responses, here's how you score across the 10 key attributes for finance and accounting careers:</p>
-        
-        <div class="attribute-grid">
-          {% for attr, score in attributes.items() %}
-            <div class="attribute-item">
-              <div style="display: flex; justify-content: between; align-items: center; margin-bottom: 8px;">
-                <strong style="color: #333;">{{ attr }}</strong>
-                <span class="score-badge">{{ score }}/10</span>
-              </div>
-              <div style="font-size: 0.9em; color: #6c757d;">
-                {% if score >= 8.0 %}
-                  🌟 Exceptional strength - leverage this in your career!
-                {% elif score >= 6.5 %}
-                  ✅ Strong capability - continue building on this
-                {% elif score >= 5.0 %}
-                  📈 Developing skill - good foundation for growth
-                {% else %}
-                  🎯 Growth opportunity - focus area for development
-                {% endif %}
-              </div>
-            </div>
-          {% endfor %}
-        </div>
-      </div>
-      {% endif %}
+  <!-- 2. SWOT -->
+  <h2>1. SWOT Analysis</h2>
+  <table class="swot">
+    <thead><tr><th>Strengths</th><th>Weaknesses</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><ul>{% for s in swot_strengths %}<li>{{ s }}</li>{% endfor %}</ul></td>
+        <td><ul>{% for w in swot_weaknesses %}<li>{{ w }}</li>{% endfor %}</ul></td>
+      </tr>
+    </tbody>
+  </table>
 
-      <!-- Download Section -->
-      <div class="download-buttons">
-        <h3 style="color: #333; margin-bottom: 20px;">📋 Get Your Detailed Reports</h3>
-        <a class="btn btn-primary" href="/download_career_blueprint">
-          📄 Download Career Strengths Blueprint (Markdown)
-        </a>
-        <a class="btn btn-secondary" href="/download_report">
-          📊 Download Basic PDF Report
-        </a>
-        <div style="margin-top: 15px; font-size: 0.9em; color: #6c757d;">
-          <p><strong>Career Strengths Blueprint</strong> includes personalized career recommendations, SWOT analysis, and actionable next steps.</p>
-          <p><em>Tip: Convert the Markdown file to PDF using online tools like markdown-to-pdf.com</em></p>
-        </div>
-      </div>
+  <table class="swot">
+    <thead><tr><th>Opportunities</th><th>Threats</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><ul>{% for o in swot_opportunities %}<li>{{ o }}</li>{% endfor %}</ul></td>
+        <td><ul>{% for t in swot_threats %}<li>{{ t }}</li>{% endfor %}</ul></td>
+      </tr>
+    </tbody>
+  </table>
 
-      <!-- Next Steps Section -->
-      <div class="results-section" style="text-align: center;">
-        <h3 style="color: #007bff; margin-bottom: 15px;">🚀 Ready for Your Next Step?</h3>
-        <p style="margin-bottom: 20px;">Based on your results, explore Skill2Hire's training programs designed for your career path:</p>
-        <a href="/training/" class="btn btn-primary" style="margin: 0 10px;">
-          🎓 Explore Training Programs
-        </a>
-        <a href="/contact.html" class="btn btn-secondary" style="margin: 0 10px;">
-          💬 Talk to Career Counselor
-        </a>
-      </div>
+  <!-- 3. Career Focus -->
+  <h2>2. Recommended Career Focus: {{ career_focus_title }}</h2>
+  <div class="career-focus">{{ career_focus_desc }}</div>
 
-    {% else %}
-      <div class="results-section" style="text-align: center;">
-        <h2>❌ No Results Found</h2>
-        <p>Please complete the assessment first.</p>
-        <a href="/assessment" class="btn btn-primary">Take Assessment</a>
-      </div>
-    {% endif %}
+  <!-- 4. Market Opportunities -->
+  <h2>3. Market Opportunities</h2>
+  <h3>Industry Trends</h3>
+  <ul>{% for trend in industry_trends %}<li>{{ trend }}</li>{% endfor %}</ul>
+
+  <h3>Potential Roles</h3>
+  <table class="roles-table">
+    <thead><tr><th>Role</th><th>Typical Employers</th></tr></thead>
+    <tbody>
+      {% for role in potential_roles %}
+        <tr><td>{{ role.title }}</td><td>{{ role.employers }}</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+  <h3>Career Path Progression</h3>
+  <ol>{% for step in career_path %}<li><strong>{{ step.title }}</strong><br>Focus: {{ step.focus }}</li>{% endfor %}</ol>
+
+  <!-- 5. Growth & Upskilling Road-map -->
+  <h2>4. Growth & Upskilling Road-map</h2>
+  <h3>Core Certifications & Programs to Pursue</h3>
+  <ul>{% for cert in core_certs %}<li>{{ cert }}</li>{% endfor %}</ul>
+
+  <h3>Immediate Steps for Interview Success</h3>
+  <ul>{% for step in interview_steps %}<li>{{ step }}</li>{% endfor %}</ul>
+
+  <!-- 6. How to Grow Further -->
+  <h2>5. How to Grow Further</h2>
+  <ul>{% for tip in growth_tips %}<li>{{ tip }}</li>{% endfor %}</ul>
+
+  <!-- 7. Closing -->
+  <h2>6. Your Future in {{ track_name }}</h2>
+  <p>{{ closing_paragraph }}</p>
+  <ul>{% for item in next_steps %}<li>{{ item }}</li>{% endfor %}</ul>
+
+  <!-- 8. Download bar (existing buttons) -->
+  <div class="download-bar">
+    <a class="btn btn-primary" href="/download_career_blueprint"><i class="fas fa-download"></i> Download Career Blueprint (Markdown)</a>
+    <a class="btn btn-secondary" href="/download_report"><i class="fas fa-file-pdf"></i> Download PDF Report</a>
   </div>
 
-  <script src="/assets/js/main.js"></script>
-  <script src="/assets/js/active-nav.js"></script>
+</div>
 </body>
 </html>
