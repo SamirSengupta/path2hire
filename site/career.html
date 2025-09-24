@@ -238,7 +238,8 @@
     </div>
     
     <div class="contact-card gradient-card rounded-2xl p-8 shadow-xl">
-      <form action="#" method="post" id="career-form" class="space-y-6">
+      <form action="#" method="post" id="career-form" enctype="multipart/form-data" class="space-y-6">
+
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div>
             <label class="block text-gray-700 font-medium mb-2">Full Name</label>
@@ -284,15 +285,18 @@
         </div>
         
         <div>
-          <label class="block text-gray-700 font-medium mb-2">Resume (Paste link or upload later)</label>
-          <input name="resume_link" class="form-input w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent transition-all" placeholder="Paste a link to your resume or mention you'll upload later" />
+          <label class="block text-gray-700 font-medium mb-2">Upload Resume</label>
+          <input type="file" name="resume_file" accept=".pdf,.doc,.docx" 
+                class="form-input w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent transition-all" />
         </div>
+
         
         <div>
-          <label class="block text-gray-700 font-medium mb-2">Cover Letter / Why You Want to Join</label>
-          <textarea name="cover_letter" rows="6" class="form-input w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent transition-all resize-none" placeholder="Tell us about your experience and why you'd be a great fit for our mission..."></textarea>
+          <label class="block text-gray-700 font-medium mb-2">Upload Cover Letter</label>
+          <input type="file" name="cover_letter_file" accept=".pdf,.doc,.docx" 
+                class="form-input w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent transition-all" />
         </div>
-        
+                
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div>
             <label class="block text-gray-700 font-medium mb-2">Salary Expectations</label>

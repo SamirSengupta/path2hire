@@ -258,7 +258,7 @@
                        {% if selected == opt['code'] %} checked {% endif %} 
                        required class="mt-1 mr-4 text-primary scale-125"> 
                 <div class="flex-1">
-                  <span class="text-gray-800 leading-relaxed">{{ opt['text'] | safe }}</span>
+                  <span class="text-gray-800 leading-relaxed">{{ opt['text'] | strip_tags | safe }}</span>
                 </div>
               </div>
             </label>
