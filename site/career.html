@@ -19,6 +19,7 @@
   </script>
   <link rel="stylesheet" href="assets/css/custom.css" />
   <style>
+    
     .floating-elements {
       position: absolute;
       width: 100%;
@@ -237,7 +238,8 @@
       <p class="text-xl text-gray-600 max-w-3xl mx-auto">Ready to make a difference? Share your passion and experience with us.</p>
     </div>
     
-    <div class="contact-card gradient-card rounded-2xl p-8 shadow-xl">
+   <div class="gradient-card rounded-2xl p-8 contact-card relative z-20">
+    <div class="max-w-6xl mx-auto px-4 relative z-20">
       <form action="#" method="post" id="career-form" enctype="multipart/form-data" class="space-y-6">
 
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -261,6 +263,23 @@
             <input name="position" class="form-input w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent transition-all" placeholder="e.g. Training Specialist" />
           </div>
         </div>
+        <!-- Trainings Applicant Can Provide -->
+        <div>
+          <label class="block text-gray-700 font-medium mb-2">Trainings You Can Provide</label>
+          <textarea name="trainings" rows="3" 
+            class="form-input w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent transition-all" 
+            placeholder="e.g. Data Science, Machine Learning, AI, Cloud, Cybersecurity"></textarea>
+          <p class="text-sm text-gray-500 mt-2">List all topics/services where you can provide training (comma-separated).</p>
+        </div>
+
+        <!-- Current CTC -->
+        <div>
+          <label class="block text-gray-700 font-medium mb-2">Current CTC (Annual)</label>
+          <input type="text" name="current_ctc" 
+            class="form-input w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent transition-all" 
+            placeholder="e.g. ₹8,00,000 or $90,000" />
+        </div>
+
         
         <div>
           <label class="block text-gray-700 font-medium mb-2">LinkedIn / Portfolio URL</label>
