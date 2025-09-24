@@ -1,105 +1,437 @@
-{# templates/results.html #}
-{# Word-style skeleton injected from Python – no hard-coded text #}
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <meta charset="utf-8">
-  <title>Personalized Career Report – Skill2Hire</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Personalized Career Report • Path2Hire</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: { primary: '#2563eb', secondary: '#1e40af', accent: '#f9a826' },
+          fontFamily: { poppins: ['Poppins','sans-serif'], roboto: ['Roboto','sans-serif'] }
+        }
+      }
+    }
+  </script>
   <link rel="stylesheet" href="/assets/css/custom.css">
   <style>
-    body{background:#f7f9fc;font-family:Poppins,Roboto,sans-serif;color:#222}
-    .report-box{max-width:900px;margin:40px auto;background:#fff;border-radius:10px;box-shadow:0 8px 30px rgba(0,0,0,.08);padding:40px 50px}
-    h1,h2,h3{color:#1e40af}
-    h1{border-bottom:3px solid #f9a826;padding-bottom:10px;margin-bottom:25px}
-    table.swot{width:100%;border-collapse:collapse;margin:20px 0}
-    table.swot th,table.swot td{border:1px solid #cbd5e1;padding:12px 15px;vertical-align:top}
-    table.swot th{background:#e0e7ff;font-weight:600}
-    .career-focus{background:#fef3c7;border-left:5px solid #f59e0b;padding:18px;margin:25px 0;border-radius:6px}
-    .roles-table{width:100%;margin:15px 0}
-    .roles-table th,.roles-table td{padding:10px 12px;border:1px solid #e5e7eb}
-    .roles-table th{background:#f3f4f6}
-    .roadmap ul{margin-left:20px}
-    .download-bar{text-align:center;margin-top:35px}
-    .btn{display:inline-block;padding:12px 24px;border-radius:6px;text-decoration:none;font-weight:600;margin:0 8px;transition:.3s}
-    .btn-primary{background:#2563eb;color:#fff}
-    .btn-primary:hover{background:#1e40af}
-    .btn-secondary{background:#e5e7eb;color:#222}
-    .btn-secondary:hover{background:#d1d5db}
+    .floating-elements {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      pointer-events: none;
+    }
+    .floating-shape {
+      position: absolute;
+      opacity: 0.1;
+      animation: float 12s ease-in-out infinite;
+    }
+    @keyframes float {
+      0%, 100% { transform: translateY(0px) rotate(0deg); }
+      25% { transform: translateY(-20px) rotate(90deg); }
+      50% { transform: translateY(-10px) rotate(180deg); }
+      75% { transform: translateY(-30px) rotate(270deg); }
+    }
+    .results-hero {
+      background: linear-gradient(135deg, #1e3a8a 0%, #3730a3 50%, #6366f1 100%);
+      position: relative;
+      overflow: hidden;
+    }
+    .pulse-glow {
+      animation: pulse-glow 3s infinite;
+    }
+    @keyframes pulse-glow {
+      0%, 100% { box-shadow: 0 0 20px rgba(37, 99, 235, 0.3); }
+      50% { box-shadow: 0 0 40px rgba(37, 99, 235, 0.6); }
+    }
+    .gradient-card {
+      background: linear-gradient(135deg, rgba(255,255,255,0.95) 0%, rgba(255,255,255,0.85) 100%);
+      backdrop-filter: blur(15px);
+      border: 1px solid rgba(255,255,255,0.3);
+    }
+    .contact-card {
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      position: relative;
+      overflow: hidden;
+    }
+    .contact-card::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: linear-gradient(45deg, transparent, rgba(37, 99, 235, 0.05), transparent);
+      transform: rotate(45deg);
+      transition: all 0.6s ease;
+      opacity: 0;
+    }
+    .contact-card:hover::before {
+      animation: shine 0.8s ease-in-out;
+    }
+    @keyframes shine {
+      0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); opacity: 0; }
+      50% { opacity: 1; }
+      100% { transform: translateX(100%) translateY(100%) rotate(45deg); opacity: 0; }
+    }
+    .contact-card:hover {
+      transform: translateY(-8px) scale(1.02);
+      box-shadow: 0 25px 50px rgba(37, 99, 235, 0.15);
+    }
+    .swot-table {
+      background: linear-gradient(135deg, rgba(255,255,255,0.9) 0%, rgba(255,255,255,0.8) 100%);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255,255,255,0.2);
+    }
+    .career-focus-box {
+      background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+      border-left: 5px solid #f59e0b;
+      position: relative;
+      overflow: hidden;
+    }
+    .career-focus-box::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      right: -50%;
+      width: 200%;
+      height: 200%;
+      background: linear-gradient(45deg, transparent, rgba(245, 158, 11, 0.1), transparent);
+      transform: rotate(45deg);
+      animation: shimmer 3s ease-in-out infinite;
+    }
+    @keyframes shimmer {
+      0%, 100% { transform: translateX(-100%) rotate(45deg); }
+      50% { transform: translateX(100%) rotate(45deg); }
+    }
   </style>
 </head>
-<body>
-<div class="report-box">
+<body class="bg-gray-50 text-gray-800">
 
-  <!-- 1. Header -->
-  <h1>Personalized Career Report: {{ track_name }}</h1>
+<!-- Hero Section -->
+<section class="results-hero text-white relative min-h-[40vh] flex items-center">
+  <div class="floating-elements">
+    <div class="floating-shape w-24 h-24 bg-white rounded-full" style="top: 15%; left: 10%; animation-delay: 0s;"></div>
+    <div class="floating-shape w-18 h-18 bg-accent rounded-full" style="top: 25%; right: 15%; animation-delay: 2s;"></div>
+    <div class="floating-shape w-20 h-20 bg-white/30 rounded-full" style="bottom: 30%; left: 20%; animation-delay: 4s;"></div>
+    <div class="floating-shape w-16 h-16 bg-accent/50 rounded-full" style="top: 60%; right: 10%; animation-delay: 6s;"></div>
+  </div>
+  
+  <div class="max-w-7xl mx-auto px-4 py-12 relative z-10">
+    <div class="text-center">
+      <div class="inline-flex items-center bg-white/20 backdrop-blur rounded-full px-6 py-3 mb-6">
+        <i class="fas fa-chart-line text-accent mr-2"></i>
+        <span class="font-semibold">Your Personalized Results</span>
+      </div>
+      
+      <h1 class="text-4xl md:text-5xl font-bold mb-6 leading-tight">
+        Career Report:
+        <span class="bg-gradient-to-r from-accent to-yellow-300 bg-clip-text text-transparent">
+          {{ track_name }}
+        </span>
+      </h1>
+      
+      <p class="text-xl text-blue-100 mb-8 max-w-3xl mx-auto">
+        Discover your strengths, opportunities, and personalized roadmap to career success.
+      </p>
+    </div>
+  </div>
+</section>
 
-  <!-- 2. SWOT -->
-  <h2>1. SWOT Analysis</h2>
-  <table class="swot">
-    <thead><tr><th>Strengths</th><th>Weaknesses</th></tr></thead>
-    <tbody>
-      <tr>
-        <td><ul>{% for s in swot_strengths %}<li>{{ s }}</li>{% endfor %}</ul></td>
-        <td><ul>{% for w in swot_weaknesses %}<li>{{ w }}</li>{% endfor %}</ul></td>
-      </tr>
-    </tbody>
-  </table>
-
-  <table class="swot">
-    <thead><tr><th>Opportunities</th><th>Threats</th></tr></thead>
-    <tbody>
-      <tr>
-        <td><ul>{% for o in swot_opportunities %}<li>{{ o }}</li>{% endfor %}</ul></td>
-        <td><ul>{% for t in swot_threats %}<li>{{ t }}</li>{% endfor %}</ul></td>
-      </tr>
-    </tbody>
-  </table>
-
-  <!-- 3. Career Focus -->
-  <h2>2. Recommended Career Focus: {{ career_focus_title }}</h2>
-  <div class="career-focus">{{ career_focus_desc }}</div>
-
-  <!-- 4. Market Opportunities -->
-  <h2>3. Market Opportunities</h2>
-  <h3>Industry Trends</h3>
-  <ul>{% for trend in industry_trends %}<li>{{ trend }}</li>{% endfor %}</ul>
-
-  <h3>Potential Roles</h3>
-  <table class="roles-table">
-    <thead><tr><th>Role</th><th>Typical Employers</th></tr></thead>
-    <tbody>
-      {% for role in potential_roles %}
-        <tr><td>{{ role.title }}</td><td>{{ role.employers }}</td></tr>
-      {% endfor %}
-    </tbody>
-  </table>
-
-  <h3>Career Path Progression</h3>
-  <ol>{% for step in career_path %}<li><strong>{{ step.title }}</strong><br>Focus: {{ step.focus }}</li>{% endfor %}</ol>
-
-  <!-- 5. Growth & Upskilling Road-map -->
-  <h2>4. Growth & Upskilling Road-map</h2>
-  <h3>Core Certifications & Programs to Pursue</h3>
-  <ul>{% for cert in core_certs %}<li>{{ cert }}</li>{% endfor %}</ul>
-
-  <h3>Immediate Steps for Interview Success</h3>
-  <ul>{% for step in interview_steps %}<li>{{ step }}</li>{% endfor %}</ul>
-
-  <!-- 6. How to Grow Further -->
-  <h2>5. How to Grow Further</h2>
-  <ul>{% for tip in growth_tips %}<li>{{ tip }}</li>{% endfor %}</ul>
-
-  <!-- 7. Closing -->
-  <h2>6. Your Future in {{ track_name }}</h2>
-  <p>{{ closing_paragraph }}</p>
-  <ul>{% for item in next_steps %}<li>{{ item }}</li>{% endfor %}</ul>
-
-  <!-- 8. Download bar (existing buttons) -->
-  <div class="download-bar">
-    <a class="btn btn-primary" href="/download_career_blueprint"><i class="fas fa-download"></i> Download Career Blueprint (Markdown)</a>
-    <a class="btn btn-secondary" href="/download_report"><i class="fas fa-file-pdf"></i> Download PDF Report</a>
+<!-- Main Report Content -->
+<section class="py-16 bg-gradient-to-br from-blue-50 via-white to-indigo-50 relative">
+  <div class="floating-elements">
+    <div class="floating-shape w-16 h-16 bg-primary/10 rounded-full" style="top: 10%; left: 5%; animation-delay: 2s;"></div>
+    <div class="floating-shape w-20 h-20 bg-accent/10 rounded-full" style="bottom: 20%; right: 10%; animation-delay: 5s;"></div>
   </div>
 
-</div>
+  <div class="max-w-5xl mx-auto px-4 relative z-10">
+    
+    <!-- SWOT Analysis Section -->
+    <div class="contact-card gradient-card rounded-2xl p-8 mb-12 shadow-xl">
+      <div class="text-center mb-8">
+        <div class="inline-flex items-center bg-primary/10 rounded-full px-6 py-3 mb-4">
+          <i class="fas fa-balance-scale text-primary mr-2"></i>
+          <span class="text-primary font-semibold">Strategic Analysis</span>
+        </div>
+        <h2 class="text-3xl font-bold text-primary mb-2">SWOT Analysis</h2>
+        <p class="text-gray-600">Understanding your professional landscape</p>
+      </div>
+      
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div class="contact-card swot-table rounded-xl p-6">
+          <h3 class="font-bold text-green-600 text-lg mb-4 flex items-center">
+            <i class="fas fa-thumbs-up mr-2"></i>Strengths
+          </h3>
+          <ul class="space-y-2">
+            {% for s in swot_strengths %}
+            <li class="flex items-start">
+              <i class="fas fa-check-circle text-green-500 mr-2 mt-1"></i>
+              <span class="text-gray-700">{{ s }}</span>
+            </li>
+            {% endfor %}
+          </ul>
+        </div>
+        
+        <div class="contact-card swot-table rounded-xl p-6">
+          <h3 class="font-bold text-red-600 text-lg mb-4 flex items-center">
+            <i class="fas fa-exclamation-triangle mr-2"></i>Weaknesses
+          </h3>
+          <ul class="space-y-2">
+            {% for w in swot_weaknesses %}
+            <li class="flex items-start">
+              <i class="fas fa-times-circle text-red-500 mr-2 mt-1"></i>
+              <span class="text-gray-700">{{ w }}</span>
+            </li>
+            {% endfor %}
+          </ul>
+        </div>
+        
+        <div class="contact-card swot-table rounded-xl p-6">
+          <h3 class="font-bold text-blue-600 text-lg mb-4 flex items-center">
+            <i class="fas fa-lightbulb mr-2"></i>Opportunities
+          </h3>
+          <ul class="space-y-2">
+            {% for o in swot_opportunities %}
+            <li class="flex items-start">
+              <i class="fas fa-arrow-up text-blue-500 mr-2 mt-1"></i>
+              <span class="text-gray-700">{{ o }}</span>
+            </li>
+            {% endfor %}
+          </ul>
+        </div>
+        
+        <div class="contact-card swot-table rounded-xl p-6">
+          <h3 class="font-bold text-orange-600 text-lg mb-4 flex items-center">
+            <i class="fas fa-shield-alt mr-2"></i>Threats
+          </h3>
+          <ul class="space-y-2">
+            {% for t in swot_threats %}
+            <li class="flex items-start">
+              <i class="fas fa-exclamation text-orange-500 mr-2 mt-1"></i>
+              <span class="text-gray-700">{{ t }}</span>
+            </li>
+            {% endfor %}
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- Career Focus Section -->
+    <div class="contact-card career-focus-box rounded-2xl p-8 mb-12 relative">
+      <div class="relative z-10">
+        <div class="text-center mb-6">
+          <div class="inline-flex items-center bg-white/80 backdrop-blur rounded-full px-6 py-3 mb-4">
+            <i class="fas fa-bullseye text-accent mr-2"></i>
+            <span class="text-accent font-semibold">Your Perfect Match</span>
+          </div>
+          <h2 class="text-3xl font-bold text-primary">{{ career_focus_title }}</h2>
+        </div>
+        <div class="bg-white/80 backdrop-blur rounded-xl p-6 text-gray-700 text-lg leading-relaxed">
+          {{ career_focus_desc }}
+        </div>
+      </div>
+    </div>
+
+    <!-- Market Opportunities Section -->
+    <div class="contact-card gradient-card rounded-2xl p-8 mb-12 shadow-xl">
+      <div class="text-center mb-8">
+        <div class="inline-flex items-center bg-primary/10 rounded-full px-6 py-3 mb-4">
+          <i class="fas fa-chart-bar text-primary mr-2"></i>
+          <span class="text-primary font-semibold">Market Intelligence</span>
+        </div>
+        <h2 class="text-3xl font-bold text-primary mb-2">Market Opportunities</h2>
+        <p class="text-gray-600">Current trends and available positions in your field</p>
+      </div>
+      
+      <!-- Industry Trends -->
+      <div class="mb-8">
+        <h3 class="text-2xl font-bold text-secondary mb-4 flex items-center">
+          <i class="fas fa-trending-up mr-3"></i>Industry Trends
+        </h3>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {% for trend in industry_trends %}
+          <div class="contact-card bg-white/50 rounded-xl p-4 border border-primary/10">
+            <div class="flex items-start">
+              <i class="fas fa-arrow-right text-primary mr-2 mt-1"></i>
+              <span class="text-gray-700">{{ trend }}</span>
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+
+      <!-- Potential Roles -->
+      <div class="mb-8">
+        <h3 class="text-2xl font-bold text-secondary mb-4 flex items-center">
+          <i class="fas fa-briefcase mr-3"></i>Potential Roles
+        </h3>
+        <div class="overflow-x-auto">
+          <div class="bg-white/70 rounded-xl overflow-hidden">
+            <table class="w-full">
+              <thead>
+                <tr class="bg-primary/10">
+                  <th class="px-6 py-4 text-left font-semibold text-primary">Role</th>
+                  <th class="px-6 py-4 text-left font-semibold text-primary">Typical Employers</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for role in potential_roles %}
+                <tr class="border-b border-primary/5 hover:bg-primary/5 transition-colors">
+                  <td class="px-6 py-4 font-medium text-gray-800">{{ role.title }}</td>
+                  <td class="px-6 py-4 text-gray-600">{{ role.employers }}</td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- Career Path Progression -->
+      <div>
+        <h3 class="text-2xl font-bold text-secondary mb-4 flex items-center">
+          <i class="fas fa-route mr-3"></i>Career Path Progression
+        </h3>
+        <div class="space-y-4">
+          {% for step in career_path %}
+          <div class="contact-card bg-white/50 rounded-xl p-6 border-l-4 border-accent">
+            <div class="flex items-center mb-2">
+              <div class="w-8 h-8 bg-accent rounded-full flex items-center justify-center text-white font-bold mr-4">
+                {{ loop.index }}
+              </div>
+              <h4 class="font-bold text-lg text-primary">{{ step.title }}</h4>
+            </div>
+            <p class="text-gray-600 ml-12"><strong>Focus:</strong> {{ step.focus }}</p>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+
+    <!-- Growth Roadmap Section -->
+    <div class="contact-card gradient-card rounded-2xl p-8 mb-12 shadow-xl">
+      <div class="text-center mb-8">
+        <div class="inline-flex items-center bg-primary/10 rounded-full px-6 py-3 mb-4">
+          <i class="fas fa-road text-primary mr-2"></i>
+          <span class="text-primary font-semibold">Your Roadmap</span>
+        </div>
+        <h2 class="text-3xl font-bold text-primary mb-2">Growth & Upskilling Roadmap</h2>
+        <p class="text-gray-600">Strategic steps to accelerate your career growth</p>
+      </div>
+      
+      <!-- Core Certifications -->
+      <div class="mb-8">
+        <h3 class="text-2xl font-bold text-secondary mb-4 flex items-center">
+          <i class="fas fa-certificate mr-3"></i>Core Certifications & Programs
+        </h3>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {% for cert in core_certs %}
+          <div class="contact-card bg-gradient-to-r from-green-50 to-emerald-50 rounded-xl p-4 border border-green-200">
+            <div class="flex items-center">
+              <i class="fas fa-award text-green-600 mr-3"></i>
+              <span class="text-gray-700 font-medium">{{ cert }}</span>
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+
+      <!-- Interview Success Steps -->
+      <div>
+        <h3 class="text-2xl font-bold text-secondary mb-4 flex items-center">
+          <i class="fas fa-handshake mr-3"></i>Immediate Steps for Interview Success
+        </h3>
+        <div class="space-y-3">
+          {% for step in interview_steps %}
+          <div class="contact-card bg-blue-50 rounded-xl p-4 border border-blue-200">
+            <div class="flex items-start">
+              <i class="fas fa-check-circle text-blue-600 mr-3 mt-1"></i>
+              <span class="text-gray-700">{{ step }}</span>
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+
+    <!-- Growth Tips Section -->
+    <div class="contact-card gradient-card rounded-2xl p-8 mb-12 shadow-xl">
+      <div class="text-center mb-8">
+        <div class="inline-flex items-center bg-primary/10 rounded-full px-6 py-3 mb-4">
+          <i class="fas fa-rocket text-primary mr-2"></i>
+          <span class="text-primary font-semibold">Accelerate Growth</span>
+        </div>
+        <h2 class="text-3xl font-bold text-primary mb-2">How to Grow Further</h2>
+        <p class="text-gray-600">Advanced strategies for long-term career success</p>
+      </div>
+      
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        {% for tip in growth_tips %}
+        <div class="contact-card bg-gradient-to-r from-purple-50 to-indigo-50 rounded-xl p-6 border border-purple-200">
+          <div class="flex items-start">
+            <i class="fas fa-lightbulb text-purple-600 mr-3 mt-1"></i>
+            <span class="text-gray-700">{{ tip }}</span>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+
+    <!-- Future Vision Section -->
+    <div class="contact-card gradient-card rounded-2xl p-8 mb-12 shadow-xl">
+      <div class="text-center mb-8">
+        <div class="inline-flex items-center bg-primary/10 rounded-full px-6 py-3 mb-4">
+          <i class="fas fa-crystal-ball text-primary mr-2"></i>
+          <span class="text-primary font-semibold">Your Future</span>
+        </div>
+        <h2 class="text-3xl font-bold text-primary mb-2">Your Future in {{ track_name }}</h2>
+      </div>
+      
+      <div class="bg-white/70 rounded-xl p-6 mb-6">
+        <p class="text-gray-700 text-lg leading-relaxed">{{ closing_paragraph }}</p>
+      </div>
+      
+      <div class="space-y-3">
+        {% for item in next_steps %}
+        <div class="contact-card bg-gradient-to-r from-accent/10 to-yellow-100 rounded-xl p-4 border border-accent/30">
+          <div class="flex items-start">
+            <i class="fas fa-arrow-right text-accent mr-3 mt-1"></i>
+            <span class="text-gray-700 font-medium">{{ item }}</span>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+
+    <!-- Download Section -->
+    <div class="text-center bg-primary text-white rounded-2xl p-8 relative overflow-hidden">
+      <div class="floating-elements">
+        <div class="floating-shape w-16 h-16 bg-white/10 rounded-full" style="top: 20%; left: 10%; animation-delay: 0s;"></div>
+        <div class="floating-shape w-12 h-12 bg-accent/10 rounded-full" style="bottom: 30%; right: 15%; animation-delay: 2s;"></div>
+      </div>
+      
+      <div class="relative z-10">
+        <h3 class="text-2xl font-bold mb-6">Take Your Report With You</h3>
+        <p class="text-blue-100 mb-8 max-w-2xl mx-auto">Download your personalized career report and action plan to guide your journey to success.</p>
+        
+        <div class="flex flex-col sm:flex-row gap-4 justify-center">
+          <a href="/download_career_blueprint" class="bg-accent hover:bg-yellow-500 text-white font-bold py-4 px-8 rounded-full shadow-xl inline-flex items-center transform hover:scale-105 transition-all">
+            <i class="fas fa-download mr-3"></i>Download Career Blueprint
+          </a>
+          <a href="/download_report" class="bg-white/20 hover:bg-white/30 text-white font-medium py-4 px-8 rounded-full border-2 border-white inline-flex items-center backdrop-blur">
+            <i class="fas fa-file-pdf mr-3"></i>Download PDF Report
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
 </body>
 </html>

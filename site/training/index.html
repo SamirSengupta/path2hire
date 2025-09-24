@@ -18,6 +18,90 @@
     }
   </script>
   <link rel="stylesheet" href="../assets/css/custom.css" />
+  <style>
+    .floating-elements {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      pointer-events: none;
+    }
+    .floating-shape {
+      position: absolute;
+      opacity: 0.1;
+      animation: float 8s ease-in-out infinite;
+    }
+    @keyframes float {
+      0%, 100% { transform: translateY(0px) rotate(0deg); }
+      33% { transform: translateY(-30px) rotate(120deg); }
+      66% { transform: translateY(-15px) rotate(240deg); }
+    }
+    .training-hero {
+      background: linear-gradient(135deg, #1e3a8a 0%, #3730a3 50%, #1e40af 100%);
+      position: relative;
+      overflow: hidden;
+    }
+    .pulse-glow {
+      animation: pulse-glow 3s infinite;
+    }
+    @keyframes pulse-glow {
+      0%, 100% { box-shadow: 0 0 20px rgba(37, 99, 235, 0.3); }
+      50% { box-shadow: 0 0 40px rgba(37, 99, 235, 0.6); }
+    }
+    .gradient-card {
+      background: linear-gradient(135deg, rgba(255,255,255,0.95) 0%, rgba(255,255,255,0.85) 100%);
+      backdrop-filter: blur(15px);
+      border: 1px solid rgba(255,255,255,0.3);
+    }
+    .training-card {
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      position: relative;
+      overflow: hidden;
+    }
+    .training-card::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: linear-gradient(45deg, transparent, rgba(37, 99, 235, 0.1), transparent);
+      transform: rotate(45deg);
+      transition: all 0.6s ease;
+      opacity: 0;
+    }
+    .training-card:hover::before {
+      animation: shine 0.8s ease-in-out;
+    }
+    @keyframes shine {
+      0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); opacity: 0; }
+      50% { opacity: 1; }
+      100% { transform: translateX(100%) translateY(100%) rotate(45deg); opacity: 0; }
+    }
+    .training-card:hover {
+      transform: translateY(-8px) scale(1.02);
+      box-shadow: 0 25px 50px rgba(37, 99, 235, 0.2);
+    }
+    .category-filter {
+      transition: all 0.3s ease;
+    }
+    .category-filter.active {
+      background: linear-gradient(135deg, #2563eb, #1e40af);
+      color: white;
+    }
+    .program-badge {
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      background: linear-gradient(135deg, #f9a826, #f59e0b);
+      color: white;
+      font-size: 0.75rem;
+      font-weight: 600;
+      padding: 0.25rem 0.75rem;
+      border-radius: 9999px;
+      z-index: 10;
+    }
+  </style>
 </head>
 <body class="bg-gray-50 text-gray-800">
 
@@ -31,14 +115,13 @@
             <span class="text-xl font-bold text-blue-600">Path2<span class="text-accent">Hire</span></span>
           </a>
           <div class="hidden md:flex md:space-x-8">
-            <a href="/index.html" class="nav-link border-b-2 border-accent text-primary px-1 pt-1 text-sm font-medium">Home</a>
-<a href="/about.html" class="nav-link border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 px-1 pt-1 text-sm font-medium">About</a>
-<a href="/training/index.html" class="nav-link border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 px-1 pt-1 text-sm font-medium">Training</a>
-<a href="/assessment-info.html" class="nav-link border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 px-1 pt-1 text-sm font-medium">Assessment</a>
-<a href="/success.html" class="nav-link border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 px-1 pt-1 text-sm font-medium">Success</a>
-<a href="/jobs" class="nav-link border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 px-1 pt-1 text-sm font-medium">Jobs</a>
-<a href="/contact.html" class="nav-link border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 px-1 pt-1 text-sm font-medium">Contact</a>
-
+            <a href="/index.html" class="nav-link border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 px-1 pt-1 text-sm font-medium">Home</a>
+            <a href="/about.html" class="nav-link border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 px-1 pt-1 text-sm font-medium">About</a>
+            <a href="/training/index.html" class="nav-link border-b-2 border-accent text-primary px-1 pt-1 text-sm font-medium">Training</a>
+            <a href="/assessment-info.html" class="nav-link border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 px-1 pt-1 text-sm font-medium">Assessment</a>
+            <a href="/success.html" class="nav-link border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 px-1 pt-1 text-sm font-medium">Success</a>
+            <a href="/jobs" class="nav-link border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 px-1 pt-1 text-sm font-medium">Jobs</a>
+            <a href="/contact.html" class="nav-link border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 px-1 pt-1 text-sm font-medium">Contact</a>
           </div>
           <div class="md:hidden">
             <button id="menuBtn" class="focus:outline-none"><i class="fas fa-bars text-2xl text-primary"></i></button>
@@ -47,76 +130,529 @@
             <a href="../login.html" class="btn-primary bg-primary hover:bg-secondary text-white px-4 py-2 rounded-full text-sm font-medium flex items-center">
               <i class="fas fa-user-graduate mr-2"></i>Student Portal
             </a>
-                      <a href="/career.html" class="btn-primary bg-primary hover:bg-secondary text-white px-4 py-2 rounded-full text-sm font-medium flex items-center">
-  <i class="fas fa-briefcase mr-2"></i>Career Portal
-</a>
-
+            <a href="/career.html" class="btn-primary bg-primary hover:bg-secondary text-white px-4 py-2 rounded-full text-sm font-medium flex items-center">
+              <i class="fas fa-briefcase mr-2"></i>Career Portal
+            </a>
           </div>
-          </div>
-
         </div>
       </div>
       <div id="mobileMenu" class="hidden md:hidden bg-white shadow-lg">
         <div class="space-y-1 px-4 pb-3 pt-2">
           <a href="../index.html" class="nav-link border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 px-1 pt-1 text-sm font-medium">Home</a>
-<a href="../about.html" class="nav-link border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 px-1 pt-1 text-sm font-medium">About</a>
-<a href="../training/index.html" class="nav-link border-b-2 border-accent text-primary px-1 pt-1 text-sm font-medium">Training</a>
-<a href="../assessment-info.html" class="nav-link border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 px-1 pt-1 text-sm font-medium">Assessment</a>
-<a href="../success.html" class="nav-link border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 px-1 pt-1 text-sm font-medium">Success</a>
-<a href="../contact.html" class="nav-link border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 px-1 pt-1 text-sm font-medium">Contact</a>
-
+          <a href="../about.html" class="nav-link border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 px-1 pt-1 text-sm font-medium">About</a>
+          <a href="../training/index.html" class="nav-link border-b-2 border-accent text-primary px-1 pt-1 text-sm font-medium">Training</a>
+          <a href="../assessment-info.html" class="nav-link border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 px-1 pt-1 text-sm font-medium">Assessment</a>
+          <a href="../success.html" class="nav-link border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 px-1 pt-1 text-sm font-medium">Success</a>
+          <a href="../contact.html" class="nav-link border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 px-1 pt-1 text-sm font-medium">Contact</a>
           <a href="../login.html" class="block w-full text-left nav-link px-1 pt-1 text-sm font-medium text-primary">Student Portal</a>
         </div>
       </div>
     </nav>
     
-
-<section class="pt-24 py-16 bg-gradient-to-br from-gray-50 to-blue-50">
-  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-    <div class="text-center mb-10">
-      <h1 class="text-4xl font-bold text-primary">All Training Programs</h1>
-      <p class="text-gray-600 mt-2">Practical, job‑oriented modules aligned with real business practices.</p>
+<!-- Hero Section -->
+<section class="pt-24 training-hero text-white relative min-h-[70vh] flex items-center">
+  <div class="floating-elements">
+    <div class="floating-shape w-20 h-20 bg-white rounded-full" style="top: 15%; left: 10%; animation-delay: 0s;"></div>
+    <div class="floating-shape w-16 h-16 bg-accent rounded-full" style="top: 25%; right: 15%; animation-delay: 1.5s;"></div>
+    <div class="floating-shape w-24 h-24 bg-white/30 rounded-full" style="bottom: 30%; left: 20%; animation-delay: 3s;"></div>
+    <div class="floating-shape w-14 h-14 bg-accent/50 rounded-full" style="top: 60%; right: 10%; animation-delay: 4.5s;"></div>
+    <div class="floating-shape w-18 h-18 bg-white/40 rounded-full" style="bottom: 15%; right: 25%; animation-delay: 2s;"></div>
+  </div>
+  
+  <div class="max-w-7xl mx-auto px-4 py-20 relative z-10">
+    <div class="text-center">
+      <div class="inline-flex items-center bg-white/20 backdrop-blur rounded-full px-6 py-3 mb-8">
+        <i class="fas fa-rocket text-accent mr-2"></i>
+        <span class="font-semibold">Career-Focused Training Programs</span>
+      </div>
+      
+      <h1 class="text-5xl md:text-6xl font-bold mb-8 leading-tight">
+        Master <span class="bg-gradient-to-r from-accent to-yellow-300 bg-clip-text text-transparent">Real-World Skills</span><br>
+        That Employers Actually Want
+      </h1>
+      
+      <p class="text-xl md:text-2xl text-blue-100 mb-12 max-w-4xl mx-auto leading-relaxed">
+        Practical, job-oriented training modules aligned with real business practices. Learn through hands-on projects, case studies, and industry-standard tools.
+      </p>
+      
+      <div class="flex flex-col sm:flex-row gap-6 justify-center items-center">
+        <a href="#programs" class="btn-primary bg-accent hover:bg-yellow-500 text-white font-bold py-4 px-10 rounded-full shadow-xl inline-flex items-center transform hover:scale-105 transition-all text-lg">
+          <i class="fas fa-play mr-3"></i>Explore Programs
+        </a>
+        <a href="/assessment-info.html" class="btn-primary bg-white/20 hover:bg-white/30 text-white font-medium py-4 px-10 rounded-full border-2 border-white inline-flex items-center backdrop-blur">
+          <i class="fas fa-compass mr-3"></i>Find Your Path
+        </a>
+      </div>
     </div>
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
   </div>
 </section>
-<script>
-  const cards = document.currentScript.previousElementSibling.querySelector('.grid');
-  const programs = [
-    ["fpna","Financial Planning & Analysis","fas fa-chart-line","Budgeting, forecasting, variance analysis."],
-    ["fund-accounting-pe","Fund Accounting / PE","fas fa-building","Capital calls, NAV, investor reporting."],
-    ["ifrs","IFRS","fas fa-globe","Real‑world IFRS application & GAAP bridge."],
-    ["kyc-aml","KYC & AML","fas fa-shield-alt","Onboarding, due‑diligence & fraud detection."],
-    ["o2c","Order to Cash (O2C)","fas fa-exchange-alt","End‑to‑end O2C lifecycle."],
-    ["p2p","Procure to Pay (P2P)","fas fa-receipt","Requisition to vendor payment."],
-    ["r2r","Record to Report (R2R)","fas fa-book","Close, reconciliation & reporting."],
-    ["uk-gaap","UK GAAP","fas fa-pound-sign","UK standards & compliance."],
-    ["us-gaap","US GAAP","fas fa-dollar-sign","US standards & practical cases."],
-    ["us-individual-tax","US Individual Tax","fas fa-file-invoice-dollar","1040 returns & deductions."],
-    ["us-business-tax","US Business Tax","fas fa-building-columns","C‑corp, S‑corp & partnerships."],
-    ["us-payroll","US Payroll","fas fa-money-check-alt","Withholdings & year‑end forms."],
-    ["sap","SAP","fab fa-suse","SAP FI/CO & controlling modules."],
-    ["quickbooks","QuickBooks","fas fa-calculator","Company setup & employer‑ready skills."]
-  ];
-  cards.innerHTML = programs.map(([slug,title,icon,desc]) => `
-    <a href="../programs/${slug}.html" class="training-card bg-white rounded-xl shadow-md p-6 block">
-      <i class="${icon} text-primary text-3xl mb-2"></i>
-      <h3 class="font-bold mb-1">${title}</h3>
-      <p class="text-sm text-gray-600">${desc}</p>
-    </a>`).join('');
-</script>
 
-<!-- FOOTER -->
+<!-- Stats Section -->
+<section class="py-16 bg-white relative">
+  <div class="floating-elements">
+    <div class="floating-shape w-12 h-12 bg-primary/5 rounded-full" style="top: 20%; left: 5%; animation-delay: 1s;"></div>
+    <div class="floating-shape w-16 h-16 bg-accent/5 rounded-full" style="bottom: 20%; right: 10%; animation-delay: 3s;"></div>
+  </div>
+  
+  <div class="max-w-7xl mx-auto px-4 relative z-10">
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-8">
+      <div class="text-center group">
+        <div class="w-20 h-20 bg-gradient-to-r from-primary to-secondary rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform pulse-glow">
+          <i class="fas fa-users text-white text-2xl"></i>
+        </div>
+        <div class="text-3xl font-bold text-primary mb-2">2000+</div>
+        <p class="text-gray-600 font-medium">Students Trained</p>
+      </div>
+      
+      <div class="text-center group">
+        <div class="w-20 h-20 bg-gradient-to-r from-accent to-yellow-500 rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform pulse-glow">
+          <i class="fas fa-briefcase text-white text-2xl"></i>
+        </div>
+        <div class="text-3xl font-bold text-primary mb-2">85%</div>
+        <p class="text-gray-600 font-medium">Job Placement Rate</p>
+      </div>
+      
+      <div class="text-center group">
+        <div class="w-20 h-20 bg-gradient-to-r from-green-500 to-emerald-500 rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform pulse-glow">
+          <i class="fas fa-award text-white text-2xl"></i>
+        </div>
+        <div class="text-3xl font-bold text-primary mb-2">14+</div>
+        <p class="text-gray-600 font-medium">Specialized Programs</p>
+      </div>
+      
+      <div class="text-center group">
+        <div class="w-20 h-20 bg-gradient-to-r from-purple-500 to-indigo-500 rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform pulse-glow">
+          <i class="fas fa-clock text-white text-2xl"></i>
+        </div>
+        <div class="text-3xl font-bold text-primary mb-2">3 Months</div>
+        <p class="text-gray-600 font-medium">Avg. Job Placement</p>
+      </div>
+    </div>
+  </div>
+</section>
 
-    <footer class="bg-gray-900 text-white pt-16 pb-12 mt-24">
-      <div class="max-w-7xl mx-auto px-4">
-        <div class="border-t border-gray-800 mt-12 pt-8 flex flex-col md:flex-row justify-between items-center">
-          <p class="text-gray-500 mb-4 md:mb-0">&copy; 2024 Path2Hire. All rights reserved.</p>
+<!-- Filter Categories -->
+<section class="py-12 bg-gradient-to-br from-gray-50 to-blue-50">
+  <div class="max-w-7xl mx-auto px-4">
+    <div class="text-center mb-12">
+      <h2 class="text-3xl font-bold text-primary mb-4">Choose Your Career Path</h2>
+      <p class="text-gray-600 text-lg">Select a specialization to see relevant training programs</p>
+    </div>
+    
+    <div class="flex flex-wrap justify-center gap-4 mb-8" id="categoryFilters">
+      <button class="category-filter active px-6 py-3 rounded-full border-2 border-primary text-primary font-semibold" data-category="all">
+        <i class="fas fa-th-large mr-2"></i>All Programs
+      </button>
+      <button class="category-filter px-6 py-3 rounded-full border-2 border-gray-300 text-gray-600 font-semibold hover:border-primary hover:text-primary" data-category="accounting">
+        <i class="fas fa-calculator mr-2"></i>Accounting
+      </button>
+      <button class="category-filter px-6 py-3 rounded-full border-2 border-gray-300 text-gray-600 font-semibold hover:border-primary hover:text-primary" data-category="finance">
+        <i class="fas fa-chart-line mr-2"></i>Finance
+      </button>
+      <button class="category-filter px-6 py-3 rounded-full border-2 border-gray-300 text-gray-600 font-semibold hover:border-primary hover:text-primary" data-category="tax">
+        <i class="fas fa-file-invoice-dollar mr-2"></i>Taxation
+      </button>
+      <button class="category-filter px-6 py-3 rounded-full border-2 border-gray-300 text-gray-600 font-semibold hover:border-primary hover:text-primary" data-category="compliance">
+        <i class="fas fa-shield-alt mr-2"></i>Compliance
+      </button>
+      <button class="category-filter px-6 py-3 rounded-full border-2 border-gray-300 text-gray-600 font-semibold hover:border-primary hover:text-primary" data-category="software">
+        <i class="fas fa-laptop mr-2"></i>Software
+      </button>
+    </div>
+  </div>
+</section>
+
+<!-- Training Programs Grid -->
+<section id="programs" class="py-20 bg-white">
+  <div class="max-w-7xl mx-auto px-4">
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" id="programsGrid">
+      <!-- Programs will be dynamically inserted here -->
+    </div>
+  </div>
+</section>
+
+<!-- Why Choose Our Training Section -->
+<section class="py-20 bg-gradient-to-br from-blue-50 via-white to-indigo-50 relative">
+  <div class="floating-elements">
+    <div class="floating-shape w-16 h-16 bg-primary/10 rounded-full" style="top: 10%; left: 5%; animation-delay: 0.5s;"></div>
+    <div class="floating-shape w-20 h-20 bg-accent/10 rounded-full" style="bottom: 15%; right: 10%; animation-delay: 2.5s;"></div>
+  </div>
+  
+  <div class="max-w-7xl mx-auto px-4 relative z-10">
+    <div class="text-center mb-16">
+      <div class="inline-flex items-center bg-primary/10 rounded-full px-6 py-3 mb-6">
+        <i class="fas fa-star text-primary mr-2"></i>
+        <span class="text-primary font-semibold">Why Path2Hire Training</span>
+      </div>
+      <h2 class="text-4xl font-bold text-primary mb-6">What Makes Our Training Different?</h2>
+      <p class="text-xl text-gray-600 max-w-3xl mx-auto">Real-world focused, practical approach that gets you job-ready faster</p>
+    </div>
+    
+    <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+      <div class="group">
+        <div class="gradient-card rounded-2xl p-8 shadow-lg hover-card transform group-hover:scale-105 transition-all duration-300">
+          <div class="w-16 h-16 bg-gradient-to-r from-primary to-secondary rounded-2xl flex items-center justify-center mb-6 group-hover:rotate-12 transition-transform">
+            <i class="fas fa-hands-on text-white text-2xl"></i>
+          </div>
+          <h3 class="font-bold text-xl mb-4 text-gray-800">Hands-On Learning</h3>
+          <p class="text-gray-600 leading-relaxed">Work on real case studies, actual business scenarios, and live projects that mirror what you'll do in your job.</p>
         </div>
       </div>
-    </footer>
-    <script src="../assets/js/main.js"></script>
-    <script src="/assets/js/active-nav.js"></script>
-</body>
-    </html>
+      
+      <div class="group">
+        <div class="gradient-card rounded-2xl p-8 shadow-lg hover-card transform group-hover:scale-105 transition-all duration-300">
+          <div class="w-16 h-16 bg-gradient-to-r from-green-500 to-emerald-500 rounded-2xl flex items-center justify-center mb-6 group-hover:rotate-12 transition-transform">
+            <i class="fas fa-user-tie text-white text-2xl"></i>
+          </div>
+          <h3 class="font-bold text-xl mb-4 text-gray-800">Industry Experts</h3>
+          <p class="text-gray-600 leading-relaxed">Learn from professionals actively working in their fields, not just academic instructors.</p>
+        </div>
+      </div>
+      
+      <div class="group">
+        <div class="gradient-card rounded-2xl p-8 shadow-lg hover-card transform group-hover:scale-105 transition-all duration-300">
+          <div class="w-16 h-16 bg-gradient-to-r from-accent to-yellow-500 rounded-2xl flex items-center justify-center mb-6 group-hover:rotate-12 transition-transform">
+            <i class="fas fa-tools text-white text-2xl"></i>
+          </div>
+          <h3 class="font-bold text-xl mb-4 text-gray-800">Industry Tools</h3>
+          <p class="text-gray-600 leading-relaxed">Master the software and tools actually used in the workplace - SAP, QuickBooks, Drake, and more.</p>
+        </div>
+      </div>
+      
+      <div class="group">
+        <div class="gradient-card rounded-2xl p-8 shadow-lg hover-card transform group-hover:scale-105 transition-all duration-300">
+          <div class="w-16 h-16 bg-gradient-to-r from-purple-500 to-indigo-500 rounded-2xl flex items-center justify-center mb-6 group-hover:rotate-12 transition-transform">
+            <i class="fas fa-certificate text-white text-2xl"></i>
+          </div>
+          <h3 class="font-bold text-xl mb-4 text-gray-800">Job-Ready Certification</h3>
+          <p class="text-gray-600 leading-relaxed">Earn certificates that employers recognize and value, with portfolio projects to showcase.</p>
+        </div>
+      </div>
+      
+      <div class="group">
+        <div class="gradient-card rounded-2xl p-8 shadow-lg hover-card transform group-hover:scale-105 transition-all duration-300">
+          <div class="w-16 h-16 bg-gradient-to-r from-pink-500 to-rose-500 rounded-2xl flex items-center justify-center mb-6 group-hover:rotate-12 transition-transform">
+            <i class="fas fa-handshake text-white text-2xl"></i>
+          </div>
+          <h3 class="font-bold text-xl mb-4 text-gray-800">Career Support</h3>
+          <p class="text-gray-600 leading-relaxed">Resume building, interview preparation, and job placement assistance included with every program.</p>
+        </div>
+      </div>
+      
+      <div class="group">
+        <div class="gradient-card rounded-2xl p-8 shadow-lg hover-card transform group-hover:scale-105 transition-all duration-300">
+          <div class="w-16 h-16 bg-gradient-to-r from-cyan-500 to-blue-500 rounded-2xl flex items-center justify-center mb-6 group-hover:rotate-12 transition-transform">
+            <i class="fas fa-clock text-white text-2xl"></i>
+          </div>
+          <h3 class="font-bold text-xl mb-4 text-gray-800">Flexible Schedule</h3>
+          <p class="text-gray-600 leading-relaxed">Weekend and evening batches available to fit around your current commitments.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Final CTA Section -->
+<section class="py-20 bg-gradient-to-r from-primary to-secondary text-white relative overflow-hidden">
+  <div class="floating-elements">
+    <div class="floating-shape w-24 h-24 bg-white/10 rounded-full" style="top: 20%; left: 10%; animation-delay: 1s;"></div>
+    <div class="floating-shape w-20 h-20 bg-accent/20 rounded-full" style="bottom: 30%; right: 15%; animation-delay: 3s;"></div>
+  </div>
+  
+  <div class="max-w-4xl mx-auto px-4 text-center relative z-10">
+    <div class="mb-8">
+      <div class="w-24 h-24 bg-white/20 rounded-full flex items-center justify-center mx-auto mb-6 pulse-glow">
+        <i class="fas fa-graduation-cap text-accent text-3xl"></i>
+      </div>
+      <h2 class="text-4xl font-bold mb-6">Ready to Launch Your Career?</h2>
+      <p class="text-xl text-blue-100 mb-8 leading-relaxed">
+        Join thousands of students who've transformed their careers with our practical training programs.
+      </p>
+    </div>
     
+    <div class="flex flex-col sm:flex-row gap-6 justify-center items-center mb-8">
+      <div class="flex items-center text-blue-100">
+        <i class="fas fa-check-circle text-accent mr-3"></i>
+        <span>Expert instructors</span>
+      </div>
+      <div class="flex items-center text-blue-100">
+        <i class="fas fa-check-circle text-accent mr-3"></i>
+        <span>Hands-on projects</span>
+      </div>
+      <div class="flex items-center text-blue-100">
+        <i class="fas fa-check-circle text-accent mr-3"></i>
+        <span>Job placement support</span>
+      </div>
+    </div>
+    
+    <div class="flex flex-col sm:flex-row gap-4 justify-center">
+      <a href="/assessment-info.html" class="bg-accent hover:bg-yellow-500 text-white font-bold py-4 px-8 rounded-full shadow-xl inline-flex items-center transform hover:scale-105 transition-all">
+        <i class="fas fa-compass mr-3"></i>Find Your Program
+      </a>
+      <a href="/contact.html" class="bg-white/20 hover:bg-white/30 text-white font-medium py-4 px-8 rounded-full border-2 border-white inline-flex items-center backdrop-blur">
+        <i class="fas fa-phone mr-3"></i>Speak to Advisor
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="bg-gray-900 text-white pt-16 pb-12 mt-24">
+  <div class="max-w-7xl mx-auto px-4">
+    <div class="border-t border-gray-800 mt-12 pt-8 flex flex-col md:flex-row justify-between items-center">
+      <p class="text-gray-500 mb-4 md:mb-0">&copy; 2024 Path2Hire. All rights reserved.</p>
+    </div>
+  </div>
+</footer>
+
+<script src="../assets/js/main.js"></script>
+<script src="/assets/js/active-nav.js"></script>
+
+<script>
+// Training programs data with categories
+const programs = [
+  {
+    slug: "fpna",
+    title: "Financial Planning & Analysis", 
+    icon: "fas fa-chart-line",
+    description: "Master budgeting, forecasting, variance analysis with real financial data and industry best practices.",
+    category: "finance",
+    duration: "6 weeks",
+    level: "Intermediate",
+    popular: true
+  },
+  {
+    slug: "fund-accounting-pe",
+    title: "Fund Accounting / PE",
+    icon: "fas fa-building", 
+    description: "Learn capital calls, NAV calculations, investor reporting for private equity and investment funds.",
+    category: "accounting",
+    duration: "8 weeks",
+    level: "Advanced",
+    popular: false
+  },
+  {
+    slug: "ifrs",
+    title: "IFRS",
+    icon: "fas fa-globe",
+    description: "Real-world IFRS application, implementation challenges, and GAAP bridge techniques.",
+    category: "accounting", 
+    duration: "7 weeks",
+    level: "Intermediate",
+    popular: true
+  },
+  {
+    slug: "kyc-aml",
+    title: "KYC & AML",
+    icon: "fas fa-shield-alt",
+    description: "Customer onboarding, due diligence processes, fraud detection, and compliance protocols.",
+    category: "compliance",
+    duration: "5 weeks", 
+    level: "Beginner",
+    popular: false
+  },
+  {
+    slug: "o2c", 
+    title: "Order to Cash (O2C)",
+    icon: "fas fa-exchange-alt",
+    description: "End-to-end O2C lifecycle from order processing to cash collection and reconciliation.",
+    category: "accounting",
+    duration: "6 weeks",
+    level: "Intermediate", 
+    popular: false
+  },
+  {
+    slug: "p2p",
+    title: "Procure to Pay (P2P)", 
+    icon: "fas fa-receipt",
+    description: "Complete P2P process from requisition to vendor payment, including approvals and reconciliation.",
+    category: "accounting",
+    duration: "6 weeks",
+    level: "Intermediate",
+    popular: false
+  },
+  {
+    slug: "r2r",
+    title: "Record to Report (R2R)",
+    icon: "fas fa-book",
+    description: "Financial close processes, reconciliation procedures, and comprehensive reporting workflows.",
+    category: "accounting",
+    duration: "7 weeks", 
+    level: "Advanced",
+    popular: false
+  },
+  {
+    slug: "uk-gaap",
+    title: "UK GAAP",
+    icon: "fas fa-pound-sign",
+    description: "UK accounting standards, compliance requirements, and practical implementation strategies.",
+    category: "accounting",
+    duration: "6 weeks",
+    level: "Intermediate",
+    popular: false
+  },
+  {
+    slug: "us-gaap", 
+    title: "US GAAP",
+    icon: "fas fa-dollar-sign",
+    description: "US accounting standards with practical case studies and real-world application scenarios.",
+    category: "accounting",
+    duration: "8 weeks",
+    level: "Advanced",
+    popular: true
+  },
+  {
+    slug: "us-individual-tax",
+    title: "US Individual Tax",
+    icon: "fas fa-file-invoice-dollar", 
+    description: "Complete 1040 tax preparation, deductions, credits, and tax planning strategies.",
+    category: "tax",
+    duration: "5 weeks",
+    level: "Beginner",
+    popular: true
+  },
+  {
+    slug: "us-business-tax",
+    title: "US Business Tax",
+    icon: "fas fa-building-columns",
+    description: "Corporate taxation including C-corp, S-corp, partnerships, and LLC structures.",
+    category: "tax", 
+    duration: "7 weeks",
+    level: "Advanced",
+    popular: false
+  },
+  {
+    slug: "us-payroll",
+    title: "US Payroll", 
+    icon: "fas fa-money-check-alt",
+    description: "Payroll processing, tax withholdings, year-end forms, and compliance requirements.",
+    category: "tax",
+    duration: "4 weeks",
+    level: "Beginner", 
+    popular: false
+  },
+  {
+    slug: "sap",
+    title: "SAP",
+    icon: "fab fa-suse",
+    description: "SAP FI/CO modules, financial transactions, reporting, and system navigation skills.",
+    category: "software",
+    duration: "8 weeks",
+    level: "Intermediate",
+    popular: true
+  },
+  {
+    slug: "quickbooks", 
+    title: "QuickBooks",
+    icon: "fas fa-calculator",
+    description: "Complete QuickBooks mastery from company setup to advanced reporting and integrations.",
+    category: "software",
+    duration: "4 weeks",
+    level: "Beginner",
+    popular: true
+  }
+];
+
+// Category filter functionality
+document.addEventListener('DOMContentLoaded', function() {
+  const categoryFilters = document.querySelectorAll('.category-filter');
+  const programsGrid = document.getElementById('programsGrid');
+  
+  // Initial render - show all programs
+  renderPrograms('all');
+  
+  // Add click event listeners to category filters
+  categoryFilters.forEach(filter => {
+    filter.addEventListener('click', function() {
+      // Remove active class from all filters
+      categoryFilters.forEach(f => f.classList.remove('active'));
+      // Add active class to clicked filter
+      this.classList.add('active');
+      
+      // Get selected category
+      const category = this.dataset.category;
+      // Render filtered programs
+      renderPrograms(category);
+    });
+  });
+  
+  function renderPrograms(category) {
+    const filteredPrograms = category === 'all' 
+      ? programs 
+      : programs.filter(program => program.category === category);
+    
+    programsGrid.innerHTML = filteredPrograms.map(program => `
+      <div class="training-card bg-white rounded-2xl shadow-lg p-6 relative group" data-category="${program.category}">
+        ${program.popular ? '<div class="program-badge">Popular</div>' : ''}
+        <div class="relative z-10">
+          <div class="w-16 h-16 bg-gradient-to-r from-primary to-secondary rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+            <i class="${program.icon} text-white text-2xl"></i>
+          </div>
+          <h3 class="font-bold text-xl mb-3 text-gray-800">${program.title}</h3>
+          <p class="text-gray-600 mb-4 leading-relaxed">${program.description}</p>
+          
+          <div class="flex items-center justify-between mb-6">
+            <div class="flex items-center space-x-4 text-sm text-gray-500">
+              <div class="flex items-center">
+                <i class="fas fa-clock mr-1"></i>
+                <span>${program.duration}</span>
+              </div>
+              <div class="flex items-center">
+                <i class="fas fa-signal mr-1"></i>
+                <span>${program.level}</span>
+              </div>
+            </div>
+          </div>
+          
+          <div class="flex gap-3">
+            <a href="../programs/${program.slug}.html" class="flex-1 bg-primary hover:bg-secondary text-white font-semibold py-3 px-4 rounded-lg text-center transition-colors">
+              Learn More
+            </a>
+            <button class="bg-gray-100 hover:bg-gray-200 text-gray-700 font-semibold py-3 px-4 rounded-lg transition-colors">
+              <i class="fas fa-bookmark"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    `).join('');
+    
+    // Add stagger animation to newly rendered cards
+    const cards = programsGrid.querySelectorAll('.training-card');
+    cards.forEach((card, index) => {
+      card.style.opacity = '0';
+      card.style.transform = 'translateY(20px)';
+      setTimeout(() => {
+        card.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+        card.style.opacity = '1';
+        card.style.transform = 'translateY(0)';
+      }, index * 100);
+    });
+  }
+  
+  // Add intersection observer for scroll animations
+  const observerOptions = {
+    threshold: 0.1,
+    rootMargin: '0px 0px -50px 0px'
+  };
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.style.opacity = '1';
+        entry.target.style.transform = 'translateY(0)';
+      }
+    });
+  }, observerOptions);
+
+  // Observe all sections for scroll animations
+  document.querySelectorAll('.gradient-card').forEach((el, index) => {
+    el.style.opacity = '0';
+    el.style.transform = 'translateY(20px)';
+    el.style.transition = `opacity 0.6s ease ${index * 0.1}s, transform 0.6s ease ${index * 0.1}s`;
+    observer.observe(el);
+  });
+});
+</script>
+
+</body>
+</html>

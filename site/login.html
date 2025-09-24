@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>login • Path2Hire</title>
+  <title>Login • Path2Hire</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
@@ -18,6 +18,94 @@
     }
   </script>
   <link rel="stylesheet" href="assets/css/custom.css" />
+  <style>
+    .floating-elements {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      pointer-events: none;
+    }
+    .floating-shape {
+      position: absolute;
+      opacity: 0.1;
+      animation: float 12s ease-in-out infinite;
+    }
+    @keyframes float {
+      0%, 100% { transform: translateY(0px) rotate(0deg); }
+      25% { transform: translateY(-20px) rotate(90deg); }
+      50% { transform: translateY(-10px) rotate(180deg); }
+      75% { transform: translateY(-30px) rotate(270deg); }
+    }
+    .login-hero {
+      background: linear-gradient(135deg, #1e3a8a 0%, #3730a3 50%, #6366f1 100%);
+      position: relative;
+      overflow: hidden;
+    }
+    .pulse-glow {
+      animation: pulse-glow 3s infinite;
+    }
+    @keyframes pulse-glow {
+      0%, 100% { box-shadow: 0 0 20px rgba(37, 99, 235, 0.3); }
+      50% { box-shadow: 0 0 40px rgba(37, 99, 235, 0.6); }
+    }
+    .gradient-card {
+      background: linear-gradient(135deg, rgba(255,255,255,0.95) 0%, rgba(255,255,255,0.85) 100%);
+      backdrop-filter: blur(15px);
+      border: 1px solid rgba(255,255,255,0.3);
+    }
+    .contact-card {
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      position: relative;
+      overflow: hidden;
+    }
+    .contact-card::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: linear-gradient(45deg, transparent, rgba(37, 99, 235, 0.05), transparent);
+      transform: rotate(45deg);
+      transition: all 0.6s ease;
+      opacity: 0;
+    }
+    .contact-card:hover::before {
+      animation: shine 0.8s ease-in-out;
+    }
+    @keyframes shine {
+      0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); opacity: 0; }
+      50% { opacity: 1; }
+      100% { transform: translateX(100%) translateY(100%) rotate(45deg); opacity: 0; }
+    }
+    .contact-card:hover {
+      transform: translateY(-8px) scale(1.02);
+      box-shadow: 0 25px 50px rgba(37, 99, 235, 0.15);
+    }
+    .form-input:focus {
+      transform: scale(1.02);
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+    }
+    .tab-button {
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+    .tab-button::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+      transition: left 0.5s ease;
+    }
+    .tab-button.active::before {
+      left: 100%;
+    }
+  </style>
 </head>
 <body class="bg-gray-50 text-gray-800">
 
@@ -31,158 +119,300 @@
             <span class="text-xl font-bold text-blue-600">Path2<span class="text-accent">Hire</span></span>
           </a>
           <div class="hidden md:flex md:space-x-8">
-            <a href="index.html" class="nav-link border-b-2 border-accent text-primary px-1 pt-1 text-sm font-medium">Home</a>
-<a href="about.html" class="nav-link border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 px-1 pt-1 text-sm font-medium">About</a>
-<a href="/training/index.html" class="nav-link border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 px-1 pt-1 text-sm font-medium">Training</a>
-<a href="assessment-info.html" class="nav-link border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 px-1 pt-1 text-sm font-medium">Assessment</a>
-<a href="success.html" class="nav-link border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 px-1 pt-1 text-sm font-medium">Success</a>
-<a href="/jobs" class="nav-link border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 px-1 pt-1 text-sm font-medium">Jobs</a>
-<a href="contact.html" class="nav-link border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 px-1 pt-1 text-sm font-medium">Contact</a>
-
+            <a href="index.html" class="nav-link border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 px-1 pt-1 text-sm font-medium">Home</a>
+            <a href="about.html" class="nav-link border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 px-1 pt-1 text-sm font-medium">About</a>
+            <a href="/training/index.html" class="nav-link border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 px-1 pt-1 text-sm font-medium">Training</a>
+            <a href="assessment-info.html" class="nav-link border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 px-1 pt-1 text-sm font-medium">Assessment</a>
+            <a href="success.html" class="nav-link border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 px-1 pt-1 text-sm font-medium">Success</a>
+            <a href="/jobs" class="nav-link border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 px-1 pt-1 text-sm font-medium">Jobs</a>
+            <a href="contact.html" class="nav-link border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 px-1 pt-1 text-sm font-medium">Contact</a>
           </div>
           <div class="md:hidden">
             <button id="menuBtn" class="focus:outline-none"><i class="fas fa-bars text-2xl text-primary"></i></button>
           </div>
-                    <div class="hidden md:flex space-x-4">
+          <div class="hidden md:flex space-x-4">
             <a href="../login.html" class="btn-primary bg-primary hover:bg-secondary text-white px-4 py-2 rounded-full text-sm font-medium flex items-center">
               <i class="fas fa-user-graduate mr-2"></i>Student Portal
             </a>
-                      <a href="./career.html" class="btn-primary bg-primary hover:bg-secondary text-white px-4 py-2 rounded-full text-sm font-medium flex items-center">
-  <i class="fas fa-briefcase mr-2"></i>Career Portal
-</a>
-
+            <a href="./career.html" class="btn-primary bg-primary hover:bg-secondary text-white px-4 py-2 rounded-full text-sm font-medium flex items-center">
+              <i class="fas fa-briefcase mr-2"></i>Career Portal
+            </a>
           </div>
-          </div>
-
         </div>
       </div>
       <div id="mobileMenu" class="hidden md:hidden bg-white shadow-lg">
         <div class="space-y-1 px-4 pb-3 pt-2">
           <a href="index.html" class="nav-link border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 px-1 pt-1 text-sm font-medium">Home</a>
-<a href="about.html" class="nav-link border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 px-1 pt-1 text-sm font-medium">About</a>
-<a href="/training/index.html" class="nav-link border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 px-1 pt-1 text-sm font-medium">Training</a>
-<a href="assessment-info.html" class="nav-link border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 px-1 pt-1 text-sm font-medium">Assessment</a>
-<a href="success.html" class="nav-link border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 px-1 pt-1 text-sm font-medium">Success</a>
-<a href="contact.html" class="nav-link border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 px-1 pt-1 text-sm font-medium">Contact</a>
-
+          <a href="about.html" class="nav-link border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 px-1 pt-1 text-sm font-medium">About</a>
+          <a href="/training/index.html" class="nav-link border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 px-1 pt-1 text-sm font-medium">Training</a>
+          <a href="assessment-info.html" class="nav-link border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 px-1 pt-1 text-sm font-medium">Assessment</a>
+          <a href="success.html" class="nav-link border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 px-1 pt-1 text-sm font-medium">Success</a>
+          <a href="contact.html" class="nav-link border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 px-1 pt-1 text-sm font-medium">Contact</a>
           <a href="/login" class="block w-full text-left nav-link px-1 pt-1 text-sm font-medium text-primary">Student Portal</a>
         </div>
       </div>
     </nav>
-    
 
-
-
-<section class="pt-24 py-16 bg-white">
+<!-- Hero Section -->
+<section class="pt-24 login-hero text-white relative min-h-[70vh] flex items-center">
+  <div class="floating-elements">
+    <div class="floating-shape w-24 h-24 bg-white rounded-full" style="top: 15%; left: 10%; animation-delay: 0s;"></div>
+    <div class="floating-shape w-18 h-18 bg-accent rounded-full" style="top: 25%; right: 15%; animation-delay: 2s;"></div>
+    <div class="floating-shape w-20 h-20 bg-white/30 rounded-full" style="bottom: 30%; left: 20%; animation-delay: 4s;"></div>
+    <div class="floating-shape w-16 h-16 bg-accent/50 rounded-full" style="top: 60%; right: 10%; animation-delay: 6s;"></div>
+    <div class="floating-shape w-14 h-14 bg-white/40 rounded-full" style="bottom: 15%; right: 30%; animation-delay: 3s;"></div>
+  </div>
   
-  <div class="max-w-md mx-auto px-4">
-    <h1 class="text-3xl font-bold text-primary text-center mb-6">Student Portal</h1>
-    <div class="bg-white rounded-2xl shadow-xl p-6 hover-card">
-      <div class="flex justify-center mb-6">
-        <button id="showSignin" type="button" class="px-4 py-2 font-medium text-white bg-primary rounded-l-full">Sign In</button>
-        <button id="showSignup" type="button" class="px-4 py-2 font-medium text-primary bg-gray-200 rounded-r-full">Sign Up</button>
+  <div class="max-w-7xl mx-auto px-4 py-20 relative z-10">
+    <div class="text-center">
+      <div class="inline-flex items-center bg-white/20 backdrop-blur rounded-full px-6 py-3 mb-8">
+        <i class="fas fa-user-graduate text-accent mr-2"></i>
+        <span class="font-semibold">Welcome to Your Future</span>
       </div>
+      
+      <h1 class="text-5xl md:text-6xl font-bold mb-8 leading-tight">
+        Access Your
+        <span class="bg-gradient-to-r from-accent to-yellow-300 bg-clip-text text-transparent">
+          Student Portal
+        </span>
+      </h1>
+      
+      <p class="text-xl md:text-2xl text-blue-100 mb-10 max-w-4xl mx-auto leading-relaxed">
+        Continue your journey to career success. Access your training modules, track progress, and connect with career opportunities.
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- Login Form Section -->
+<section class="py-16 bg-gradient-to-br from-blue-50 via-white to-indigo-50 relative">
+  <div class="floating-elements">
+    <div class="floating-shape w-16 h-16 bg-primary/10 rounded-full" style="top: 10%; left: 5%; animation-delay: 2s;"></div>
+    <div class="floating-shape w-20 h-20 bg-accent/10 rounded-full" style="bottom: 20%; right: 10%; animation-delay: 5s;"></div>
+  </div>
+  
+  <div class="max-w-md mx-auto px-4 relative z-10">
+    <div class="contact-card gradient-card rounded-2xl p-8 shadow-xl">
+      <div class="text-center mb-8">
+        <div class="w-16 h-16 bg-gradient-to-r from-primary to-secondary rounded-2xl flex items-center justify-center mx-auto mb-4 pulse-glow">
+          <i class="fas fa-user text-white text-2xl"></i>
+        </div>
+        <h2 class="text-2xl font-bold text-primary">Student Portal</h2>
+        <p class="text-gray-600 mt-2">Sign in to access your learning dashboard</p>
+      </div>
+      
+      <!-- Tab Buttons -->
+      <div class="flex justify-center mb-8">
+        <button id="showSignin" type="button" class="tab-button px-6 py-3 font-medium text-white bg-primary rounded-l-full transition-all hover:bg-secondary active">
+          Sign In
+        </button>
+        <button id="showSignup" type="button" class="tab-button px-6 py-3 font-medium text-primary bg-gray-200 rounded-r-full transition-all hover:bg-gray-300">
+          Sign Up
+        </button>
+      </div>
+      
+      <!-- Sign In Form -->
       <div id="signinForm">
-        <form method="POST" action="/login" class="space-y-4">
+        <form method="POST" action="/login" class="space-y-6">
           <input type="hidden" name="next" id="nextInputSignin" value="">
-          <div><label class="block text-gray-700 font-medium">Email</label><input name="email" type="email" required class="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-primary hover:border-primary"></div>
-          <div><label class="block text-gray-700 font-medium">Password</label><input name="password" type="password" required class="w-full px-3 py-2 border rounded-md focus:ring-2 focus:ring-primary hover:border-primary"></div>
-          <button class="btn-primary w-full bg-primary hover:bg-secondary text-white font-medium py-3 rounded-md">Sign In</button>
+          <div>
+            <label class="block text-gray-700 font-medium mb-2">Email Address</label>
+            <input name="email" type="email" required class="form-input w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent transition-all">
+          </div>
+          <div>
+            <label class="block text-gray-700 font-medium mb-2">Password</label>
+            <input name="password" type="password" required class="form-input w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent transition-all">
+          </div>
+          <button class="w-full bg-primary hover:bg-secondary text-white font-bold py-4 rounded-xl shadow-lg transform hover:scale-105 transition-all">
+            <i class="fas fa-sign-in-alt mr-2"></i>Sign In
+          </button>
         </form>
       </div>
+      
+      <!-- Sign Up Form -->
       <div id="signupForm" class="hidden">
-        <form method="POST" action="/signup" class="space-y-4">
+        <form method="POST" action="/signup" class="space-y-6">
           <input type="hidden" name="next" id="nextInputSignup" value="">
-          <div><label class="block text-gray-700 font-medium">Full Name</label><input name="name" type="text" required class="w-full px-3 py-2 border rounded-md"></div>
-          <div><label class="block text-gray-700 font-medium">Email</label><input name="email" type="email" required class="w-full px-3 py-2 border rounded-md"></div>
-          <div><label class="block text-gray-700 font-medium">Password</label><input name="password" type="password" required class="w-full px-3 py-2 border rounded-md"></div>
-          <div><label class="block text-gray-700 font-medium">Confirm Password</label><input name="confirm_password" type="password" required class="w-full px-3 py-2 border rounded-md"></div>
-          <button class="btn-primary w-full bg-accent hover:bg-yellow-500 text-white font-medium py-3 rounded-md">Sign Up</button>
+          <div>
+            <label class="block text-gray-700 font-medium mb-2">Full Name</label>
+            <input name="name" type="text" required class="form-input w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-accent focus:border-transparent transition-all">
+          </div>
+          <div>
+            <label class="block text-gray-700 font-medium mb-2">Email Address</label>
+            <input name="email" type="email" required class="form-input w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-accent focus:border-transparent transition-all">
+          </div>
+          <div>
+            <label class="block text-gray-700 font-medium mb-2">Password</label>
+            <input name="password" type="password" required class="form-input w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-accent focus:border-transparent transition-all">
+          </div>
+          <div>
+            <label class="block text-gray-700 font-medium mb-2">Confirm Password</label>
+            <input name="confirm_password" type="password" required class="form-input w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-accent focus:border-transparent transition-all">
+          </div>
+          <button class="w-full bg-accent hover:bg-yellow-500 text-white font-bold py-4 rounded-xl shadow-lg transform hover:scale-105 transition-all">
+            <i class="fas fa-user-plus mr-2"></i>Sign Up
+          </button>
         </form>
+      </div>
+      
+      <div class="mt-6 text-center">
+        <p class="text-sm text-gray-600">
+          Need help? <a href="contact.html" class="text-primary hover:text-secondary font-medium">Contact Support</a>
+        </p>
       </div>
     </div>
   </div>
 </section>
-<script>
-const showSignin=document.getElementById('showSignin');
-const showSignup=document.getElementById('showSignup');
-const signinForm=document.getElementById('signinForm');
-const signupForm=document.getElementById('signupForm');
-function toggleForms(show){
-  if(show==='signin'){
-    signinForm.classList.remove('hidden');
-    signupForm.classList.add('hidden');
-    showSignin.classList.add('bg-primary','text-white');
-    showSignin.classList.remove('bg-gray-200','text-primary');
-    showSignup.classList.add('bg-gray-200','text-primary');
-    showSignup.classList.remove('bg-primary','text-white');
-  } else {
-    signinForm.classList.add('hidden');
-    signupForm.classList.remove('hidden');
-    showSignup.classList.add('bg-primary','text-white');
-    showSignup.classList.remove('bg-gray-200','text-primary');
-    showSignin.classList.add('bg-gray-200','text-primary');
-    showSignin.classList.remove('bg-primary','text-white');
-  }
-}
-showSignin.addEventListener('click',()=>toggleForms('signin'));
-showSignup.addEventListener('click',()=>toggleForms('signup'));
 
-// populate next hidden inputs from ?next= parameter
-(function(){
-  try{
-    const params = new URLSearchParams(window.location.search);
-    const nextVal = params.get('next') || '';
-    if(nextVal){
-      const s = document.getElementById('nextInputSignin');
-      const u = document.getElementById('nextInputSignup');
-      if(s) s.value = nextVal;
-      if(u) u.value = nextVal;
-    }
-  }catch(e){}
-})();
-</script>
+<!-- Benefits Section -->
+<section class="py-16 bg-white relative">
+  <div class="floating-elements">
+    <div class="floating-shape w-12 h-12 bg-primary/5 rounded-full" style="top: 20%; left: 5%; animation-delay: 1s;"></div>
+    <div class="floating-shape w-16 h-16 bg-accent/5 rounded-full" style="bottom: 30%; right: 10%; animation-delay: 4s;"></div>
+  </div>
+  
+  <div class="max-w-7xl mx-auto px-4 relative z-10">
+    <div class="text-center mb-16">
+      <div class="inline-flex items-center bg-primary/10 rounded-full px-6 py-3 mb-6">
+        <i class="fas fa-star text-primary mr-2"></i>
+        <span class="text-primary font-semibold">Student Benefits</span>
+      </div>
+      <h2 class="text-4xl font-bold text-primary mb-6">What's Waiting for You</h2>
+      <p class="text-xl text-gray-600 max-w-3xl mx-auto">Access premium training content and career resources designed to accelerate your professional growth.</p>
+    </div>
+    
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+      <div class="contact-card gradient-card rounded-2xl p-8 text-center group">
+        <div class="w-20 h-20 bg-gradient-to-r from-primary to-secondary rounded-2xl flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform pulse-glow">
+          <i class="fas fa-play-circle text-white text-2xl"></i>
+        </div>
+        <h3 class="text-xl font-bold text-gray-800 mb-4">Interactive Training</h3>
+        <p class="text-gray-600">Access hands-on training modules with real-world scenarios and practical exercises.</p>
+      </div>
+      
+      <div class="contact-card gradient-card rounded-2xl p-8 text-center group">
+        <div class="w-20 h-20 bg-gradient-to-r from-accent to-yellow-500 rounded-2xl flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform pulse-glow">
+          <i class="fas fa-chart-line text-white text-2xl"></i>
+        </div>
+        <h3 class="text-xl font-bold text-gray-800 mb-4">Progress Tracking</h3>
+        <p class="text-gray-600">Monitor your learning progress and celebrate milestones on your career journey.</p>
+      </div>
+      
+      <div class="contact-card gradient-card rounded-2xl p-8 text-center group">
+        <div class="w-20 h-20 bg-gradient-to-r from-green-500 to-emerald-500 rounded-2xl flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform pulse-glow">
+          <i class="fas fa-handshake text-white text-2xl"></i>
+        </div>
+        <h3 class="text-xl font-bold text-gray-800 mb-4">Job Placement</h3>
+        <p class="text-gray-600">Connect with exclusive job opportunities and get direct placement support.</p>
+      </div>
+    </div>
+  </div>
+</section>
 
-<script>
-const showSignin=document.getElementById('showSignin');
-const showSignup=document.getElementById('showSignup');
-const signinForm=document.getElementById('signinForm');
-const signupForm=document.getElementById('signupForm');
-function toggleForms(show){
-  if(show==='signin'){
-    signinForm.classList.remove('hidden');
-    signupForm.classList.add('hidden');
-    showSignin.classList.add('bg-primary','text-white');
-    showSignin.classList.remove('bg-gray-200','text-primary');
-    showSignup.classList.add('bg-gray-200','text-primary');
-    showSignup.classList.remove('bg-primary','text-white');
-  } else {
-    signinForm.classList.add('hidden');
-    signupForm.classList.remove('hidden');
-    showSignup.classList.add('bg-primary','text-white');
-    showSignup.classList.remove('bg-gray-200','text-primary');
-    showSignin.classList.add('bg-gray-200','text-primary');
-    showSignin.classList.remove('bg-primary','text-white');
-  }
-}
-showSignin.addEventListener('click',()=>toggleForms('signin'));
-showSignup.addEventListener('click',()=>toggleForms('signup'));
-</script>
-
-
-<!-- FOOTER -->
-
-<!-- FOOTER -->
-
-    <footer class="bg-gray-900 text-white pt-16 pb-12 mt-24">
-      <div class="max-w-7xl mx-auto px-4">
-        <div class="border-t border-gray-800 mt-12 pt-8 flex flex-col md:flex-row justify-between items-center">
-          <p class="text-gray-500 mb-4 md:mb-0">&copy; 2024 Path2Hire. All rights reserved.</p>
+<!-- Footer -->
+<footer class="bg-gray-800 text-white py-12">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+      <div>
+        <a href="index.html" class="flex items-center mb-4">
+          <div class="h-8 w-8 rounded-full bg-blue-600 flex items-center justify-center mr-2">
+            <i class="fas fa-graduation-cap text-white"></i>
+          </div>
+          <span class="text-xl font-bold text-white">Path2<span class="text-accent">Hire</span></span>
+        </a>
+        <p class="text-gray-400 text-sm">Your trusted partner in career transformation. Empowering futures, one success story at a time.</p>
+        <div class="flex space-x-4 mt-6">
+          <a href="#" class="text-gray-400 hover:text-white"><i class="fab fa-facebook-f"></i></a>
+          <a href="#" class="text-gray-400 hover:text-white"><i class="fab fa-twitter"></i></a>
+          <a href="#" class="text-gray-400 hover:text-white"><i class="fab fa-linkedin-in"></i></a>
+          <a href="#" class="text-gray-400 hover:text-white"><i class="fab fa-instagram"></i></a>
         </div>
       </div>
-    </footer>
-    <script src="assets/js/main.js"></script>
-    <script src="/assets/js/active-nav.js"></script>
-</body>
-    </html>
+      
+      <div>
+        <h3 class="text-lg font-semibold mb-4">Quick Links</h3>
+        <ul class="space-y-2">
+          <li><a href="index.html" class="text-gray-400 hover:text-white text-sm">Home</a></li>
+          <li><a href="about.html" class="text-gray-400 hover:text-white text-sm">About Us</a></li>
+          <li><a href="/training/index.html" class="text-gray-400 hover:text-white text-sm">Training Programs</a></li>
+          <li><a href="assessment-info.html" class="text-gray-400 hover:text-white text-sm">Career Assessment</a></li>
+          <li><a href="success.html" class="text-gray-400 hover:text-white text-sm">Success Stories</a></li>
+          <li><a href="contact.html" class="text-gray-400 hover:text-white text-sm">Contact Us</a></li>
+        </ul>
+      </div>
+      
+      <div>
+        <h3 class="text-lg font-semibold mb-4">Resources</h3>
+        <ul class="space-y-2">
+          <li><a href="/blog" class="text-gray-400 hover:text-white text-sm">Blog</a></li>
+          <li><a href="/faq" class="text-gray-400 hover:text-white text-sm">FAQ</a></li>
+          <li><a href="/privacy" class="text-gray-400 hover:text-white text-sm">Privacy Policy</a></li>
+          <li><a href="/terms" class="text-gray-400 hover:text-white text-sm">Terms of Service</a></li>
+        </ul>
+      </div>
+      
+      <div>
+        <h3 class="text-lg font-semibold mb-4">Contact Info</h3>
+        <p class="text-gray-400 text-sm mb-2"><i class="fas fa-map-marker-alt mr-2"></i>Career Building Center, Financial Plaza, Mumbai 400001</p>
+        <p class="text-gray-400 text-sm mb-2"><i class="fas fa-phone mr-2"></i>+91 98765 43210</p>
+        <p class="text-gray-400 text-sm mb-2"><i class="fas fa-envelope mr-2"></i>info@path2hire.co.in</p>
+        <p class="text-gray-400 text-sm"><i class="fas fa-clock mr-2"></i>Mon-Fri: 9 AM - 7 PM</p>
+      </div>
+    </div>
     
+    <div class="border-t border-gray-700 mt-8 pt-8 text-center text-gray-500 text-sm">
+      &copy; 2023 Path2Hire. All rights reserved.
+    </div>
+  </div>
+</footer>
+
+<script>
+  // Mobile menu toggle
+  document.getElementById("menuBtn").addEventListener("click", function() {
+    document.getElementById("mobileMenu").classList.toggle("hidden");
+  });
+
+  // Tab functionality
+  const showSignin = document.getElementById('showSignin');
+  const showSignup = document.getElementById('showSignup');
+  const signinForm = document.getElementById('signinForm');
+  const signupForm = document.getElementById('signupForm');
+  
+  function toggleForms(show) {
+    if (show === 'signin') {
+      signinForm.classList.remove('hidden');
+      signupForm.classList.add('hidden');
+      showSignin.classList.add('bg-primary', 'text-white', 'active');
+      showSignin.classList.remove('bg-gray-200', 'text-primary');
+      showSignup.classList.add('bg-gray-200', 'text-primary');
+      showSignup.classList.remove('bg-primary', 'text-white', 'active');
+    } else {
+      signinForm.classList.add('hidden');
+      signupForm.classList.remove('hidden');
+      showSignup.classList.add('bg-primary', 'text-white', 'active');
+      showSignup.classList.remove('bg-gray-200', 'text-primary');
+      showSignin.classList.add('bg-gray-200', 'text-primary');
+      showSignin.classList.remove('bg-primary', 'text-white', 'active');
+    }
+  }
+  
+  showSignin.addEventListener('click', () => toggleForms('signin'));
+  showSignup.addEventListener('click', () => toggleForms('signup'));
+
+  // Populate next hidden inputs from ?next= parameter
+  (function() {
+    try {
+      const params = new URLSearchParams(window.location.search);
+      const nextVal = params.get('next') || '';
+      if (nextVal) {
+        const s = document.getElementById('nextInputSignin');
+        const u = document.getElementById('nextInputSignup');
+        if (s) s.value = nextVal;
+        if (u) u.value = nextVal;
+      }
+    } catch(e) {}
+  })();
+</script>
+
+</body>
+</html>
