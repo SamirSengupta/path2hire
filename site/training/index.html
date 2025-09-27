@@ -17,7 +17,6 @@
       }
     }
   </script>
-  <link rel="stylesheet" href="../assets/css/custom.css" />
   <style>
     .floating-elements {
       position: absolute;
@@ -100,6 +99,19 @@
       padding: 0.25rem 0.75rem;
       border-radius: 9999px;
       z-index: 10;
+    }
+    .hover-card {
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .hover-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+    }
+    .icon-hover {
+      transition: all 0.3s ease;
+    }
+    .icon-hover:hover {
+      transform: rotate(360deg);
     }
   </style>
 </head>
@@ -292,7 +304,7 @@
       <div class="group">
         <div class="gradient-card rounded-2xl p-8 shadow-lg hover-card transform group-hover:scale-105 transition-all duration-300">
           <div class="w-16 h-16 bg-gradient-to-r from-primary to-secondary rounded-2xl flex items-center justify-center mb-6 group-hover:rotate-12 transition-transform">
-            <i class="fas fa-hands-on text-white text-2xl"></i>
+            <i class="fas fa-hands-helping text-white text-2xl"></i>
           </div>
           <h3 class="font-bold text-xl mb-4 text-gray-800">Hands-On Learning</h3>
           <p class="text-gray-600 leading-relaxed">Work on real case studies, actual business scenarios, and live projects that mirror what you'll do in your job.</p>
@@ -454,6 +466,226 @@
 </footer>
 
 <script>
+// Training programs data with categories
+const programs = [
+  {
+    slug: "fpna",
+    title: "Financial Planning & Analysis", 
+    icon: "fas fa-chart-line",
+    description: "Master budgeting, forecasting, variance analysis with real financial data and industry best practices.",
+    category: "finance",
+    duration: "6 weeks",
+    level: "Intermediate",
+    popular: true
+  },
+  {
+    slug: "fund-accounting-pe",
+    title: "Fund Accounting / PE",
+    icon: "fas fa-building", 
+    description: "Learn capital calls, NAV calculations, investor reporting for private equity and investment funds.",
+    category: "accounting",
+    duration: "8 weeks",
+    level: "Advanced",
+    popular: false
+  },
+  {
+    slug: "ifrs",
+    title: "IFRS",
+    icon: "fas fa-globe",
+    description: "Real-world IFRS application, implementation challenges, and GAAP bridge techniques.",
+    category: "accounting", 
+    duration: "7 weeks",
+    level: "Intermediate",
+    popular: true
+  },
+  {
+    slug: "kyc-aml",
+    title: "KYC & AML",
+    icon: "fas fa-shield-alt",
+    description: "Customer onboarding, due diligence processes, fraud detection, and compliance protocols.",
+    category: "compliance",
+    duration: "5 weeks", 
+    level: "Beginner",
+    popular: false
+  },
+  {
+    slug: "o2c", 
+    title: "Order to Cash (O2C)",
+    icon: "fas fa-exchange-alt",
+    description: "End-to-end O2C lifecycle from order processing to cash collection and reconciliation.",
+    category: "accounting",
+    duration: "6 weeks",
+    level: "Intermediate", 
+    popular: false
+  },
+  {
+    slug: "p2p",
+    title: "Procure to Pay (P2P)", 
+    icon: "fas fa-receipt",
+    description: "Complete P2P process from requisition to vendor payment, including approvals and reconciliation.",
+    category: "accounting",
+    duration: "6 weeks",
+    level: "Intermediate",
+    popular: false
+  },
+  {
+    slug: "r2r",
+    title: "Record to Report (R2R)",
+    icon: "fas fa-book",
+    description: "Financial close processes, reconciliation procedures, and comprehensive reporting workflows.",
+    category: "accounting",
+    duration: "7 weeks", 
+    level: "Advanced",
+    popular: false
+  },
+  {
+    slug: "uk-gaap",
+    title: "UK GAAP",
+    icon: "fas fa-pound-sign",
+    description: "UK accounting standards, compliance requirements, and practical implementation strategies.",
+    category: "accounting",
+    duration: "6 weeks",
+    level: "Intermediate",
+    popular: false
+  },
+  {
+    slug: "us-gaap", 
+    title: "US GAAP",
+    icon: "fas fa-dollar-sign",
+    description: "US accounting standards with practical case studies and real-world application scenarios.",
+    category: "accounting",
+    duration: "8 weeks",
+    level: "Advanced",
+    popular: true
+  },
+  {
+    slug: "us-individual-tax",
+    title: "US Individual Tax",
+    icon: "fas fa-file-invoice-dollar", 
+    description: "Complete 1040 tax preparation, deductions, credits, and tax planning strategies.",
+    category: "tax",
+    duration: "5 weeks",
+    level: "Beginner",
+    popular: true
+  },
+  {
+    slug: "us-business-tax",
+    title: "US Business Tax",
+    icon: "fas fa-building-columns",
+    description: "Corporate taxation including C-corp, S-corp, partnerships, and LLC structures.",
+    category: "tax", 
+    duration: "7 weeks",
+    level: "Advanced",
+    popular: false
+  },
+  {
+    slug: "us-payroll",
+    title: "US Payroll", 
+    icon: "fas fa-money-check-alt",
+    description: "Payroll processing, tax withholdings, year-end forms, and compliance requirements.",
+    category: "tax",
+    duration: "4 weeks",
+    level: "Beginner", 
+    popular: false
+  },
+  {
+    slug: "sap",
+    title: "SAP",
+    icon: "fab fa-suse",
+    description: "SAP FI/CO modules, financial transactions, reporting, and system navigation skills.",
+    category: "software",
+    duration: "8 weeks",
+    level: "Intermediate",
+    popular: true
+  },
+  {
+    slug: "quickbooks", 
+    title: "QuickBooks",
+    icon: "fas fa-calculator",
+    description: "Complete QuickBooks mastery from company setup to advanced reporting and integrations.",
+    category: "software",
+    duration: "4 weeks",
+    level: "Beginner",
+    popular: true
+  }
+];
+
+// Category filter functionality
+document.addEventListener('DOMContentLoaded', function() {
+  const categoryFilters = document.querySelectorAll('.category-filter');
+  const programsGrid = document.getElementById('programsGrid');
+  
+  // Initial render - show all programs
+  renderPrograms('all');
+  
+  // Add click event listeners to category filters
+  categoryFilters.forEach(filter => {
+    filter.addEventListener('click', function() {
+      // Remove active class from all filters
+      categoryFilters.forEach(f => f.classList.remove('active'));
+      // Add active class to clicked filter
+      this.classList.add('active');
+      
+      // Get selected category
+      const category = this.dataset.category;
+      // Render filtered programs
+      renderPrograms(category);
+    });
+  });
+  
+  function renderPrograms(category) {
+    const filteredPrograms = category === 'all' 
+      ? programs 
+      : programs.filter(program => program.category === category);
+    
+    programsGrid.innerHTML = filteredPrograms.map(program => `
+      <div class="training-card bg-white rounded-2xl shadow-lg p-6 relative group" data-category="${program.category}">
+        ${program.popular ? '<div class="program-badge">Popular</div>' : ''}
+        <div class="relative z-10">
+          <div class="w-16 h-16 bg-gradient-to-r from-primary to-secondary rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
+            <i class="${program.icon} text-white text-2xl"></i>
+          </div>
+          <h3 class="font-bold text-xl mb-3 text-gray-800">${program.title}</h3>
+          <p class="text-gray-600 mb-4 leading-relaxed">${program.description}</p>
+          
+          <div class="flex items-center justify-between mb-6">
+            <div class="flex items-center space-x-4 text-sm text-gray-500">
+              <div class="flex items-center">
+                <i class="fas fa-clock mr-1"></i>
+                <span>${program.duration}</span>
+              </div>
+              <div class="flex items-center">
+                <i class="fas fa-signal mr-1"></i>
+                <span>${program.level}</span>
+              </div>
+            </div>
+          </div>
+          
+          <div class="flex gap-3">
+            <a href="../programs/${program.slug}.html" class="flex-1 bg-primary hover:bg-secondary text-white font-semibold py-3 px-4 rounded-lg text-center transition-colors">
+              Learn More
+            </a>
+            <button class="bg-gray-100 hover:bg-gray-200 text-gray-700 font-semibold py-3 px-4 rounded-lg transition-colors">
+              <i class="fas fa-bookmark"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    `).join('');
+    
+    // Add stagger animation to newly rendered cards
+    const cards = programsGrid.querySelectorAll('.training-card');
+    cards.forEach((card, index) => {
+      card.style.opacity = '0';
+      card.style.transform = 'translateY(20px)';
+      setTimeout(() => {
+        card.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+        card.style.opacity = '1';
+        card.style.transform = 'translateY(0)';
+      }, index * 100);
+    });
+  }
+  
   // Mobile menu toggle
   document.getElementById('menuBtn').addEventListener('click', function() {
     document.getElementById('mobileMenu').classList.toggle('hidden');
@@ -471,12 +703,29 @@
     }
   });
 
-  // Form submission (for demonstration, actual submission would involve backend)
-  document.getElementById('contactForm').addEventListener('submit', function(event) {
-    event.preventDefault();
-    alert('Thank you for your message! We will get back to you shortly.');
-    this.reset();
+  // Add intersection observer for scroll animations
+  const observerOptions = {
+    threshold: 0.1,
+    rootMargin: '0px 0px -50px 0px'
+  };
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.style.opacity = '1';
+        entry.target.style.transform = 'translateY(0)';
+      }
+    });
+  }, observerOptions);
+
+  // Observe all sections for scroll animations
+  document.querySelectorAll('.gradient-card').forEach((el, index) => {
+    el.style.opacity = '0';
+    el.style.transform = 'translateY(20px)';
+    el.style.transition = `opacity 0.6s ease ${index * 0.1}s, transform 0.6s ease ${index * 0.1}s`;
+    observer.observe(el);
   });
+});
 </script>
 
 </body>
