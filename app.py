@@ -42,6 +42,33 @@ CONTACT_DIR   = os.path.join(BASE_DIR, 'data')
 CONTACT_FILE  = os.path.join(CONTACT_DIR, 'contacts.xlsx')
 os.makedirs(CONTACT_DIR, exist_ok=True)
 
+import io, os, pandas as pd
+from flask import send_file
+
+@app.route('/download/contacts')
+def download_contacts():
+    """Return the live Excel file as a download."""
+    path = os.path.join(BASE_DIR, 'data', 'contacts.xlsx')
+    if not os.path.exists(path):
+        return "No contact file yet", 404
+    return send_file(path,
+                     mimetype='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+                     as_attachment=True,
+                     download_name='contacts.xlsx')
+
+
+@app.route('/download/careers')
+def download_careers():
+    """Return the live career-applications Excel file as a download."""
+    path = os.path.join(BASE_DIR, 'data', 'careers.xlsx')
+    if not os.path.exists(path):
+        return "No career file yet", 404
+    return send_file(path,
+                     mimetype='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+                     as_attachment=True,
+                     download_name='careers.xlsx')
+
+
 @app.route('/contact', methods=['POST'])
 def save_contact():
     """Store contact-form data into an ever-growing Excel file"""
