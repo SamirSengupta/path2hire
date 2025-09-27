@@ -92,7 +92,7 @@
 <body class="bg-gray-50 text-gray-800">
 
     <nav id="navbar" class="fixed w-full bg-white shadow-md z-50 hover-card">
-      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex justify-between h-16 items-center">
           <a href="index.html" class="flex items-center">
             <div class="h-8 w-8 rounded-full bg-blue-600 flex items-center justify-center mr-2 icon-hover">
@@ -101,26 +101,30 @@
             <span class="text-xl font-bold text-blue-600">Path2<span class="text-accent">Hire</span></span>
           </a>
           <div class="hidden md:flex md:space-x-8">
-            <a href="index.html" class="nav-link border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 px-1 pt-1 text-sm font-medium">Home</a>
+            <a href="index.html" class="nav-link border-b-2 border-accent text-primary px-1 pt-1 text-sm font-medium">Home</a>
             <a href="about.html" class="nav-link border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 px-1 pt-1 text-sm font-medium">About</a>
             <a href="/training/index.html" class="nav-link border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 px-1 pt-1 text-sm font-medium">Training</a>
             <a href="assessment-info.html" class="nav-link border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 px-1 pt-1 text-sm font-medium">Assessment</a>
             <a href="success.html" class="nav-link border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 px-1 pt-1 text-sm font-medium">Success</a>
             <a href="/jobs" class="nav-link border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 px-1 pt-1 text-sm font-medium">Jobs</a>
-            <a href="contact.html" class="nav-link border-b-2 border-accent text-primary px-1 pt-1 text-sm font-medium">Contact</a>
+            <a href="contact.html" class="nav-link border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 px-1 pt-1 text-sm font-medium">Contact</a>
           </div>
           <div class="md:hidden">
             <button id="menuBtn" class="focus:outline-none"><i class="fas fa-bars text-2xl text-primary"></i></button>
           </div>
           <div class="hidden md:flex space-x-4">
             <a href="../login.html" class="btn-primary bg-primary hover:bg-secondary text-white px-4 py-2 rounded-full text-sm font-medium flex items-center">
-              <i class="fas fa-user-graduate mr-2"></i>Student Portal
+              <i class="fas fa-sign-in-alt mr-2"></i>Login/Sign Up
             </a>
             <a href="./career.html" class="btn-primary bg-primary hover:bg-secondary text-white px-4 py-2 rounded-full text-sm font-medium flex items-center">
               <i class="fas fa-briefcase mr-2"></i>Career Portal
             </a>
+            <a href="./profile.html" class="btn-primary bg-accent hover:bg-yellow-500 text-white px-4 py-2 rounded-full text-sm font-medium flex items-center">
+              <i class="fas fa-user mr-2"></i>Profile
+            </a>
           </div>
         </div>
+      </div>
       </div>
       <div id="mobileMenu" class="hidden md:hidden bg-white shadow-lg">
         <div class="space-y-1 px-4 pb-3 pt-2">
@@ -293,7 +297,7 @@
       
       <div class="gradient-card rounded-2xl p-8 contact-card relative z-20">
         <div class="max-w-6xl mx-auto px-4 relative z-20">
-        <form class="space-y-6" id="contactForm">
+        <form class="space-y-6" id="contactForm" method="POST" action="/contact">
           <div class="grid md:grid-cols-2 gap-6">
             <div>
               <label class="block text-gray-700 font-semibold mb-2">Full Name *</label>
@@ -430,10 +434,10 @@
         </a>
         <p class="text-gray-400 text-sm">Your trusted partner in career transformation. Empowering futures, one success story at a time.</p>
         <div class="flex space-x-4 mt-6">
-          <a href="#" class="text-gray-400 hover:text-white"><i class="fab fa-facebook-f"></i></a>
-          <a href="#" class="text-gray-400 hover:text-white"><i class="fab fa-twitter"></i></a>
-          <a href="#" class="text-gray-400 hover:text-white"><i class="fab fa-linkedin-in"></i></a>
-          <a href="#" class="text-gray-400 hover:text-white"><i class="fab fa-instagram"></i></a>
+          <a href="https://www.facebook.com/path2hire/" class="text-gray-400 hover:text-white"><i class="fab fa-facebook-f"></i></a>
+          <a href="https://x.com/Path2Hire/" class="text-gray-400 hover:text-white"><i class="fab fa-twitter"></i></a>
+          <a href="https://www.linkedin.com/company/path2hire/" class="text-gray-400 hover:text-white"><i class="fab fa-linkedin-in"></i></a>
+          <a href="https://www.instagram.com/path.2.hire/" class="text-gray-400 hover:text-white"><i class="fab fa-instagram"></i></a>
         </div>
       </div>
       
@@ -493,11 +497,23 @@
   });
 
   // Form submission (for demonstration, actual submission would involve backend)
-  document.getElementById('contactForm').addEventListener('submit', function(event) {
-    event.preventDefault();
-    alert('Thank you for your message! We will get back to you shortly.');
-    this.reset();
+document.getElementById('contactForm').addEventListener('submit', async function (e) {
+  e.preventDefault();                       // keep the page still
+  const form = e.target;
+  const data = new FormData(form);
+
+  const res = await fetch('/contact', {
+      method: 'POST',
+      body: data
   });
+
+  if (res.ok) {
+      alert('Thank you! We will get back to you shortly.');
+      form.reset();
+  } else {
+      alert('Something went wrong. Please try again later.');
+  }
+});
 </script>
 
 </body>

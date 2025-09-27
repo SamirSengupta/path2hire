@@ -8,7 +8,15 @@
     "password": "scrypt:32768:8:1$izhdgPF8oKWHVTpb$8fda2a6de711c7c767b0393bf7c0acddb8bb1f5253cbfcfdd1437efb91f0bb1ee8b5b6608d6d3b3c7e7d3a79d5e136cf2a2831f1d7cf4555f280823b109ef99c"
   },
   "samir843301003@gmail.com": {
-    "name": "Samir Sengupta",
-    "password": "scrypt:32768:8:1$TDA5afElEXTciHfJ$4e651918c1341ebdd3fa70f748bc0d3768ec9edca6f287008fa15d9367272c3504eaf6a9d59d0331c023d4161598eb88433c9e365eebab6da80a750b53ea5b7f"
+    "name": "SAMIR SANJEEV SENGUPTA",
+    "password": "scrypt:32768:8:1$TDA5afElEXTciHfJ$4e651918c1341ebdd3fa70f748bc0d3768ec9edca6f287008fa15d9367272c3504eaf6a9d59d0331c023d4161598eb88433c9e365eebab6da80a750b53ea5b7f",
+    "first_name": "SAMIR SANJEEV",
+    "last_name": "SENGUPTA",
+    "phone": "5513591228",
+    "address": "Journal Square",
+    "date_of_birth": "2025-08-20",
+    "gender": "Male",
+    "bio": "SamCodeMan",
+    "updated_at": "2025-09-27T21:20:30.265418+00:00"
   }
 }

@@ -24,27 +24,33 @@
     <nav id="navbar" class="fixed w-full bg-white shadow-md z-50 hover-card">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex justify-between h-16 items-center">
-          <a href="../index.html" class="flex items-center">
+          <a href="index.html" class="flex items-center">
             <div class="h-8 w-8 rounded-full bg-blue-600 flex items-center justify-center mr-2 icon-hover">
               <i class="fas fa-graduation-cap text-white"></i>
             </div>
             <span class="text-xl font-bold text-blue-600">Path2<span class="text-accent">Hire</span></span>
           </a>
           <div class="hidden md:flex md:space-x-8">
-            <a href="../index.html" class="nav-link border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 px-1 pt-1 text-sm font-medium">Home</a>
-<a href="../about.html" class="nav-link border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 px-1 pt-1 text-sm font-medium">About</a>
-<a href="../training/index.html" class="nav-link border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 px-1 pt-1 text-sm font-medium">Training</a>
-<a href="../assessment.html" class="nav-link border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 px-1 pt-1 text-sm font-medium">Assessment</a>
-<a href="../success.html" class="nav-link border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 px-1 pt-1 text-sm font-medium">Success</a>
-<a href="../contact.html" class="nav-link border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 px-1 pt-1 text-sm font-medium">Contact</a>
-
+            <a href="index.html" class="nav-link border-b-2 border-accent text-primary px-1 pt-1 text-sm font-medium">Home</a>
+            <a href="about.html" class="nav-link border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 px-1 pt-1 text-sm font-medium">About</a>
+            <a href="/training/index.html" class="nav-link border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 px-1 pt-1 text-sm font-medium">Training</a>
+            <a href="assessment-info.html" class="nav-link border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 px-1 pt-1 text-sm font-medium">Assessment</a>
+            <a href="success.html" class="nav-link border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 px-1 pt-1 text-sm font-medium">Success</a>
+            <a href="/jobs" class="nav-link border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 px-1 pt-1 text-sm font-medium">Jobs</a>
+            <a href="contact.html" class="nav-link border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 px-1 pt-1 text-sm font-medium">Contact</a>
           </div>
           <div class="md:hidden">
             <button id="menuBtn" class="focus:outline-none"><i class="fas fa-bars text-2xl text-primary"></i></button>
           </div>
-          <div class="hidden md:block">
+          <div class="hidden md:flex space-x-4">
             <a href="../login.html" class="btn-primary bg-primary hover:bg-secondary text-white px-4 py-2 rounded-full text-sm font-medium flex items-center">
-              <i class="fas fa-user-graduate mr-2"></i>Student Portal
+              <i class="fas fa-sign-in-alt mr-2"></i>Login/Sign Up
+            </a>
+            <a href="./career.html" class="btn-primary bg-primary hover:bg-secondary text-white px-4 py-2 rounded-full text-sm font-medium flex items-center">
+              <i class="fas fa-briefcase mr-2"></i>Career Portal
+            </a>
+            <a href="./profile.html" class="btn-primary bg-accent hover:bg-yellow-500 text-white px-4 py-2 rounded-full text-sm font-medium flex items-center">
+              <i class="fas fa-user mr-2"></i>Profile
             </a>
           </div>
         </div>
@@ -122,17 +128,64 @@
   </div>
 </section>
 
-<!-- FOOTER -->
-
-<!-- FOOTER -->
-
-    <footer class="bg-gray-900 text-white pt-16 pb-12 mt-24">
-      <div class="max-w-7xl mx-auto px-4">
-        <div class="border-t border-gray-800 mt-12 pt-8 flex flex-col md:flex-row justify-between items-center">
-          <p class="text-gray-500 mb-4 md:mb-0">&copy; 2024 Path2Hire. All rights reserved.</p>
+<!-- Footer -->
+<footer class="bg-gray-800 text-white py-12">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+      <div>
+        <a href="index.html" class="flex items-center mb-4">
+          <div class="h-8 w-8 rounded-full bg-blue-600 flex items-center justify-center mr-2">
+            <i class="fas fa-graduation-cap text-white"></i>
+          </div>
+          <span class="text-xl font-bold text-white">Path2<span class="text-accent">Hire</span></span>
+        </a>
+        <p class="text-gray-400 text-sm">Your trusted partner in career transformation. Empowering futures, one success story at a time.</p>
+        <div class="flex space-x-4 mt-6">
+          <a href="https://www.facebook.com/path2hire/" class="text-gray-400 hover:text-white"><i class="fab fa-facebook-f"></i></a>
+          <a href="https://x.com/Path2Hire/" class="text-gray-400 hover:text-white"><i class="fab fa-twitter"></i></a>
+          <a href="https://www.linkedin.com/company/path2hire/" class="text-gray-400 hover:text-white"><i class="fab fa-linkedin-in"></i></a>
+          <a href="https://www.instagram.com/path.2.hire/" class="text-gray-400 hover:text-white"><i class="fab fa-instagram"></i></a>
         </div>
       </div>
-    </footer>
+      
+      <div>
+        <h3 class="text-lg font-semibold mb-4">Quick Links</h3>
+        <ul class="space-y-2">
+          <li><a href="index.html" class="text-gray-400 hover:text-white text-sm">Home</a></li>
+          <li><a href="about.html" class="text-gray-400 hover:text-white text-sm">About Us</a></li>
+          <li><a href="/training/index.html" class="text-gray-400 hover:text-white text-sm">Training Programs</a></li>
+          <li><a href="assessment-info.html" class="text-gray-400 hover:text-white text-sm">Career Assessment</a></li>
+          <li><a href="success.html" class="text-gray-400 hover:text-white text-sm">Success Stories</a></li>
+          <li><a href="contact.html" class="text-gray-400 hover:text-white text-sm">Contact Us</a></li>
+        </ul>
+      </div>
+      
+      <div>
+        <h3 class="text-lg font-semibold mb-4">Resources</h3>
+        <ul class="space-y-2">
+          <li><a href="/blog" class="text-gray-400 hover:text-white text-sm">Blog</a></li>
+          <li><a href="/faq" class="text-gray-400 hover:text-white text-sm">FAQ</a></li>
+          <li><a href="/privacy" class="text-gray-400 hover:text-white text-sm">Privacy Policy</a></li>
+          <li><a href="/terms" class="text-gray-400 hover:text-white text-sm">Terms of Service</a></li>
+        </ul>
+      </div>
+      
+      <div>
+        <h3 class="text-lg font-semibold mb-4">Contact Info</h3>
+        <p class="text-gray-400 text-sm mb-2"><i class="fas fa-map-marker-alt mr-2"></i>Career Building Center, Financial Plaza, Mumbai 400001</p>
+        <p class="text-gray-400 text-sm mb-2"><i class="fas fa-phone mr-2"></i>+91 98765 43210</p>
+        <p class="text-gray-400 text-sm mb-2"><i class="fas fa-envelope mr-2"></i>info@path2hire.co.in</p>
+        <p class="text-gray-400 text-sm"><i class="fas fa-clock mr-2"></i>Mon-Fri: 9 AM - 7 PM</p>
+      </div>
+    </div>
+    
+    <div class="border-t border-gray-700 mt-8 pt-8 text-center text-gray-500 text-sm">
+      &copy; 2023 Path2Hire. All rights reserved.
+    </div>
+  </div>
+</footer>
+
+
     <script src="../assets/js/main.js"></script>
     <script src="/assets/js/active-nav.js"></script>
 </body>

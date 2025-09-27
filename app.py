@@ -34,6 +34,47 @@ app.config['SESSION_COOKIE_HTTPONLY'] = True
 app.config['SESSION_COOKIE_SAMESITE'] = 'Lax'
 app.config['SESSION_PERMANENT'] = False
 
+# ----------  CONTACT-FORM  ----------
+import os, pandas as pd                      # already at top of file
+from datetime import datetime                # already at top of file
+
+CONTACT_DIR   = os.path.join(BASE_DIR, 'data')
+CONTACT_FILE  = os.path.join(CONTACT_DIR, 'contacts.xlsx')
+os.makedirs(CONTACT_DIR, exist_ok=True)
+
+@app.route('/contact', methods=['POST'])
+def save_contact():
+    """Store contact-form data into an ever-growing Excel file"""
+    # 1. grab fields (same names you already use)
+    fullName     = request.form.get('fullName', '').strip()
+    email        = request.form.get('email', '').strip()
+    phone        = request.form.get('phone', '').strip()
+    inquiryType  = request.form.get('inquiryType', '')
+    background   = request.form.get('background', '')
+    message      = request.form.get('message', '')
+
+    # 2. build row  (timezone-naïve → Excel-safe)
+    row = {
+        'Full Name': fullName,
+        'Email': email,
+        'Phone': phone,
+        'Inquiry Type': inquiryType,
+        'Background': background,
+        'Message': message,
+        'Submitted At': datetime.utcnow()          # <-- Excel-compatible
+    }
+
+    # 3. append to Excel (create header once)
+    if not os.path.exists(CONTACT_FILE):
+        pd.DataFrame([row]).to_excel(CONTACT_FILE, index=False)
+    else:
+        df = pd.read_excel(CONTACT_FILE)
+        df = pd.concat([df, pd.DataFrame([row])], ignore_index=True)
+        df.to_excel(CONTACT_FILE, index=False)
+
+    # 4. still return the same tiny 200 so your JS alert keeps working
+    return '', 200
+
 
 def strip_tags_func(s):
     """Remove internal tag markers like (FAR), (CRM), (BM), (MO) from display text."""
@@ -45,6 +86,62 @@ def strip_tags_func(s):
         return str(s)
 
 app.jinja_env.filters['strip_tags'] = strip_tags_func
+
+# ----------  CAREER-APPLICATION  ----------
+CAREER_DIR   = os.path.join(BASE_DIR, 'data')
+CAREER_FILE  = os.path.join(CAREER_DIR, 'careers.xlsx')
+os.makedirs(CAREER_DIR, exist_ok=True)
+
+@app.route('/career', methods=['POST'])
+def save_career():
+    """Store career-application data into an ever-growing Excel file"""
+    full_name          = request.form.get('full_name', '').strip()
+    email              = request.form.get('email', '').strip()
+    phone              = request.form.get('phone', '').strip()
+    position           = request.form.get('position', '').strip()
+    trainings          = request.form.get('trainings', '').strip()
+    current_ctc        = request.form.get('current_ctc', '').strip()
+    portfolio          = request.form.get('portfolio', '').strip()
+    location           = request.form.get('location', '').strip()
+    authorization      = request.form.get('authorization', '').strip()
+    salary_expectation = request.form.get('salary_expectation', '').strip()
+    start_date         = request.form.get('start_date', '')
+    resume_file        = request.files.get('resume_file')        # optional
+    cover_letter_file  = request.files.get('cover_letter_file')  # optional
+
+    # Build row
+    row = {
+        'Full Name': full_name,
+        'Email': email,
+        'Phone': phone,
+        'Position': position,
+        'Trainings': trainings,
+        'Current CTC': current_ctc,
+        'Portfolio': portfolio,
+        'Location': location,
+        'Work Authorization': authorization,
+        'Salary Expectation': salary_expectation,
+        'Start Date': start_date,
+        'Resume Filename': resume_file.filename if resume_file else '',
+        'Cover-Letter Filename': cover_letter_file.filename if cover_letter_file else '',
+        'Submitted At': datetime.utcnow()
+    }
+
+    # Append to Excel
+    if not os.path.exists(CAREER_FILE):
+        pd.DataFrame([row]).to_excel(CAREER_FILE, index=False)
+    else:
+        df = pd.read_excel(CAREER_FILE)
+        df = pd.concat([df, pd.DataFrame([row])], ignore_index=True)
+        df.to_excel(CAREER_FILE, index=False)
+
+    # Save uploaded files (optional) – keeps original name
+    if resume_file and resume_file.filename:
+        resume_file.save(os.path.join(CAREER_DIR, f"RESUME_{datetime.utcnow().strftime('%Y%m%d%H%M%S')}_{resume_file.filename}"))
+    if cover_letter_file and cover_letter_file.filename:
+        cover_letter_file.save(os.path.join(CAREER_DIR, f"CL_{datetime.utcnow().strftime('%Y%m%d%H%M%S')}_{cover_letter_file.filename}"))
+
+    return '', 200   # same invisible success as contact page
 
 # Utility: load/save users
 def load_users():
@@ -134,6 +231,103 @@ def signup():
     session['logged_in'] = True
     session['user'] = {'email': email, 'name': users[email]['name']}
     return redirect(next_url)
+
+
+# ----------  helpers  ----------
+from datetime import datetime, timezone  # UTC-aware
+
+def load_users():
+    import json, os
+    USERS_FILE = os.path.join(os.path.dirname(__file__), 'users.json')
+    if not os.path.exists(USERS_FILE):
+        return {}
+    with open(USERS_FILE, 'r', encoding='utf-8') as f:
+        try:
+            return json.load(f)
+        except Exception:
+            return {}
+
+def save_users(users):
+    import json, os
+    USERS_FILE = os.path.join(os.path.dirname(__file__), 'users.json')
+    with open(USERS_FILE, 'w', encoding='utf-8') as f:
+        json.dump(users, f, indent=2)
+
+def calculate_profile_completion(user_data: dict) -> int:
+    required = ['name', 'first_name', 'last_name', 'phone', 'date_of_birth', 'address']
+    completed = sum(1 for f in required if user_data.get(f))
+    return int((completed / len(required)) * 100)
+
+# ----------  routes  ----------
+@app.route('/profile')
+def profile():
+    if not session.get('logged_in'):
+        return redirect(url_for('login', next='/profile'))
+
+    user_info = session.get('user', {})
+    user_email = user_info.get('email')
+    users = load_users()
+    user_data = users.get(user_email, {})
+
+    # ---- assessment history ----
+    ATTEMPTS_DIR = os.path.join(os.path.dirname(__file__), 'attempts')
+    user_attempts = []
+    if os.path.exists(ATTEMPTS_DIR):
+        for fname in os.listdir(ATTEMPTS_DIR):
+            if not fname.endswith('.json'):
+                continue
+            try:
+                with open(os.path.join(ATTEMPTS_DIR, fname), encoding='utf-8') as f:
+                    att = json.load(f)
+                    if att.get('user') == user_email and att.get('submitted'):
+                        user_attempts.append(att)
+            except Exception:
+                continue
+    user_attempts.sort(key=lambda x: x.get('submitted_at', ''), reverse=True)
+    total_attempts = len(user_attempts)
+    latest_results = user_attempts[0]['results'] if user_attempts else None
+
+    profile_data = {
+        'user_info': user_info,
+        'user_data': user_data,
+        'total_attempts': total_attempts,
+        'latest_results': latest_results,
+        'attempts_history': user_attempts[:5],
+        'join_date': user_data.get('created_at', ''),
+        'profile_completion': calculate_profile_completion(user_data),
+    }
+    return render_template('profile.html', **profile_data)
+
+# ---- legacy url redirect (optional) ----
+@app.route('/profile.html')
+def profile_html_redirect():
+    return redirect(url_for('profile'), code=301)
+
+# ---- update endpoint ----
+@app.route('/profile/update', methods=['POST'])
+def update_profile():
+    if not session.get('logged_in'):
+        return jsonify({'success': False, 'error': 'Not logged in'}), 401
+    user_email = session['user']['email']
+    users = load_users()
+    if user_email not in users:
+        return jsonify({'success': False, 'error': 'User not found'}), 404
+
+    # update fields
+    updates = {k: request.form.get(k, '').strip() for k in
+               ['first_name', 'last_name', 'phone', 'address',
+                'date_of_birth', 'gender', 'bio']}
+    updates['updated_at'] = datetime.now(timezone.utc).isoformat()
+    users[user_email].update({k: v for k, v in updates.items() if v})
+
+    # rebuild full name
+    fname = users[user_email].get('first_name', '')
+    lname = users[user_email].get('last_name', '')
+    users[user_email]['name'] = f"{fname} {lname}".strip() or users[user_email]['name']
+    session['user']['name'] = users[user_email]['name']
+
+    save_users(users)
+    return jsonify({'success': True, 'message': 'Profile updated'})
 
 @app.route('/logout')
 def logout():
