@@ -26,6 +26,18 @@ SITE_DIR = os.path.join(BASE_DIR, 'site')
 USERS_FILE = os.path.join(BASE_DIR, 'users.json')
 EXCEL_FILE = os.path.join(BASE_DIR, 'Sample Assessment questions.xlsx')
 
+import os, zipfile, io, glob
+from flask import send_file
+
+# ----------  folder-level paths ----------
+CAREER_DIR    = os.path.join(BASE_DIR, 'data', 'careers')
+CONTACT_DIR   = os.path.join(BASE_DIR, 'data', 'contacts')
+os.makedirs(CAREER_DIR, exist_ok=True)
+os.makedirs(CONTACT_DIR, exist_ok=True)
+
+CAREER_EXCEL  = os.path.join(CAREER_DIR, 'careers.xlsx')
+CONTACT_EXCEL = os.path.join(CONTACT_DIR, 'contacts.xlsx')
+
 app = Flask(__name__, static_folder=None, template_folder='templates')
 # Production-ready defaults
 app.secret_key = 'unicorn-secret-please-change'
@@ -45,34 +57,93 @@ os.makedirs(CONTACT_DIR, exist_ok=True)
 import io, os, pandas as pd
 from flask import send_file
 
-@app.route('/download/contacts')
-def download_contacts():
-    """Return the live Excel file as a download."""
-    path = os.path.join(BASE_DIR, 'data', 'contacts.xlsx')
-    if not os.path.exists(path):
-        return "No contact file yet", 404
-    return send_file(path,
-                     mimetype='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-                     as_attachment=True,
-                     download_name='contacts.xlsx')
-
 
 @app.route('/download/careers')
-def download_careers():
-    """Return the live career-applications Excel file as a download."""
-    path = os.path.join(BASE_DIR, 'data', 'careers.xlsx')
-    if not os.path.exists(path):
-        return "No career file yet", 404
-    return send_file(path,
-                     mimetype='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+def download_careers_zip():
+    """Return entire /data/careers/ folder as zip"""
+    memory_file = io.BytesIO()
+    with zipfile.ZipFile(memory_file, 'w', zipfile.ZIP_DEFLATED) as zf:
+        for root, _, files in os.walk(CAREER_DIR):
+            for file in files:
+                file_path = os.path.join(root, file)
+                arc_name  = os.path.relpath(file_path, CAREER_DIR)   # keep folder structure
+                zf.write(file_path, arc_name)
+    memory_file.seek(0)
+    return send_file(memory_file,
+                     mimetype='application/zip',
                      as_attachment=True,
-                     download_name='careers.xlsx')
+                     download_name='careers_bundle.zip')
+
+@app.route('/download/contacts')
+def download_contacts_zip():
+    """Return entire /data/contacts/ folder as zip"""
+    memory_file = io.BytesIO()
+    with zipfile.ZipFile(memory_file, 'w', zipfile.ZIP_DEFLATED) as zf:
+        for root, _, files in os.walk(CONTACT_DIR):
+            for file in files:
+                file_path = os.path.join(root, file)
+                arc_name  = os.path.relpath(file_path, CONTACT_DIR)
+                zf.write(file_path, arc_name)
+    memory_file.seek(0)
+    return send_file(memory_file,
+                     mimetype='application/zip',
+                     as_attachment=True,
+                     download_name='contacts_bundle.zip')
+
+
+@app.route('/download/careers/delete', methods=['POST'])   # or GET if you prefer
+def delete_careers():
+    """
+    ADMIN: purge every career application & uploaded file.
+    Keeps the Excel header so the next append still works.
+    """
+    import os, glob
+
+    # 1. wipe the Excel sheet (keep header only)
+    header = ['Full Name','Email','Phone','Position','Trainings',
+              'Current CTC','Portfolio','Location','Work Authorization',
+              'Salary Expectation','Start Date','Resume Filename',
+              'Cover-Letter Filename','Submitted At']
+    pd.DataFrame(columns=header).to_excel(CAREER_FILE, index=False)
+
+    # 2. delete every uploaded file in the same folder
+    for f in glob.glob(os.path.join(CAREER_DIR, "RESUME_*")) + \
+             glob.glob(os.path.join(CAREER_DIR, "CL_*")):
+        try:
+            os.remove(f)
+        except Exception:
+            pass
+
+    return jsonify({'status': 'ok', 'message': 'All career data wiped.'}), 200
+
+
+@app.route('/download/contacts/delete', methods=['POST'])   # or GET
+def delete_contacts():
+    """
+    ADMIN: purge every contact-form row.
+    Keeps header so next append still works.
+    """
+    import os, glob
+
+    # 1. wipe the Excel sheet (header only)
+    header = ['Full Name','Email','Phone','Inquiry Type',
+              'Background','Message','Submitted At']
+    pd.DataFrame(columns=header).to_excel(CONTACT_FILE, index=False)
+
+    # 2. (optional) delete any uploaded files if you ever add them here
+    for f in glob.glob(os.path.join(CONTACT_DIR, "*")):
+        if not f.endswith('.xlsx'):          # keep the sheet itself
+            try:
+                os.remove(f)
+            except Exception:
+                pass
+
+    return jsonify({'status': 'ok', 'message': 'All contact data wiped.'}), 200
 
 
 @app.route('/contact', methods=['POST'])
 def save_contact():
-    """Store contact-form data into an ever-growing Excel file"""
-    # 1. grab fields (same names you already use)
+    """Store contact-form data into /data/contacts/"""
     fullName     = request.form.get('fullName', '').strip()
     email        = request.form.get('email', '').strip()
     phone        = request.form.get('phone', '').strip()
@@ -80,7 +151,6 @@ def save_contact():
     background   = request.form.get('background', '')
     message      = request.form.get('message', '')
 
-    # 2. build row  (timezone-naïve → Excel-safe)
     row = {
         'Full Name': fullName,
         'Email': email,
@@ -88,18 +158,16 @@ def save_contact():
         'Inquiry Type': inquiryType,
         'Background': background,
         'Message': message,
-        'Submitted At': datetime.utcnow()          # <-- Excel-compatible
+        'Submitted At': datetime.utcnow()
     }
 
-    # 3. append to Excel (create header once)
-    if not os.path.exists(CONTACT_FILE):
-        pd.DataFrame([row]).to_excel(CONTACT_FILE, index=False)
+    if not os.path.exists(CONTACT_EXCEL):
+        pd.DataFrame([row]).to_excel(CONTACT_EXCEL, index=False)
     else:
-        df = pd.read_excel(CONTACT_FILE)
+        df = pd.read_excel(CONTACT_EXCEL)
         df = pd.concat([df, pd.DataFrame([row])], ignore_index=True)
-        df.to_excel(CONTACT_FILE, index=False)
+        df.to_excel(CONTACT_EXCEL, index=False)
 
-    # 4. still return the same tiny 200 so your JS alert keeps working
     return '', 200
 
 
@@ -121,7 +189,7 @@ os.makedirs(CAREER_DIR, exist_ok=True)
 
 @app.route('/career', methods=['POST'])
 def save_career():
-    """Store career-application data into an ever-growing Excel file"""
+    """Store career-application + files into /data/careers/"""
     full_name          = request.form.get('full_name', '').strip()
     email              = request.form.get('email', '').strip()
     phone              = request.form.get('phone', '').strip()
@@ -133,10 +201,9 @@ def save_career():
     authorization      = request.form.get('authorization', '').strip()
     salary_expectation = request.form.get('salary_expectation', '').strip()
     start_date         = request.form.get('start_date', '')
-    resume_file        = request.files.get('resume_file')        # optional
-    cover_letter_file  = request.files.get('cover_letter_file')  # optional
+    resume_file        = request.files.get('resume_file')
+    cover_letter_file  = request.files.get('cover_letter_file')
 
-    # Build row
     row = {
         'Full Name': full_name,
         'Email': email,
@@ -154,21 +221,23 @@ def save_career():
         'Submitted At': datetime.utcnow()
     }
 
-    # Append to Excel
-    if not os.path.exists(CAREER_FILE):
-        pd.DataFrame([row]).to_excel(CAREER_FILE, index=False)
+    # append Excel
+    if not os.path.exists(CAREER_EXCEL):
+        pd.DataFrame([row]).to_excel(CAREER_EXCEL, index=False)
     else:
-        df = pd.read_excel(CAREER_FILE)
+        df = pd.read_excel(CAREER_EXCEL)
         df = pd.concat([df, pd.DataFrame([row])], ignore_index=True)
-        df.to_excel(CAREER_FILE, index=False)
+        df.to_excel(CAREER_EXCEL, index=False)
 
-    # Save uploaded files (optional) – keeps original name
+    # save uploads into CAREER_DIR
+    ts = datetime.utcnow().strftime('%Y%m%d%H%M%S')
     if resume_file and resume_file.filename:
-        resume_file.save(os.path.join(CAREER_DIR, f"RESUME_{datetime.utcnow().strftime('%Y%m%d%H%M%S')}_{resume_file.filename}"))
+        resume_file.save(os.path.join(CAREER_DIR, f"RESUME_{ts}_{resume_file.filename}"))
     if cover_letter_file and cover_letter_file.filename:
-        cover_letter_file.save(os.path.join(CAREER_DIR, f"CL_{datetime.utcnow().strftime('%Y%m%d%H%M%S')}_{cover_letter_file.filename}"))
+        cover_letter_file.save(os.path.join(CAREER_DIR, f"CL_{ts}_{cover_letter_file.filename}"))
 
-    return '', 200   # same invisible success as contact page
+    return '', 200
+
 
 # Utility: load/save users
 def load_users():
