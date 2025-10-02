@@ -58,6 +58,23 @@ import io, os, pandas as pd
 from flask import send_file
 
 
+@app.route('/blog')
+def blog():
+    return send_from_directory('site', 'blog.html')
+
+@app.route('/faq')
+def faq():
+    return send_from_directory('site', 'faq.html')
+
+@app.route('/privacy')
+def privacy():
+    return send_from_directory('site', 'privacy.html')
+
+@app.route('/terms')
+def terms():
+    return send_from_directory('site', 'terms.html')
+
+
 @app.route('/download/careers')
 def download_careers_zip():
     """Return entire /data/careers/ folder as zip"""
