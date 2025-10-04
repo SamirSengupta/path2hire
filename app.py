@@ -157,6 +157,296 @@ def delete_contacts():
 
     return jsonify({'status': 'ok', 'message': 'All contact data wiped.'}), 200
 
+# ============================================================================
+# RAZORPAY PAYMENT INTEGRATION
+# Copy this entire section and paste it in your app.py after the imports
+# ============================================================================
+
+import razorpay
+
+# ----------  RAZORPAY CONFIGURATION ----------
+# IMPORTANT: Replace these with your actual Razorpay credentials
+# Get them from: https://dashboard.razorpay.com/app/keys
+RAZORPAY_KEY_ID = "rzp_test_RPTaVidKyUhQZ5"
+RAZORPAY_KEY_SECRET = "4XHackLERuPm2t1vOLADI2Lr"
+
+# Assessment price in paise (100 paise = 1 INR)
+# Currently set to 1 INR (100 paise)
+ASSESSMENT_PRICE = int(os.environ.get('ASSESSMENT_PRICE', '100'))  # ₹1
+
+# Initialize Razorpay client
+razorpay_client = razorpay.Client(auth=(RAZORPAY_KEY_ID, RAZORPAY_KEY_SECRET))
+
+# ----------  PAYMENT TRACKING ----------
+PAYMENTS_DIR = os.path.join(BASE_DIR, 'payments')
+os.makedirs(PAYMENTS_DIR, exist_ok=True)
+PAYMENTS_FILE = os.path.join(PAYMENTS_DIR, 'payments.json')
+
+
+def load_payments():
+    """Load payment records"""
+    if os.path.exists(PAYMENTS_FILE):
+        with open(PAYMENTS_FILE, 'r', encoding='utf-8') as f:
+            try:
+                return json.load(f)
+            except Exception:
+                return {}
+    return {}
+
+
+def save_payments(payments):
+    """Save payment records"""
+    with open(PAYMENTS_FILE, 'w', encoding='utf-8') as f:
+        json.dump(payments, f, indent=2)
+
+
+def has_user_paid(user_email):
+    """Check if user has ever made a successful payment"""
+    payments = load_payments()
+    user_payments = payments.get(user_email, [])
+    return any(p.get('status') == 'captured' for p in user_payments)
+
+
+def record_payment(user_email, payment_data):
+    """Record a payment for a user"""
+    payments = load_payments()
+    if user_email not in payments:
+        payments[user_email] = []
+    payments[user_email].append(payment_data)
+    save_payments(payments)
+
+
+# ----------  PAYMENT ROUTES ----------
+
+@app.route('/payment')
+def payment():
+    """Payment page - shown before first assessment"""
+    if not session.get('logged_in'):
+        return redirect(url_for('login', next='/payment'))
+    
+    user_email = session.get('user', {}).get('email')
+    
+    # Check if user already paid
+    if has_user_paid(user_email):
+        return redirect('/assessment')
+    
+    # Render payment page
+    return render_template('payment.html', 
+                         razorpay_key=RAZORPAY_KEY_ID,
+                         amount=ASSESSMENT_PRICE,
+                         user_email=user_email,
+                         user_name=session.get('user', {}).get('name'))
+
+
+@app.route('/create_order', methods=['POST'])
+def create_order():
+    """Create Razorpay order"""
+    if not session.get('logged_in'):
+        return jsonify({'error': 'Not logged in'}), 401
+    
+    user_email = session.get('user', {}).get('email')
+    
+    # Check if already paid
+    if has_user_paid(user_email):
+        return jsonify({'error': 'Already paid'}), 400
+    
+    try:
+        # Create Razorpay order
+        order_data = {
+            'amount': ASSESSMENT_PRICE,  # amount in paise
+            'currency': 'INR',
+            'receipt': f'assessment_{user_email}_{uuid.uuid4().hex[:8]}',
+            'notes': {
+                'user_email': user_email,
+                'purpose': 'First Assessment Payment'
+            }
+        }
+        
+        order = razorpay_client.order.create(data=order_data)
+        
+        return jsonify({
+            'success': True,
+            'order_id': order['id'],
+            'amount': order['amount'],
+            'currency': order['currency']
+        })
+    
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+
+@app.route('/verify_payment', methods=['POST'])
+def verify_payment():
+    """Verify Razorpay payment signature"""
+    if not session.get('logged_in'):
+        return jsonify({'error': 'Not logged in'}), 401
+    
+    user_email = session.get('user', {}).get('email')
+    
+    try:
+        # Get payment details from request
+        payment_id = request.json.get('razorpay_payment_id')
+        order_id = request.json.get('razorpay_order_id')
+        signature = request.json.get('razorpay_signature')
+        
+        # Verify signature
+        params_dict = {
+            'razorpay_order_id': order_id,
+            'razorpay_payment_id': payment_id,
+            'razorpay_signature': signature
+        }
+        
+        razorpay_client.utility.verify_payment_signature(params_dict)
+        
+        # Payment verified - record it
+        payment_record = {
+            'payment_id': payment_id,
+            'order_id': order_id,
+            'amount': ASSESSMENT_PRICE,
+            'currency': 'INR',
+            'status': 'captured',
+            'timestamp': datetime.utcnow().isoformat(),
+            'user_email': user_email
+        }
+        
+        record_payment(user_email, payment_record)
+        
+        return jsonify({
+            'success': True,
+            'message': 'Payment verified successfully',
+            'redirect': '/assessment'
+        })
+    
+    except razorpay.errors.SignatureVerificationError:
+        return jsonify({'error': 'Payment verification failed'}), 400
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+
+# ----------  MODIFY EXISTING /assessment ROUTE ----------
+# Replace your existing @app.route('/assessment') function with this:
+
+@app.route('/assessment')
+def assessment():
+    """Start or resume assessment - check payment first"""
+    if not session.get('logged_in'):
+        return redirect(url_for('login', next='/assessment'))
+    
+    user_email = session.get('user', {}).get('email')
+    
+    # Check if user needs to pay (first time user)
+    if not has_user_paid(user_email):
+        return redirect('/payment')
+    
+    # User has paid, proceed with assessment
+    os.makedirs(ATTEMPTS_DIR, exist_ok=True)
+    attempt_id = session.get('attempt_id')
+    attempt_path = os.path.join(ATTEMPTS_DIR, f"{attempt_id}.json") if attempt_id else None
+
+    if not attempt_id or not os.path.exists(attempt_path):
+        qs = load_questions()
+        random.shuffle(qs)
+        for q in qs:
+            random.shuffle(q['Options'])
+        attempt_id = uuid.uuid4().hex
+        attempt = {
+            'id': attempt_id,
+            'user': user_email,
+            'start': datetime.utcnow().isoformat(),
+            'questions': qs,
+            'submitted': False,
+            'results': None,
+            'answers': {}
+        }
+        with open(os.path.join(ATTEMPTS_DIR, f"{attempt_id}.json"), 'w', encoding='utf-8') as f:
+            json.dump(attempt, f)
+        session['attempt_id'] = attempt_id
+    else:
+        with open(attempt_path, 'r', encoding='utf-8') as f:
+            attempt = json.load(f)
+        start = datetime.fromisoformat(attempt['start'])
+        if datetime.utcnow() - start > timedelta(minutes=30):
+            try:
+                os.remove(attempt_path)
+            except Exception:
+                pass
+            session.pop('attempt_id', None)
+            session.clear()
+            return redirect(url_for('login', next='/assessment', timeout=1))
+    
+    return redirect(url_for('assessment_question', idx=0))
+
+
+# ----------  OPTIONAL: UPDATE PROFILE TO SHOW PAYMENT STATUS ----------
+# Add this helper function if it doesn't exist:
+
+def calculate_profile_completion(user_data: dict) -> int:
+    required = ['name', 'first_name', 'last_name', 'phone', 'date_of_birth', 'address']
+    completed = sum(1 for f in required if user_data.get(f))
+    return int((completed / len(required)) * 100)
+
+
+# Update your existing @app.route('/profile') function:
+# Find the line: profile_data = {...}
+# And add 'has_paid': has_user_paid(user_email) to it
+# Like this:
+
+@app.route('/profile')
+def profile():
+    if not session.get('logged_in'):
+        return redirect(url_for('login', next='/profile'))
+
+    user_info = session.get('user', {})
+    user_email = user_info.get('email')
+    users = load_users()
+    user_data = users.get(user_email, {})
+
+    # Get payment status
+    has_paid = has_user_paid(user_email)
+
+    # Assessment history
+    user_attempts = []
+    if os.path.exists(ATTEMPTS_DIR):
+        for fname in os.listdir(ATTEMPTS_DIR):
+            if not fname.endswith('.json'):
+                continue
+            try:
+                with open(os.path.join(ATTEMPTS_DIR, fname), encoding='utf-8') as f:
+                    att = json.load(f)
+                    if att.get('user') == user_email and att.get('submitted'):
+                        user_attempts.append(att)
+            except Exception:
+                continue
+    user_attempts.sort(key=lambda x: x.get('submitted_at', ''), reverse=True)
+    total_attempts = len(user_attempts)
+    latest_results = user_attempts[0]['results'] if user_attempts else None
+
+    profile_data = {
+        'user_info': user_info,
+        'user_data': user_data,
+        'total_attempts': total_attempts,
+        'latest_results': latest_results,
+        'attempts_history': user_attempts[:5],
+        'join_date': user_data.get('created_at', ''),
+        'profile_completion': calculate_profile_completion(user_data),
+        'has_paid': has_paid  # Add this line
+    }
+    return render_template('profile.html', **profile_data)
+
+
+# ============================================================================
+# END OF RAZORPAY INTEGRATION
+# ============================================================================
+
+# INSTRUCTIONS:
+# 1. Make sure to add 'import razorpay' at the top of your app.py with other imports
+# 2. Install razorpay: pip install razorpay==1.4.2
+# 3. Set your Razorpay keys:
+#    - Windows: set RAZORPAY_KEY_ID=rzp_test_xxxxx
+#    - Linux/Mac: export RAZORPAY_KEY_ID='rzp_test_xxxxx'
+# 4. Or directly replace 'rzp_test_xxxxxxxxxxxxx' above with your actual key
+# 5. Price is currently set to ₹1 (100 paise)
+# 6. Test with card: 4111 1111 1111 1111, CVV: 123, Expiry: any future date
 
 @app.route('/contact', methods=['POST'])
 def save_contact():
@@ -372,44 +662,44 @@ def calculate_profile_completion(user_data: dict) -> int:
     return int((completed / len(required)) * 100)
 
 # ----------  routes  ----------
-@app.route('/profile')
-def profile():
-    if not session.get('logged_in'):
-        return redirect(url_for('login', next='/profile'))
+# @app.route('/profile')
+# def profile():
+#     if not session.get('logged_in'):
+#         return redirect(url_for('login', next='/profile'))
 
-    user_info = session.get('user', {})
-    user_email = user_info.get('email')
-    users = load_users()
-    user_data = users.get(user_email, {})
+#     user_info = session.get('user', {})
+#     user_email = user_info.get('email')
+#     users = load_users()
+#     user_data = users.get(user_email, {})
 
-    # ---- assessment history ----
-    ATTEMPTS_DIR = os.path.join(os.path.dirname(__file__), 'attempts')
-    user_attempts = []
-    if os.path.exists(ATTEMPTS_DIR):
-        for fname in os.listdir(ATTEMPTS_DIR):
-            if not fname.endswith('.json'):
-                continue
-            try:
-                with open(os.path.join(ATTEMPTS_DIR, fname), encoding='utf-8') as f:
-                    att = json.load(f)
-                    if att.get('user') == user_email and att.get('submitted'):
-                        user_attempts.append(att)
-            except Exception:
-                continue
-    user_attempts.sort(key=lambda x: x.get('submitted_at', ''), reverse=True)
-    total_attempts = len(user_attempts)
-    latest_results = user_attempts[0]['results'] if user_attempts else None
+#     # ---- assessment history ----
+#     ATTEMPTS_DIR = os.path.join(os.path.dirname(__file__), 'attempts')
+#     user_attempts = []
+#     if os.path.exists(ATTEMPTS_DIR):
+#         for fname in os.listdir(ATTEMPTS_DIR):
+#             if not fname.endswith('.json'):
+#                 continue
+#             try:
+#                 with open(os.path.join(ATTEMPTS_DIR, fname), encoding='utf-8') as f:
+#                     att = json.load(f)
+#                     if att.get('user') == user_email and att.get('submitted'):
+#                         user_attempts.append(att)
+#             except Exception:
+#                 continue
+#     user_attempts.sort(key=lambda x: x.get('submitted_at', ''), reverse=True)
+#     total_attempts = len(user_attempts)
+#     latest_results = user_attempts[0]['results'] if user_attempts else None
 
-    profile_data = {
-        'user_info': user_info,
-        'user_data': user_data,
-        'total_attempts': total_attempts,
-        'latest_results': latest_results,
-        'attempts_history': user_attempts[:5],
-        'join_date': user_data.get('created_at', ''),
-        'profile_completion': calculate_profile_completion(user_data),
-    }
-    return render_template('profile.html', **profile_data)
+#     profile_data = {
+#         'user_info': user_info,
+#         'user_data': user_data,
+#         'total_attempts': total_attempts,
+#         'latest_results': latest_results,
+#         'attempts_history': user_attempts[:5],
+#         'join_date': user_data.get('created_at', ''),
+#         'profile_completion': calculate_profile_completion(user_data),
+#     }
+#     return render_template('profile.html', **profile_data)
 
 # ---- legacy url redirect (optional) ----
 @app.route('/profile.html')
@@ -456,48 +746,48 @@ def logout():
     return redirect('/')
 
 
-@app.route('/assessment')
-def assessment():
-    # start or resume an attempt and redirect to first question
-    if not session.get('logged_in'):
-        return redirect(url_for('login', next='/assessment'))
-    os.makedirs(ATTEMPTS_DIR, exist_ok=True)
-    attempt_id = session.get('attempt_id')
-    attempt_path = os.path.join(ATTEMPTS_DIR, f"{attempt_id}.json") if attempt_id else None
+# @app.route('/assessment')
+# def assessment():
+#     # start or resume an attempt and redirect to first question
+#     if not session.get('logged_in'):
+#         return redirect(url_for('login', next='/assessment'))
+#     os.makedirs(ATTEMPTS_DIR, exist_ok=True)
+#     attempt_id = session.get('attempt_id')
+#     attempt_path = os.path.join(ATTEMPTS_DIR, f"{attempt_id}.json") if attempt_id else None
 
-    if not attempt_id or not os.path.exists(attempt_path):
-        qs = load_questions()
-        random.shuffle(qs)
-        for q in qs:
-            random.shuffle(q['Options'])
-        attempt_id = uuid.uuid4().hex
-        attempt = {
-            'id': attempt_id,
-            'user': session.get('user', {}).get('email'),
-            'start': datetime.utcnow().isoformat(),
-            'questions': qs,
-            'submitted': False,
-            'results': None,
-            'answers': {}
-        }
-        with open(os.path.join(ATTEMPTS_DIR, f"{attempt_id}.json"), 'w', encoding='utf-8') as f:
-            json.dump(attempt, f)
-        session['attempt_id'] = attempt_id
-    else:
-        with open(attempt_path, 'r', encoding='utf-8') as f:
-            attempt = json.load(f)
-        # check timeout (30 minutes)
-        start = datetime.fromisoformat(attempt['start'])
-        if datetime.utcnow() - start > timedelta(minutes=30):
-            try:
-                os.remove(attempt_path)
-            except Exception:
-                pass
-            session.pop('attempt_id', None)
-            session.clear()
-            return redirect(url_for('login', next='/assessment', timeout=1))
-    # redirect to first question (or resume at 0)
-    return redirect(url_for('assessment_question', idx=0))
+#     if not attempt_id or not os.path.exists(attempt_path):
+#         qs = load_questions()
+#         random.shuffle(qs)
+#         for q in qs:
+#             random.shuffle(q['Options'])
+#         attempt_id = uuid.uuid4().hex
+#         attempt = {
+#             'id': attempt_id,
+#             'user': session.get('user', {}).get('email'),
+#             'start': datetime.utcnow().isoformat(),
+#             'questions': qs,
+#             'submitted': False,
+#             'results': None,
+#             'answers': {}
+#         }
+#         with open(os.path.join(ATTEMPTS_DIR, f"{attempt_id}.json"), 'w', encoding='utf-8') as f:
+#             json.dump(attempt, f)
+#         session['attempt_id'] = attempt_id
+#     else:
+#         with open(attempt_path, 'r', encoding='utf-8') as f:
+#             attempt = json.load(f)
+#         # check timeout (30 minutes)
+#         start = datetime.fromisoformat(attempt['start'])
+#         if datetime.utcnow() - start > timedelta(minutes=30):
+#             try:
+#                 os.remove(attempt_path)
+#             except Exception:
+#                 pass
+#             session.pop('attempt_id', None)
+#             session.clear()
+#             return redirect(url_for('login', next='/assessment', timeout=1))
+#     # redirect to first question (or resume at 0)
+#     return redirect(url_for('assessment_question', idx=0))
 
 @app.route('/assessment/<int:idx>')
 def assessment_question(idx):

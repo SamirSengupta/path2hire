@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment - Path2Hire Assessment</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .payment-container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            max-width: 500px;
+            width: 100%;
+            padding: 40px;
+            animation: slideUp 0.5s ease;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .payment-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .payment-icon {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 20px;
+            font-size: 40px;
+        }
+
+        h1 {
+            color: #333;
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            color: #666;
+            font-size: 16px;
+        }
+
+        .payment-info {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 25px;
+            margin: 25px 0;
+        }
+
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .info-row:last-child {
+            margin-bottom: 0;
+            padding-bottom: 0;
+            border-bottom: none;
+        }
+
+        .info-label {
+            color: #666;
+            font-size: 14px;
+        }
+
+        .info-value {
+            color: #333;
+            font-weight: 600;
+            font-size: 16px;
+        }
+
+        .price {
+            font-size: 32px;
+            color: #667eea;
+            font-weight: 700;
+        }
+
+        .features {
+            margin: 25px 0;
+        }
+
+        .feature-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 12px;
+            color: #555;
+        }
+
+        .feature-item::before {
+            content: "✓";
+            color: #10b981;
+            font-weight: bold;
+            font-size: 18px;
+            margin-right: 12px;
+            width: 24px;
+            height: 24px;
+            background: #d1fae5;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .pay-button {
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 20px;
+        }
+
+        .pay-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4);
+        }
+
+        .pay-button:active {
+            transform: translateY(0);
+        }
+
+        .pay-button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .security-note {
+            text-align: center;
+            margin-top: 20px;
+            padding: 15px;
+            background: #fef3c7;
+            border-radius: 8px;
+            font-size: 14px;
+            color: #92400e;
+        }
+
+        .security-note::before {
+            content: "🔒 ";
+        }
+
+        .note {
+            text-align: center;
+            color: #666;
+            font-size: 13px;
+            margin-top: 15px;
+            line-height: 1.6;
+        }
+
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .spinner {
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #667eea;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .error-message {
+            background: #fee;
+            color: #c33;
+            padding: 12px;
+            border-radius: 8px;
+            margin: 15px 0;
+            display: none;
+            text-align: center;
+        }
+
+        .back-link {
+            display: block;
+            text-align: center;
+            margin-top: 20px;
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .back-link:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="payment-container">
+        <div class="payment-header">
+            <div class="payment-icon">💳</div>
+            <h1>Complete Your Payment</h1>
+            <p class="subtitle">Unlock your first career assessment</p>
+        </div>
+
+        <div class="payment-info">
+            <div class="info-row">
+                <span class="info-label">Assessment Package</span>
+                <span class="info-value">First-Time Access</span>
+            </div>
+            <div class="info-row">
+                <span class="info-label">Total Amount</span>
+                <span class="price">₹{{ (amount / 100) | int }}</span>
+            </div>
+        </div>
+
+        <div class="features">
+            <h3 style="margin-bottom: 15px; color: #333;">What You Get:</h3>
+            <div class="feature-item">Complete career assessment test</div>
+            <div class="feature-item">Detailed strengths analysis</div>
+            <div class="feature-item">Career blueprint report</div>
+            <div class="feature-item">Personalized career recommendations</div>
+            <div class="feature-item">Unlimited future assessments (FREE)</div>
+        </div>
+
+        <div id="error-message" class="error-message"></div>
+
+        <button id="pay-button" class="pay-button">
+            Proceed to Pay ₹{{ (amount / 100) | int }}
+        </button>
+
+        <div class="security-note">
+            Secure payment powered by Razorpay
+        </div>
+
+        <p class="note">
+            This is a one-time payment. After this, you can take unlimited assessments for free!
+        </p>
+
+        <div class="loading" id="loading">
+            <div class="spinner"></div>
+            <p style="margin-top: 10px; color: #666;">Processing payment...</p>
+        </div>
+
+        <a href="/profile" class="back-link">← Back to Profile</a>
+    </div>
+
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+    <script>
+        const payButton = document.getElementById('pay-button');
+        const loading = document.getElementById('loading');
+        const errorMessage = document.getElementById('error-message');
+
+        function showError(message) {
+            errorMessage.textContent = message;
+            errorMessage.style.display = 'block';
+            setTimeout(() => {
+                errorMessage.style.display = 'none';
+            }, 5000);
+        }
+
+        function showLoading(show) {
+            if (show) {
+                loading.style.display = 'block';
+                payButton.style.display = 'none';
+            } else {
+                loading.style.display = 'none';
+                payButton.style.display = 'block';
+            }
+        }
+
+        payButton.addEventListener('click', async function() {
+            try {
+                payButton.disabled = true;
+                showLoading(true);
+
+                // Create order on server
+                const response = await fetch('/create_order', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                });
+
+                const data = await response.json();
+
+                if (!response.ok || !data.success) {
+                    throw new Error(data.error || 'Failed to create order');
+                }
+
+                showLoading(false);
+
+                // Configure Razorpay options
+                const options = {
+                    key: '{{ razorpay_key }}',
+                    amount: data.amount,
+                    currency: data.currency,
+                    order_id: data.order_id,
+                    name: 'Path2Hire',
+                    description: 'Career Assessment - First Time Access',
+                    image: '/assets/logo.png', // Optional: Add your logo
+                    prefill: {
+                        name: '{{ user_name }}',
+                        email: '{{ user_email }}'
+                    },
+                    theme: {
+                        color: '#667eea'
+                    },
+                    handler: async function(response) {
+                        // Payment successful
+                        showLoading(true);
+                        
+                        try {
+                            // Verify payment on server
+                            const verifyResponse = await fetch('/verify_payment', {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/json'
+                                },
+                                body: JSON.stringify({
+                                    razorpay_payment_id: response.razorpay_payment_id,
+                                    razorpay_order_id: response.razorpay_order_id,
+                                    razorpay_signature: response.razorpay_signature
+                                })
+                            });
+
+                            const verifyData = await verifyResponse.json();
+
+                            if (verifyData.success) {
+                                // Redirect to assessment
+                                window.location.href = verifyData.redirect;
+                            } else {
+                                throw new Error(verifyData.error || 'Payment verification failed');
+                            }
+                        } catch (error) {
+                            showLoading(false);
+                            showError('Payment verification failed: ' + error.message);
+                            payButton.disabled = false;
+                        }
+                    },
+                    modal: {
+                        ondismiss: function() {
+                            showLoading(false);
+                            payButton.disabled = false;
+                        }
+                    }
+                };
+
+                // Open Razorpay checkout
+                const rzp = new Razorpay(options);
+                
+                rzp.on('payment.failed', function(response) {
+                    showLoading(false);
+                    showError('Payment failed: ' + response.error.description);
+                    payButton.disabled = false;
+                });
+
+                rzp.open();
+
+            } catch (error) {
+                showLoading(false);
+                showError(error.message);
+                payButton.disabled = false;
+            }
+        });
+    </script>
+</body>
+</html>
