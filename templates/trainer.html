@@ -1,0 +1,580 @@
+<!doctype html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Trainer Profile • Path2Hire</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
+  <style>
+    :root{
+      --color-primary:#2563eb;
+      --color-secondary:#1e40af;
+      --color-accent:#f9a826;
+    }
+    .modal{position:fixed;inset:0;z-index:50;display:none;place-items:center;background:rgba(0,0,0,.55)}
+    .modal.show{display:grid}
+    .tab-content{display:none}
+    .tab-content.block{display:block}
+    .tab-button.active{background:var(--color-primary);color:#fff}
+  </style>
+</head>
+
+<body class="bg-gray-50 text-gray-800">
+
+<!-- NAVBAR -->
+<nav class="fixed top-0 w-full bg-white shadow-md z-40">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex justify-between h-16 items-center">
+      <a href="/" class="flex items-center space-x-2">
+        <div class="h-8 w-8 rounded-full bg-blue-600 flex items-center justify-center"><i class="fas fa-graduation-cap text-white"></i></div>
+        <span class="text-xl font-bold text-blue-600">Path2<span class="text-yellow-500">Hire</span></span>
+      </a>
+      <div class="hidden md:flex space-x-6 text-sm font-medium">
+        <a href="/" class="text-gray-500 hover:text-gray-700">Home</a>
+        <a href="/about.html" class="text-gray-500 hover:text-gray-700">About</a>
+        <a href="/contact.html" class="text-gray-500 hover:text-gray-700">Contact</a>
+      </div>
+      <div class="flex items-center space-x-4">
+        <img src="https://ui-avatars.com/api/?name=Trainer&background=2563eb&color=fff" class="w-8 h-8 rounded-full" alt="avatar">
+        <span class="text-sm font-medium text-gray-700">Trainer</span>
+        <a href="/logout" class="text-gray-500 hover:text-gray-700"><i class="fas fa-sign-out-alt"></i></a>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<!-- HERO SECTION -->
+<section class="pt-24 pb-10 bg-gradient-to-br from-blue-600 via-indigo-600 to-purple-700 text-white">
+  <div class="max-w-7xl mx-auto px-4">
+    <div class="flex flex-col md:flex-row items-center gap-8">
+      <div class="relative shrink-0">
+        <img src="https://ui-avatars.com/api/?name=Trainer&background=f9a826&color=fff&size=150" class="w-32 h-32 rounded-full border-4 border-white shadow-xl" alt="Profile">
+        <button onclick="openModal('photoModal')" class="absolute bottom-2 right-2 bg-yellow-500 hover:bg-yellow-400 text-white rounded-full p-2 shadow"><i class="fas fa-camera text-sm"></i></button>
+      </div>
+      <div class="md:flex-1 text-center md:text-left">
+        <h1 class="text-4xl font-bold mb-1">Trainer Name</h1>
+        <p class="text-blue-100 mb-3">Professional Trainer • Path2Hire</p>
+        <div class="flex flex-wrap justify-center md:justify-start gap-3 text-xs">
+          <span class="bg-white/20 backdrop-blur px-3 py-1 rounded-full"><i class="fas fa-envelope mr-2"></i>trainer@email.com</span>
+          <span class="bg-white/20 backdrop-blur px-3 py-1 rounded-full"><i class="fas fa-phone mr-2"></i>+1 234 567 8900</span>
+        </div>
+        <div class="mt-5 flex flex-wrap gap-3 justify-center md:justify-start">
+          <button onclick="openModal('editProfileModal')" class="bg-white/20 hover:bg-white/30 px-5 py-2 rounded-full border border-white/30 backdrop-blur transition"><i class="fas fa-edit mr-2"></i>Edit Profile</button>
+        </div>
+      </div>
+      <div class="shrink-0 text-center">
+        <div class="text-5xl font-extrabold text-yellow-300">75%</div>
+        <p class="text-sm text-blue-100">Profile Complete</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TABS -->
+<section class="bg-white shadow-sm sticky top-16 z-30">
+  <div class="max-w-7xl mx-auto px-4">
+    <div class="flex border-b overflow-x-auto">
+      <button onclick="switchTab('personal')" class="tab-button active px-5 py-3 text-sm font-medium border-b-2 border-transparent whitespace-nowrap">Personal Info</button>
+      <button onclick="switchTab('identification')" class="tab-button px-5 py-3 text-sm font-medium border-b-2 border-transparent text-gray-600 hover:text-gray-800 whitespace-nowrap">Identification</button>
+      <button onclick="switchTab('banking')" class="tab-button px-5 py-3 text-sm font-medium border-b-2 border-transparent text-gray-600 hover:text-gray-800 whitespace-nowrap">Banking</button>
+      <button onclick="switchTab('qualifications')" class="tab-button px-5 py-3 text-sm font-medium border-b-2 border-transparent text-gray-600 hover:text-gray-800 whitespace-nowrap">Qualifications</button>
+      <button onclick="switchTab('employment')" class="tab-button px-5 py-3 text-sm font-medium border-b-2 border-transparent text-gray-600 hover:text-gray-800 whitespace-nowrap">Employment</button>
+      <button onclick="switchTab('trainings')" class="tab-button px-5 py-3 text-sm font-medium border-b-2 border-transparent text-gray-600 hover:text-gray-800 whitespace-nowrap">Trainings</button>
+    </div>
+  </div>
+</section>
+
+<!-- TAB CONTENT -->
+<main class="max-w-7xl mx-auto px-4 py-8">
+  
+  <!-- PERSONAL INFO TAB -->
+  <div id="personal" class="tab-content block">
+    <div class="bg-white rounded-2xl p-6 shadow">
+      <h3 class="text-xl font-bold mb-6 flex items-center"><i class="fas fa-user mr-3 text-blue-600"></i>Personal Information</h3>
+      <form id="personalForm" class="space-y-4">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">First Name <span class="text-red-500">*</span></label>
+            <input type="text" name="first_name" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" />
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Last Name <span class="text-red-500">*</span></label>
+            <input type="text" name="last_name" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" />
+          </div>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Email <span class="text-red-500">*</span></label>
+            <input type="email" name="email" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" />
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Phone <span class="text-red-500">*</span></label>
+            <input type="tel" name="phone" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" />
+          </div>
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Full Address <span class="text-red-500">*</span></label>
+          <textarea name="address" rows="3" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"></textarea>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">City</label>
+            <input type="text" name="city" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" />
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">State/Province</label>
+            <input type="text" name="state" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" />
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">PIN/ZIP Code</label>
+            <input type="text" name="pincode" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" />
+          </div>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Date of Birth <span class="text-red-500">*</span></label>
+            <input type="date" name="dob" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" />
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Gender</label>
+            <select name="gender" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+              <option value="">Select Gender</option>
+              <option value="Male">Male</option>
+              <option value="Female">Female</option>
+              <option value="Other">Other</option>
+              <option value="Prefer not to say">Prefer not to say</option>
+            </select>
+          </div>
+        </div>
+        <div class="flex justify-end gap-3 pt-4">
+          <button type="submit" class="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"><i class="fas fa-save mr-2"></i>Save Personal Info</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- IDENTIFICATION TAB -->
+  <div id="identification" class="tab-content">
+    <div class="bg-white rounded-2xl p-6 shadow">
+      <h3 class="text-xl font-bold mb-6 flex items-center"><i class="fas fa-id-card mr-3 text-blue-600"></i>Identification Documents</h3>
+      <form id="identificationForm" class="space-y-6">
+        <!-- PAN Card -->
+        <div class="p-4 border border-gray-200 rounded-lg">
+          <h4 class="font-semibold text-gray-800 mb-4">PAN Card Details</h4>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1">PAN Number <span class="text-red-500">*</span></label>
+              <input type="text" name="pan_number" placeholder="ABCDE1234F" pattern="[A-Z]{5}[0-9]{4}[A-Z]{1}" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" />
+              <p class="text-xs text-gray-500 mt-1">Format: ABCDE1234F</p>
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1">Name on PAN Card <span class="text-red-500">*</span></label>
+              <input type="text" name="pan_name" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" />
+            </div>
+          </div>
+        </div>
+
+        <!-- Aadhaar Card -->
+        <div class="p-4 border border-gray-200 rounded-lg">
+          <h4 class="font-semibold text-gray-800 mb-4">Aadhaar Card Details</h4>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1">Aadhaar Number <span class="text-red-500">*</span></label>
+              <input type="text" name="aadhaar_number" placeholder="1234 5678 9012" pattern="[0-9]{12}" maxlength="12" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" />
+              <p class="text-xs text-gray-500 mt-1">12-digit Aadhaar number</p>
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1">Name on Aadhaar Card <span class="text-red-500">*</span></label>
+              <input type="text" name="aadhaar_name" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" />
+            </div>
+          </div>
+        </div>
+
+        <div class="flex justify-end gap-3 pt-4">
+          <button type="submit" class="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"><i class="fas fa-save mr-2"></i>Save Identification</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- BANKING TAB -->
+  <div id="banking" class="tab-content">
+    <div class="bg-white rounded-2xl p-6 shadow">
+      <h3 class="text-xl font-bold mb-6 flex items-center"><i class="fas fa-university mr-3 text-blue-600"></i>Banking Details</h3>
+      <form id="bankingForm" class="space-y-4">
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Bank Name <span class="text-red-500">*</span></label>
+          <input type="text" name="bank_name" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" />
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Account Number <span class="text-red-500">*</span></label>
+            <input type="text" name="account_number" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" />
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Confirm Account Number <span class="text-red-500">*</span></label>
+            <input type="text" name="confirm_account_number" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" />
+          </div>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">IFSC Code <span class="text-red-500">*</span></label>
+            <input type="text" name="ifsc_code" placeholder="ABCD0123456" pattern="[A-Z]{4}0[A-Z0-9]{6}" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" />
+            <p class="text-xs text-gray-500 mt-1">Format: ABCD0123456</p>
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Account Type <span class="text-red-500">*</span></label>
+            <select name="account_type" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+              <option value="">Select Type</option>
+              <option value="Savings">Savings Account</option>
+              <option value="Current">Current Account</option>
+            </select>
+          </div>
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Account Holder Name <span class="text-red-500">*</span></label>
+          <input type="text" name="account_holder_name" required class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" />
+          <p class="text-xs text-gray-500 mt-1">Name as per bank records</p>
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1">Branch Name</label>
+          <input type="text" name="branch_name" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" />
+        </div>
+        <div class="flex justify-end gap-3 pt-4">
+          <button type="submit" class="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"><i class="fas fa-save mr-2"></i>Save Banking Details</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- QUALIFICATIONS TAB -->
+  <div id="qualifications" class="tab-content">
+    <div class="bg-white rounded-2xl p-6 shadow">
+      <div class="flex justify-between items-center mb-6">
+        <h3 class="text-xl font-bold flex items-center"><i class="fas fa-graduation-cap mr-3 text-blue-600"></i>Educational Qualifications</h3>
+        <button onclick="addQualification()" class="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition text-sm"><i class="fas fa-plus mr-2"></i>Add Qualification</button>
+      </div>
+      <div id="qualificationsList" class="space-y-4">
+        <!-- Qualifications will be added here -->
+        <div class="text-center py-8 text-gray-500">
+          <i class="fas fa-graduation-cap text-4xl mb-3"></i>
+          <p>No qualifications added yet. Click "Add Qualification" to begin.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- EMPLOYMENT TAB -->
+  <div id="employment" class="tab-content">
+    <div class="bg-white rounded-2xl p-6 shadow">
+      <div class="flex justify-between items-center mb-6">
+        <h3 class="text-xl font-bold flex items-center"><i class="fas fa-briefcase mr-3 text-blue-600"></i>Employment History</h3>
+        <button onclick="addEmployment()" class="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition text-sm"><i class="fas fa-plus mr-2"></i>Add Employment</button>
+      </div>
+      <div id="employmentList" class="space-y-4">
+        <!-- Employment records will be added here -->
+        <div class="text-center py-8 text-gray-500">
+          <i class="fas fa-briefcase text-4xl mb-3"></i>
+          <p>No employment history added yet. Click "Add Employment" to begin.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TRAININGS TAB -->
+  <div id="trainings" class="tab-content">
+    <div class="bg-white rounded-2xl p-6 shadow">
+      <div class="flex justify-between items-center mb-6">
+        <h3 class="text-xl font-bold flex items-center"><i class="fas fa-chalkboard-teacher mr-3 text-blue-600"></i>Trainings You Can Provide</h3>
+        <button onclick="addTraining()" class="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition text-sm"><i class="fas fa-plus mr-2"></i>Add Training</button>
+      </div>
+      <div id="trainingsList" class="space-y-4">
+        <!-- Training courses will be added here -->
+        <div class="text-center py-8 text-gray-500">
+          <i class="fas fa-chalkboard-teacher text-4xl mb-3"></i>
+          <p>No training courses added yet. Click "Add Training" to begin.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<!-- PHOTO MODAL -->
+<div id="photoModal" class="modal">
+  <div class="bg-white rounded-2xl max-w-md w-full p-6 text-center">
+    <div class="flex justify-between items-center mb-4">
+      <h2 class="text-xl font-bold text-gray-800">Update Profile Photo</h2>
+      <button onclick="closeModal('photoModal')" class="text-gray-400 hover:text-gray-600"><i class="fas fa-times text-xl"></i></button>
+    </div>
+    <img src="https://ui-avatars.com/api/?name=Trainer&background=f9a826&color=fff&size=150" class="w-32 h-32 rounded-full mx-auto mb-4" alt="current">
+    <div class="border-2 border-dashed border-gray-300 rounded-lg p-8 mb-4">
+      <i class="fas fa-cloud-upload-alt text-4xl text-gray-400 mb-2"></i>
+      <p class="text-gray-600">Profile photos coming soon!</p>
+      <p class="text-xs text-gray-400">For now we use your initials</p>
+    </div>
+    <button onclick="closeModal('photoModal')" class="px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition">Close</button>
+  </div>
+</div>
+
+<script>
+  let qualificationCounter = 0;
+  let employmentCounter = 0;
+  let trainingCounter = 0;
+
+  function switchTab(tab){
+    document.querySelectorAll('.tab-content').forEach(c=>c.classList.remove('block'));
+    document.querySelectorAll('.tab-button').forEach(b=>b.classList.remove('active'));
+    document.getElementById(tab).classList.add('block');
+    event.target.classList.add('active');
+  }
+
+  function openModal(id){
+    document.getElementById(id).classList.add('show');
+    document.body.style.overflow='hidden';
+  }
+
+  function closeModal(id){
+    document.getElementById(id).classList.remove('show');
+    document.body.style.overflow='auto';
+  }
+
+  document.querySelectorAll('.modal').forEach(m=>m.addEventListener('click',e=>{
+    if(e.target===m){closeModal(m.id)}
+  }));
+
+  // Add Qualification
+  function addQualification(){
+    const list = document.getElementById('qualificationsList');
+    if(list.querySelector('.text-center')){list.innerHTML='';}
+    qualificationCounter++;
+    const html = `
+      <div class="p-4 border border-gray-200 rounded-lg" id="qual-${qualificationCounter}">
+        <div class="flex justify-between items-center mb-3">
+          <h4 class="font-semibold text-gray-800">Qualification #${qualificationCounter}</h4>
+          <button onclick="removeItem('qual-${qualificationCounter}')" class="text-red-500 hover:text-red-700"><i class="fas fa-trash"></i></button>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Degree/Certificate</label>
+            <input type="text" name="qual_degree_${qualificationCounter}" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm" placeholder="e.g., B.Tech, MBA" />
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Specialization</label>
+            <input type="text" name="qual_specialization_${qualificationCounter}" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm" placeholder="e.g., Computer Science" />
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Institution</label>
+            <input type="text" name="qual_institution_${qualificationCounter}" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm" />
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Year of Completion</label>
+            <input type="number" name="qual_year_${qualificationCounter}" min="1950" max="2030" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm" />
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Grade/CGPA</label>
+            <input type="text" name="qual_grade_${qualificationCounter}" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm" placeholder="e.g., 8.5/10" />
+          </div>
+        </div>
+      </div>
+    `;
+    list.insertAdjacentHTML('beforeend', html);
+  }
+
+  // Add Employment
+  function addEmployment(){
+    const list = document.getElementById('employmentList');
+    if(list.querySelector('.text-center')){list.innerHTML='';}
+    employmentCounter++;
+    const html = `
+      <div class="p-4 border border-gray-200 rounded-lg" id="emp-${employmentCounter}">
+        <div class="flex justify-between items-center mb-3">
+          <h4 class="font-semibold text-gray-800">Employment #${employmentCounter}</h4>
+          <button onclick="removeItem('emp-${employmentCounter}')" class="text-red-500 hover:text-red-700"><i class="fas fa-trash"></i></button>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Company Name</label>
+            <input type="text" name="emp_company_${employmentCounter}" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm" />
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Job Title</label>
+            <input type="text" name="emp_title_${employmentCounter}" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm" />
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Start Date</label>
+            <input type="date" name="emp_start_${employmentCounter}" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm" />
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">End Date</label>
+            <input type="date" name="emp_end_${employmentCounter}" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm" />
+            <label class="flex items-center mt-2 text-sm">
+              <input type="checkbox" name="emp_current_${employmentCounter}" class="mr-2" onchange="toggleEndDate(this, ${employmentCounter})">
+              Currently working here
+            </label>
+          </div>
+          <div class="md:col-span-2">
+            <label class="block text-sm font-medium text-gray-700 mb-1">Job Responsibilities</label>
+            <textarea name="emp_responsibilities_${employmentCounter}" rows="3" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm" placeholder="Describe your key responsibilities..."></textarea>
+          </div>
+        </div>
+      </div>
+    `;
+    list.insertAdjacentHTML('beforeend', html);
+  }
+
+  // Add Training
+  function addTraining(){
+    const list = document.getElementById('trainingsList');
+    if(list.querySelector('.text-center')){list.innerHTML='';}
+    trainingCounter++;
+    const html = `
+      <div class="p-4 border border-gray-200 rounded-lg" id="train-${trainingCounter}">
+        <div class="flex justify-between items-center mb-3">
+          <h4 class="font-semibold text-gray-800">Training #${trainingCounter}</h4>
+          <button onclick="removeItem('train-${trainingCounter}')" class="text-red-500 hover:text-red-700"><i class="fas fa-trash"></i></button>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Training Name</label>
+            <input type="text" name="train_name_${trainingCounter}" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm" placeholder="e.g., Excel Advanced Training" />
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Category</label>
+            <select name="train_category_${trainingCounter}" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm">
+              <option value="">Select Category</option>
+              <option value="Accounting">Accounting</option>
+              <option value="Finance">Finance</option>
+              <option value="Business Analysis">Business Analysis</option>
+              <option value="Software Tools">Software Tools</option>
+              <option value="Compliance">Compliance</option>
+              <option value="Tax">Tax & Taxation</option>
+              <option value="Payroll">Payroll</option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Duration (Hours)</label>
+            <input type="number" name="train_duration_${trainingCounter}" min="1" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm" placeholder="e.g., 40" />
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">Experience (Years)</label>
+            <input type="number" name="train_experience_${trainingCounter}" min="0" step="0.5" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm" placeholder="Years of experience" />
+          </div>
+          <div class="md:col-span-2">
+            <label class="block text-sm font-medium text-gray-700 mb-1">Training Description</label>
+            <textarea name="train_description_${trainingCounter}" rows="3" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm" placeholder="Describe what this training covers..."></textarea>
+          </div>
+          <div class="md:col-span-2">
+            <label class="block text-sm font-medium text-gray-700 mb-1">Prerequisites (if any)</label>
+            <input type="text" name="train_prerequisites_${trainingCounter}" class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm" placeholder="e.g., Basic Excel knowledge" />
+          </div>
+        </div>
+      </div>
+    `;
+    list.insertAdjacentHTML('beforeend', html);
+  }
+
+  // Remove item
+  function removeItem(id){
+    if(confirm('Are you sure you want to remove this item?')){
+      document.getElementById(id).remove();
+      
+      // Check if list is empty and show placeholder
+      const qualList = document.getElementById('qualificationsList');
+      const empList = document.getElementById('employmentList');
+      const trainList = document.getElementById('trainingsList');
+      
+      if(qualList && qualList.children.length === 0){
+        qualList.innerHTML = '<div class="text-center py-8 text-gray-500"><i class="fas fa-graduation-cap text-4xl mb-3"></i><p>No qualifications added yet. Click "Add Qualification" to begin.</p></div>';
+      }
+      if(empList && empList.children.length === 0){
+        empList.innerHTML = '<div class="text-center py-8 text-gray-500"><i class="fas fa-briefcase text-4xl mb-3"></i><p>No employment history added yet. Click "Add Employment" to begin.</p></div>';
+      }
+      if(trainList && trainList.children.length === 0){
+        trainList.innerHTML = '<div class="text-center py-8 text-gray-500"><i class="fas fa-chalkboard-teacher text-4xl mb-3"></i><p>No training courses added yet. Click "Add Training" to begin.</p></div>';
+      }
+    }
+  }
+
+  // Toggle end date based on "currently working" checkbox
+  function toggleEndDate(checkbox, id){
+    const endDateInput = document.querySelector(`input[name="emp_end_${id}"]`);
+    if(checkbox.checked){
+      endDateInput.disabled = true;
+      endDateInput.value = '';
+      endDateInput.classList.add('bg-gray-100');
+    } else {
+      endDateInput.disabled = false;
+      endDateInput.classList.remove('bg-gray-100');
+    }
+  }
+
+  // Form submissions
+  document.getElementById('personalForm')?.addEventListener('submit', function(e){
+    e.preventDefault();
+    const formData = new FormData(this);
+    fetch('/trainer/update/personal', {
+      method: 'POST',
+      body: formData
+    })
+    .then(r => r.json())
+    .then(d => {
+      if(d.success){
+        alert('Personal information saved successfully!');
+      } else {
+        alert('Error: ' + (d.error || 'Failed to save'));
+      }
+    })
+    .catch(err => alert('Request failed'));
+  });
+
+  document.getElementById('identificationForm')?.addEventListener('submit', function(e){
+    e.preventDefault();
+    const formData = new FormData(this);
+    fetch('/trainer/update/identification', {
+      method: 'POST',
+      body: formData
+    })
+    .then(r => r.json())
+    .then(d => {
+      if(d.success){
+        alert('Identification details saved successfully!');
+      } else {
+        alert('Error: ' + (d.error || 'Failed to save'));
+      }
+    })
+    .catch(err => alert('Request failed'));
+  });
+
+  document.getElementById('bankingForm')?.addEventListener('submit', function(e){
+    e.preventDefault();
+    const formData = new FormData(this);
+    
+    // Validate account number match
+    const accNum = formData.get('account_number');
+    const confNum = formData.get('confirm_account_number');
+    
+    if(accNum !== confNum){
+      alert('Account numbers do not match!');
+      return;
+    }
+    
+    fetch('/trainer/update/banking', {
+      method: 'POST',
+      body: formData
+    })
+    .then(r => r.json())
+    .then(d => {
+      if(d.success){
+        alert('Banking details saved successfully!');
+      } else {
+        alert('Error: ' + (d.error || 'Failed to save'));
+      }
+    })
+    .catch(err => alert('Request failed'));
+  });
+</script>
+</body>
+</html>

@@ -273,6 +273,265 @@ def create_order():
     
     except Exception as e:
         return jsonify({'error': str(e)}), 500
+    
+
+# ---------- TRAINER PROFILE ROUTES ----------
+TRAINER_DIR = os.path.join(BASE_DIR, 'data', 'trainers')
+os.makedirs(TRAINER_DIR, exist_ok=True)
+TRAINER_FILE = os.path.join(TRAINER_DIR, 'trainers.json')
+
+def load_trainers():
+    """Load trainer data from JSON file"""
+    if os.path.exists(TRAINER_FILE):
+        with open(TRAINER_FILE, 'r', encoding='utf-8') as f:
+            try:
+                return json.load(f)
+            except Exception:
+                return {}
+    return {}
+
+def save_trainers(trainers):
+    """Save trainer data to JSON file"""
+    with open(TRAINER_FILE, 'w', encoding='utf-8') as f:
+        json.dump(trainers, f, indent=2)
+
+@app.route('/trainer')
+def trainer():
+    """Trainer profile page"""
+    if not session.get('logged_in'):
+        return redirect(url_for('login', next='/trainer'))
+    
+    user_info = session.get('user', {})
+    user_email = user_info.get('email')
+    trainers = load_trainers()
+    trainer_data = trainers.get(user_email, {})
+    
+    # Calculate profile completion for trainer
+    required_fields = ['first_name', 'last_name', 'phone', 'address', 'dob', 
+                      'pan_number', 'aadhaar_number', 'bank_name', 'account_number']
+    completed = sum(1 for f in required_fields if trainer_data.get(f))
+    profile_completion = int((completed / len(required_fields)) * 100)
+    
+    return render_template('trainer.html',
+                         user_info=user_info,
+                         trainer_data=trainer_data,
+                         profile_completion=profile_completion)
+
+@app.route('/trainer/update/personal', methods=['POST'])
+def update_trainer_personal():
+    """Update trainer personal information"""
+    if not session.get('logged_in'):
+        return jsonify({'success': False, 'error': 'Not logged in'}), 401
+    
+    user_email = session['user']['email']
+    trainers = load_trainers()
+    
+    if user_email not in trainers:
+        trainers[user_email] = {}
+    
+    # Update personal fields
+    updates = {
+        'first_name': request.form.get('first_name', '').strip(),
+        'last_name': request.form.get('last_name', '').strip(),
+        'email': request.form.get('email', '').strip(),
+        'phone': request.form.get('phone', '').strip(),
+        'address': request.form.get('address', '').strip(),
+        'city': request.form.get('city', '').strip(),
+        'state': request.form.get('state', '').strip(),
+        'pincode': request.form.get('pincode', '').strip(),
+        'dob': request.form.get('dob', '').strip(),
+        'gender': request.form.get('gender', '').strip(),
+        'updated_at': datetime.now(timezone.utc).isoformat()
+    }
+    
+    trainers[user_email].update({k: v for k, v in updates.items() if v})
+    save_trainers(trainers)
+    
+    return jsonify({'success': True, 'message': 'Personal information updated successfully'})
+
+@app.route('/trainer/update/identification', methods=['POST'])
+def update_trainer_identification():
+    """Update trainer identification documents"""
+    if not session.get('logged_in'):
+        return jsonify({'success': False, 'error': 'Not logged in'}), 401
+    
+    user_email = session['user']['email']
+    trainers = load_trainers()
+    
+    if user_email not in trainers:
+        trainers[user_email] = {}
+    
+    # Update identification fields
+    updates = {
+        'pan_number': request.form.get('pan_number', '').strip().upper(),
+        'pan_name': request.form.get('pan_name', '').strip(),
+        'aadhaar_number': request.form.get('aadhaar_number', '').strip(),
+        'aadhaar_name': request.form.get('aadhaar_name', '').strip(),
+        'updated_at': datetime.now(timezone.utc).isoformat()
+    }
+    
+    trainers[user_email].update({k: v for k, v in updates.items() if v})
+    save_trainers(trainers)
+    
+    return jsonify({'success': True, 'message': 'Identification details updated successfully'})
+
+@app.route('/trainer/update/banking', methods=['POST'])
+def update_trainer_banking():
+    """Update trainer banking details"""
+    if not session.get('logged_in'):
+        return jsonify({'success': False, 'error': 'Not logged in'}), 401
+    
+    user_email = session['user']['email']
+    trainers = load_trainers()
+    
+    if user_email not in trainers:
+        trainers[user_email] = {}
+    
+    # Validate account numbers match
+    account_number = request.form.get('account_number', '').strip()
+    confirm_account = request.form.get('confirm_account_number', '').strip()
+    
+    if account_number != confirm_account:
+        return jsonify({'success': False, 'error': 'Account numbers do not match'}), 400
+    
+    # Update banking fields
+    updates = {
+        'bank_name': request.form.get('bank_name', '').strip(),
+        'account_number': account_number,
+        'ifsc_code': request.form.get('ifsc_code', '').strip().upper(),
+        'account_type': request.form.get('account_type', '').strip(),
+        'account_holder_name': request.form.get('account_holder_name', '').strip(),
+        'branch_name': request.form.get('branch_name', '').strip(),
+        'updated_at': datetime.now(timezone.utc).isoformat()
+    }
+    
+    trainers[user_email].update({k: v for k, v in updates.items() if v})
+    save_trainers(trainers)
+    
+    return jsonify({'success': True, 'message': 'Banking details updated successfully'})
+
+@app.route('/trainer/update/qualifications', methods=['POST'])
+def update_trainer_qualifications():
+    """Save trainer qualifications"""
+    if not session.get('logged_in'):
+        return jsonify({'success': False, 'error': 'Not logged in'}), 401
+    
+    user_email = session['user']['email']
+    trainers = load_trainers()
+    
+    if user_email not in trainers:
+        trainers[user_email] = {}
+    
+    # Collect all qualification entries from form
+    qualifications = []
+    form_data = request.form.to_dict()
+    
+    # Group by qualification counter
+    qual_counters = set()
+    for key in form_data.keys():
+        if key.startswith('qual_'):
+            counter = key.split('_')[-1]
+            if counter.isdigit():
+                qual_counters.add(counter)
+    
+    for counter in qual_counters:
+        qual = {
+            'degree': form_data.get(f'qual_degree_{counter}', ''),
+            'specialization': form_data.get(f'qual_specialization_{counter}', ''),
+            'institution': form_data.get(f'qual_institution_{counter}', ''),
+            'year': form_data.get(f'qual_year_{counter}', ''),
+            'grade': form_data.get(f'qual_grade_{counter}', '')
+        }
+        if any(qual.values()):  # Only add if at least one field has data
+            qualifications.append(qual)
+    
+    trainers[user_email]['qualifications'] = qualifications
+    trainers[user_email]['updated_at'] = datetime.now(timezone.utc).isoformat()
+    save_trainers(trainers)
+    
+    return jsonify({'success': True, 'message': 'Qualifications saved successfully'})
+
+@app.route('/trainer/update/employment', methods=['POST'])
+def update_trainer_employment():
+    """Save trainer employment history"""
+    if not session.get('logged_in'):
+        return jsonify({'success': False, 'error': 'Not logged in'}), 401
+    
+    user_email = session['user']['email']
+    trainers = load_trainers()
+    
+    if user_email not in trainers:
+        trainers[user_email] = {}
+    
+    # Collect employment entries
+    employment = []
+    form_data = request.form.to_dict()
+    
+    emp_counters = set()
+    for key in form_data.keys():
+        if key.startswith('emp_'):
+            counter = key.split('_')[-1]
+            if counter.isdigit():
+                emp_counters.add(counter)
+    
+    for counter in emp_counters:
+        emp = {
+            'company': form_data.get(f'emp_company_{counter}', ''),
+            'title': form_data.get(f'emp_title_{counter}', ''),
+            'start_date': form_data.get(f'emp_start_{counter}', ''),
+            'end_date': form_data.get(f'emp_end_{counter}', ''),
+            'current': form_data.get(f'emp_current_{counter}') == 'on',
+            'responsibilities': form_data.get(f'emp_responsibilities_{counter}', '')
+        }
+        if any([emp['company'], emp['title']]):
+            employment.append(emp)
+    
+    trainers[user_email]['employment'] = employment
+    trainers[user_email]['updated_at'] = datetime.now(timezone.utc).isoformat()
+    save_trainers(trainers)
+    
+    return jsonify({'success': True, 'message': 'Employment history saved successfully'})
+
+@app.route('/trainer/update/trainings', methods=['POST'])
+def update_trainer_trainings():
+    """Save trainings that trainer can provide"""
+    if not session.get('logged_in'):
+        return jsonify({'success': False, 'error': 'Not logged in'}), 401
+    
+    user_email = session['user']['email']
+    trainers = load_trainers()
+    
+    if user_email not in trainers:
+        trainers[user_email] = {}
+    
+    # Collect training courses
+    trainings = []
+    form_data = request.form.to_dict()
+    
+    train_counters = set()
+    for key in form_data.keys():
+        if key.startswith('train_'):
+            counter = key.split('_')[-1]
+            if counter.isdigit():
+                train_counters.add(counter)
+    
+    for counter in train_counters:
+        training = {
+            'name': form_data.get(f'train_name_{counter}', ''),
+            'category': form_data.get(f'train_category_{counter}', ''),
+            'duration': form_data.get(f'train_duration_{counter}', ''),
+            'experience': form_data.get(f'train_experience_{counter}', ''),
+            'description': form_data.get(f'train_description_{counter}', ''),
+            'prerequisites': form_data.get(f'train_prerequisites_{counter}', '')
+        }
+        if training['name']:
+            trainings.append(training)
+    
+    trainers[user_email]['trainings'] = trainings
+    trainers[user_email]['updated_at'] = datetime.now(timezone.utc).isoformat()
+    save_trainers(trainers)
+    
+    return jsonify({'success': True, 'message': 'Training courses saved successfully'})
 
 
 @app.route('/verify_payment', methods=['POST'])
@@ -561,32 +820,195 @@ def save_users(users):
         json.dump(users, f, indent=2)
 
 # Load questions from Excel. Map Option A->FAR, B->BM, C->CRM, D->MO
+# Load questions from Excel. Map Option A->FAR, B->BM, C->CRM, D->MO
 def load_questions():
+    """
+    Load questions from Excel and ensure balanced selection:
+    - 10 questions from each of the 10 categories
+    - Total 100 questions
+    """
     if not os.path.exists(EXCEL_FILE):
         return []
+    
     df = pd.read_excel(EXCEL_FILE)
-    questions = []
-    for _, row in df.iterrows():
-        # Ensure required columns exist
+    
+    # Define all expected categories
+    EXPECTED_CATEGORIES = [
+        'Accounting Knowledge',
+        'Attention to Detail',
+        'Business & Economic Acumen',
+        'Communication Skills',
+        'Compliance & Ethics',
+        'Finacial Concepts Skill',
+        'Personality Preference',
+        'Problem Solving Skills',
+        'Quantitative & Math Skill',
+        'Tech & Tool Familiarity'
+    ]
+    
+    # Group questions by category
+    questions_by_category = {cat: [] for cat in EXPECTED_CATEGORIES}
+    
+    for idx, row in df.iterrows():
+        # Skip rows with missing required data
         if pd.isna(row.get('No')) or pd.isna(row.get('Scenario')):
             continue
+        
         try:
             no = int(row['No'])
         except Exception:
-            no = int(_)+1
+            no = int(idx) + 1
+        
+        # Parse options with their codes
         opts = []
-        mapping = [('Option A','FAR'), ('Option B','BM'), ('Option C','CRM'), ('Option D','MO')]
+        mapping = [('Option A', 'FAR'), ('Option B', 'BM'), 
+                   ('Option C', 'CRM'), ('Option D', 'MO')]
         for col, code in mapping:
             text = row.get(col)
             if pd.notna(text):
                 opts.append({'text': str(text), 'code': code})
-        questions.append({
-            'No': no, 
-            'Scenario': str(row['Scenario']), 
-            'Options': opts, 
-            'Category': row.get('Categories/Attributes','')
-        })
-    return questions
+        
+        # Get category (handle variations in column name)
+        category = row.get('Categories/Attributes') or row.get('Categories') or ''
+        category = str(category).strip()
+        
+        # Build question object
+        question = {
+            'No': no,
+            'Scenario': str(row['Scenario']),
+            'Options': opts,
+            'Category': category
+        }
+        
+        # Add to appropriate category bucket
+        if category in questions_by_category:
+            questions_by_category[category].append(question)
+    
+    # Select exactly 10 questions from each category
+    selected_questions = []
+    warnings = []
+    
+    for category in EXPECTED_CATEGORIES:
+        available = questions_by_category[category]
+        
+        if len(available) >= 10:
+            # Randomly select 10 questions
+            selected = random.sample(available, 10)
+            selected_questions.extend(selected)
+        elif len(available) > 0:
+            # Not enough questions - use all available and warn
+            selected_questions.extend(available)
+            warnings.append(f"Category '{category}': Only {len(available)} questions available (need 10)")
+        else:
+            warnings.append(f"Category '{category}': No questions found!")
+    
+    # Log warnings if any
+    if warnings:
+        print("\nQuestion Selection Warnings:")
+        for w in warnings:
+            print(f"   - {w}")
+        print(f"   Total questions loaded: {len(selected_questions)} (expected 100)\n")
+    
+    return selected_questions
+
+
+@app.route('/checkpoint')
+def checkpoint():
+    """
+    TESTING ONLY: Bypass payment requirement
+    This should be removed or disabled in production
+    """
+    if not session.get('logged_in'):
+        return redirect(url_for('login', next='/checkpoint'))
+    
+    user_email = session.get('user', {}).get('email')
+    
+    # Create a fake payment record to bypass payment check
+    fake_payment = {
+        'payment_id': 'test_bypass',
+        'order_id': 'test_order',
+        'amount': ASSESSMENT_PRICE,
+        'currency': 'INR',
+        'status': 'captured',
+        'timestamp': datetime.utcnow().isoformat(),
+        'user_email': user_email,
+        'note': 'Testing bypass - not a real payment'
+    }
+    
+    record_payment(user_email, fake_payment)
+    
+    return f'''
+    <!DOCTYPE html>
+    <html>
+    <head>
+        <title>Checkpoint - Payment Bypassed</title>
+        <style>
+            body {{
+                font-family: Arial, sans-serif;
+                max-width: 600px;
+                margin: 100px auto;
+                padding: 20px;
+                background: #f5f5f5;
+            }}
+            .card {{
+                background: white;
+                padding: 30px;
+                border-radius: 10px;
+                box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+                text-align: center;
+            }}
+            .success {{
+                color: #28a745;
+                font-size: 48px;
+                margin-bottom: 20px;
+            }}
+            h1 {{
+                color: #333;
+                margin-bottom: 10px;
+            }}
+            p {{
+                color: #666;
+                margin-bottom: 20px;
+            }}
+            .btn {{
+                display: inline-block;
+                padding: 12px 30px;
+                background: #007bff;
+                color: white;
+                text-decoration: none;
+                border-radius: 5px;
+                font-weight: bold;
+                margin-top: 20px;
+            }}
+            .btn:hover {{
+                background: #0056b3;
+            }}
+            .warning {{
+                background: #fff3cd;
+                border: 1px solid #ffc107;
+                padding: 15px;
+                border-radius: 5px;
+                margin-top: 20px;
+                color: #856404;
+            }}
+        </style>
+    </head>
+    <body>
+        <div class="card">
+            <div class="success">✓</div>
+            <h1>Payment Bypassed</h1>
+            <p>Testing mode activated for user: <strong>{user_email}</strong></p>
+            <p>You can now access the assessment without payment.</p>
+            <a href="/assessment" class="btn">Start Assessment</a>
+            <div class="warning">
+                <strong>⚠️ Testing Mode</strong><br>
+                This is a testing bypass. Remove this route in production!
+            </div>
+        </div>
+    </body>
+    </html>
+    '''
+
 
 @app.route('/')
 def index():
@@ -839,18 +1261,33 @@ def answer():
     if next_idx >= total:
         return redirect(url_for('submit'))
     return redirect(url_for('assessment_question', idx=next_idx))
+
+
 @app.route('/submit', methods=['GET', 'POST'])
 def submit():
+    """
+    Submit the assessment with robust normalization and category-based scoring.
+    Fixes issue of repetitive results (always BM+CRM+MO).
+    """
+    import re
+    from datetime import datetime
+
     if not session.get('logged_in'):
         return redirect(url_for('login', next='/assessment'))
+
     attempt_id = session.get('attempt_id')
     if not attempt_id:
         return redirect('/assessment')
+
     attempt_path = os.path.join(ATTEMPTS_DIR, f"{attempt_id}.json")
     if not os.path.exists(attempt_path):
         return redirect('/assessment')
+
+    # Load the attempt
     with open(attempt_path, 'r', encoding='utf-8') as f:
         attempt = json.load(f)
+
+    # Check for timeout (30 min)
     start = datetime.fromisoformat(attempt['start'])
     if datetime.utcnow() - start > timedelta(minutes=30):
         try:
@@ -859,38 +1296,110 @@ def submit():
             pass
         session.clear()
         return redirect(url_for('login', next='/assessment', timeout=1))
-    
-    # Handle GET request (when user reaches end of assessment)
-    if request.method == 'GET':
-        # Auto-submit the assessment using saved answers
-        pass
-    
-    # tally answers (support form-submission or per-question saved answers)
-    scores = {}
-    # prefer request.form (legacy), otherwise use attempt['answers']
-    answers = request.form if request.form else {('q'+k):v for k,v in attempt.get('answers', {}).items()}
+
+    # Get submitted answers
+    answers = request.form if request.form else {('q' + k): v for k, v in attempt.get('answers', {}).items()}
+
+    # --- Helper to normalize answer codes ---
+    def normalize_choice(raw_val, question):
+        """
+        Convert answer to standardized code: FAR / BM / CRM / MO.
+        Accepts formats: 'A', 'Option A', full text, or direct code.
+        """
+        if not raw_val:
+            return None
+        v = str(raw_val).strip()
+        if not v:
+            return None
+
+        v_u = v.upper()
+        if v_u in ('FAR', 'BM', 'CRM', 'MO'):
+            return v_u
+
+        # Letter mapping
+        letter_map = {'A': 'FAR', 'B': 'BM', 'C': 'CRM', 'D': 'MO'}
+        if len(v_u) == 1 and v_u in letter_map:
+            return letter_map[v_u]
+
+        # Patterns like "Option A" or "A) text"
+        m = re.match(r'^(?:OPTION\s*)?([A-D])\b', v_u)
+        if m:
+            return letter_map.get(m.group(1))
+
+        # Match option text
+        opts = question.get('Options', []) or []
+        lower_v = v.strip().lower()
+        for opt in opts:
+            opt_text = str(opt.get('text', '')).strip().lower()
+            opt_code = opt.get('code', '').upper()
+            if lower_v == opt_text or lower_v in opt_text:
+                return opt_code or None
+
+        return None
+
+    # --- Initialize scoring structures ---
+    scores = {'FAR': 0, 'BM': 0, 'CRM': 0, 'MO': 0}
+    category_scores = {}  # category -> dict(FAR,BM,CRM,MO)
+    debug_rows = []       # for logging / debugging input values
+
+    # --- Process every question ---
     for q in attempt['questions']:
-        key = f"q{q['No']}"
-        val = answers.get(key) if answers.get(key) else answers.get(str(q['No']))
-        if val:
-            scores[val] = scores.get(val, 0) + 1
-    strongest = max(scores, key=scores.get) if scores else None
-    
-    # Calculate attribute scores using the new system
+        qno = str(q.get('No'))
+        key = f"q{qno}"
+        raw_val = answers.get(key) or answers.get(qno)
+        normalized = normalize_choice(raw_val, q)
+
+        debug_rows.append({
+            'question_no': qno,
+            'category': q.get('Category'),
+            'raw_value': raw_val,
+            'normalized': normalized,
+            'options': q.get('Options')
+        })
+
+        if not normalized:
+            continue
+
+        # Increment overall scores
+        scores[normalized] = scores.get(normalized, 0) + 1
+
+        # Category-level breakdown
+        category = q.get('Category', 'Unknown').strip() or 'Unknown'
+        if category not in category_scores:
+            category_scores[category] = {'FAR': 0, 'BM': 0, 'CRM': 0, 'MO': 0}
+        category_scores[category][normalized] += 1
+
+    # Identify strongest dimension
+    strongest = max(scores, key=scores.get) if any(scores.values()) else None
+
+    # Compute higher-level attributes (if supported)
     attributes = calculate_attribute_scores(scores)
-    
+
+    # Attach results + debug info to attempt
     attempt['submitted'] = True
     attempt['submitted_at'] = datetime.utcnow().isoformat()
     attempt['results'] = {
-        'scores': scores, 
+        'scores': scores,
+        'category_breakdown': category_scores,
         'strongest': strongest,
         'attributes': attributes
     }
+    attempt['debug_submission'] = {
+        'checked_at': datetime.utcnow().isoformat(),
+        'debug_rows': debug_rows
+    }
+
+    # Save updated attempt
     with open(attempt_path, 'w', encoding='utf-8') as f:
-        json.dump(attempt, f)
+        json.dump(attempt, f, indent=2)
+
+    # Mark submission complete
     session['last_attempt_id'] = attempt_id
     session.pop('attempt_id', None)
+
     return redirect('/results')
+
+
 
 # ------------------------------------------------------------------
 #  NEW : dynamic Word-style report mapping  (no more hard-coded text)
