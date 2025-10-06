@@ -7,3 +7,4 @@ gunicorn
 requests==2.31.0
 beautifulsoup4==4.12.2
 lxml>=5.2.1
+razorpay
