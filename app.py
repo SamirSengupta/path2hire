@@ -167,8 +167,8 @@ import razorpay
 # ----------  RAZORPAY CONFIGURATION ----------
 # IMPORTANT: Replace these with your actual Razorpay credentials
 # Get them from: https://dashboard.razorpay.com/app/keys
-RAZORPAY_KEY_ID = "rzp_test_RPTaVidKyUhQZ5"
-RAZORPAY_KEY_SECRET = "4XHackLERuPm2t1vOLADI2Lr"
+RAZORPAY_KEY_ID = "rzp_live_RRLzuRNwQiqFcR"
+RAZORPAY_KEY_SECRET = "1Fct2RgdkxW97AWMTTRYsunC"
 
 # Assessment price in paise (100 paise = 1 INR)
 # Currently set to 1 INR (100 paise)
