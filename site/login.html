@@ -17,7 +17,6 @@
       }
     }
   </script>
-  <link rel="stylesheet" href="assets/css/custom.css" />
   <style>
     .floating-elements {
       position: absolute;
@@ -59,30 +58,6 @@
       position: relative;
       overflow: hidden;
     }
-    .contact-card::before {
-      content: '';
-      position: absolute;
-      top: -50%;
-      left: -50%;
-      width: 200%;
-      height: 200%;
-      background: linear-gradient(45deg, transparent, rgba(37, 99, 235, 0.05), transparent);
-      transform: rotate(45deg);
-      transition: all 0.6s ease;
-      opacity: 0;
-    }
-    .contact-card:hover::before {
-      animation: shine 0.8s ease-in-out;
-    }
-    @keyframes shine {
-      0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); opacity: 0; }
-      50% { opacity: 1; }
-      100% { transform: translateX(100%) translateY(100%) rotate(45deg); opacity: 0; }
-    }
-    .contact-card:hover {
-      transform: translateY(-8px) scale(1.02);
-      box-shadow: 0 25px 50px rgba(37, 99, 235, 0.15);
-    }
     .form-input:focus {
       transform: scale(1.02);
       box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
@@ -92,109 +67,109 @@
       position: relative;
       overflow: hidden;
     }
-    .tab-button::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: -100%;
-      width: 100%;
-      height: 100%;
-      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
-      transition: left 0.5s ease;
+    .google-btn {
+      transition: all 0.3s ease;
+      border: 2px solid #e5e7eb;
     }
-    .tab-button.active::before {
-      left: 100%;
+    .google-btn:hover {
+      border-color: #4285f4;
+      box-shadow: 0 4px 12px rgba(66, 133, 244, 0.15);
+      transform: translateY(-2px);
+    }
+    .google-btn:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+    .divider {
+      display: flex;
+      align-items: center;
+      text-align: center;
+      margin: 1.5rem 0;
+    }
+    .divider::before,
+    .divider::after {
+      content: '';
+      flex: 1;
+      border-bottom: 1px solid #e5e7eb;
+    }
+    .divider span {
+      padding: 0 1rem;
+      color: #6b7280;
+      font-size: 0.875rem;
+    }
+    .error-message {
+      background: #fee;
+      border: 1px solid #fcc;
+      color: #c33;
+      padding: 12px;
+      border-radius: 8px;
+      margin-bottom: 16px;
+      display: none;
+    }
+    .error-message.show {
+      display: block;
+    }
+    .spinner {
+      border: 2px solid #f3f3f3;
+      border-top: 2px solid #3498db;
+      border-radius: 50%;
+      width: 16px;
+      height: 16px;
+      animation: spin 1s linear infinite;
+      display: inline-block;
+      margin-right: 8px;
+    }
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
     }
   </style>
 </head>
 <body class="bg-gray-50 text-gray-800">
 
-    <nav id="navbar" class="fixed w-full bg-white shadow-md z-50 hover-card">
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="flex justify-between h-16 items-center">
-          <a href="index.html" class="flex items-center">
-            <div class="h-8 w-8 rounded-full bg-blue-600 flex items-center justify-center mr-2 icon-hover">
-              <i class="fas fa-graduation-cap text-white"></i>
-            </div>
-            <span class="text-xl font-bold text-blue-600">Path2<span class="text-accent">Hire</span></span>
-          </a>
-          <div class="hidden md:flex md:space-x-8">
-            <a href="../index.html" class="nav-link border-b-2 border-accent text-primary px-1 pt-1 text-sm font-medium">Home</a>
-            <a href="../about.html" class="nav-link border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 px-1 pt-1 text-sm font-medium">About</a>
-            <a href="../training/index.html" class="nav-link border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 px-1 pt-1 text-sm font-medium">Training</a>
-            <a href="../assessment-info.html" class="nav-link border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 px-1 pt-1 text-sm font-medium">Assessment</a>
-            <a href="../success.html" class="nav-link border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 px-1 pt-1 text-sm font-medium">Success</a>
-            <a href="/jobs" class="nav-link border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 px-1 pt-1 text-sm font-medium">Jobs</a>
-            <a href="../contact.html" class="nav-link border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 px-1 pt-1 text-sm font-medium">Contact</a>
-          </div>
-          <div class="md:hidden">
-            <button id="menuBtn" class="focus:outline-none"><i class="fas fa-bars text-2xl text-primary"></i></button>
-          </div>
-          <div class="hidden md:flex space-x-4">
-            <a href="../login.html" class="btn-primary bg-primary hover:bg-secondary text-white px-4 py-2 rounded-full text-sm font-medium flex items-center">
-              <i class="fas fa-sign-in-alt mr-2"></i>Login/Sign Up
-            </a>
-            <a href="../career.html" class="btn-primary bg-primary hover:bg-secondary text-white px-4 py-2 rounded-full text-sm font-medium flex items-center">
-              <i class="fas fa-briefcase mr-2"></i>Career Portal
-            </a>
-            <a href="../profile.html" class="btn-primary bg-accent hover:bg-yellow-500 text-white px-4 py-2 rounded-full text-sm font-medium flex items-center">
-              <i class="fas fa-user mr-2"></i>Profile
-            </a>
-          </div>
+<nav id="navbar" class="fixed w-full bg-white shadow-md z-50">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex justify-between h-16 items-center">
+      <a href="index.html" class="flex items-center">
+        <div class="h-8 w-8 rounded-full bg-blue-600 flex items-center justify-center mr-2">
+          <i class="fas fa-graduation-cap text-white"></i>
         </div>
-      <div id="mobileMenu" class="hidden md:hidden bg-white shadow-lg">
-        <div class="space-y-1 px-4 pb-3 pt-2">
-          <a href="index.html" class="nav-link border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 px-1 pt-1 text-sm font-medium">Home</a>
-          <a href="about.html" class="nav-link border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 px-1 pt-1 text-sm font-medium">About</a>
-          <a href="/training/index.html" class="nav-link border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 px-1 pt-1 text-sm font-medium">Training</a>
-          <a href="assessment-info.html" class="nav-link border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 px-1 pt-1 text-sm font-medium">Assessment</a>
-          <a href="success.html" class="nav-link border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 px-1 pt-1 text-sm font-medium">Success</a>
-          <a href="contact.html" class="nav-link border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 px-1 pt-1 text-sm font-medium">Contact</a>
-          <a href="/login" class="block w-full text-left nav-link px-1 pt-1 text-sm font-medium text-primary">Student Portal</a>
-        </div>
+        <span class="text-xl font-bold text-blue-600">Path2<span class="text-accent">Hire</span></span>
+      </a>
+      <div class="hidden md:flex md:space-x-8">
+        <a href="index.html" class="nav-link text-primary px-1 pt-1 text-sm font-medium">Home</a>
+        <a href="about.html" class="nav-link text-gray-500 hover:text-gray-700 px-1 pt-1 text-sm font-medium">About</a>
+        <a href="training/index.html" class="nav-link text-gray-500 hover:text-gray-700 px-1 pt-1 text-sm font-medium">Training</a>
+        <a href="contact.html" class="nav-link text-gray-500 hover:text-gray-700 px-1 pt-1 text-sm font-medium">Contact</a>
       </div>
-    </nav>
+    </div>
+  </div>
+</nav>
 
-<!-- Hero Section -->
 <section class="pt-24 login-hero text-white relative min-h-[70vh] flex items-center">
   <div class="floating-elements">
-    <div class="floating-shape w-24 h-24 bg-white rounded-full" style="top: 15%; left: 10%; animation-delay: 0s;"></div>
+    <div class="floating-shape w-24 h-24 bg-white rounded-full" style="top: 15%; left: 10%;"></div>
     <div class="floating-shape w-18 h-18 bg-accent rounded-full" style="top: 25%; right: 15%; animation-delay: 2s;"></div>
-    <div class="floating-shape w-20 h-20 bg-white/30 rounded-full" style="bottom: 30%; left: 20%; animation-delay: 4s;"></div>
-    <div class="floating-shape w-16 h-16 bg-accent/50 rounded-full" style="top: 60%; right: 10%; animation-delay: 6s;"></div>
-    <div class="floating-shape w-14 h-14 bg-white/40 rounded-full" style="bottom: 15%; right: 30%; animation-delay: 3s;"></div>
   </div>
   
   <div class="max-w-7xl mx-auto px-4 py-20 relative z-10">
     <div class="text-center">
-      <div class="inline-flex items-center bg-white/20 backdrop-blur rounded-full px-6 py-3 mb-8">
-        <i class="fas fa-user-graduate text-accent mr-2"></i>
-        <span class="font-semibold">Welcome to Your Future</span>
-      </div>
-      
-      <h1 class="text-5xl md:text-6xl font-bold mb-8 leading-tight">
+      <h1 class="text-5xl md:text-6xl font-bold mb-8">
         Access Your
         <span class="bg-gradient-to-r from-accent to-yellow-300 bg-clip-text text-transparent">
           Student Portal
         </span>
       </h1>
-      
-      <p class="text-xl md:text-2xl text-blue-100 mb-10 max-w-4xl mx-auto leading-relaxed">
-        Continue your journey to career success. Access your training modules, track progress, and connect with career opportunities.
+      <p class="text-xl text-blue-100 mb-10 max-w-4xl mx-auto">
+        Continue your journey to career success.
       </p>
     </div>
   </div>
 </section>
 
-<!-- Login Form Section -->
 <section class="py-16 bg-gradient-to-br from-blue-50 via-white to-indigo-50 relative">
-  <div class="floating-elements">
-    <div class="floating-shape w-16 h-16 bg-primary/10 rounded-full" style="top: 10%; left: 5%; animation-delay: 2s;"></div>
-    <div class="floating-shape w-20 h-20 bg-accent/10 rounded-full" style="bottom: 20%; right: 10%; animation-delay: 5s;"></div>
-  </div>
-  
   <div class="max-w-md mx-auto px-4 relative z-10">
-    <div class="gradient-card rounded-2xl p-8 contact-card relative z-20"></div>
+    <div class="gradient-card rounded-2xl p-8 contact-card">
       <div class="text-center mb-8">
         <div class="w-16 h-16 bg-gradient-to-r from-primary to-secondary rounded-2xl flex items-center justify-center mx-auto mb-4 pulse-glow">
           <i class="fas fa-user text-white text-2xl"></i>
@@ -203,20 +178,40 @@
         <p class="text-gray-600 mt-2">Sign in to access your learning dashboard</p>
       </div>
       
+      <!-- Error Messages -->
+      <div id="errorMessage" class="error-message"></div>
+      
       <!-- Tab Buttons -->
       <div class="flex justify-center mb-8">
-        <button id="showSignin" type="button" class="tab-button px-6 py-3 font-medium text-white bg-primary rounded-l-full transition-all hover:bg-secondary active">
+        <button id="showSignin" type="button" class="tab-button px-6 py-3 font-medium text-white bg-primary rounded-l-full">
           Sign In
         </button>
-        <button id="showSignup" type="button" class="tab-button px-6 py-3 font-medium text-primary bg-gray-200 rounded-r-full transition-all hover:bg-gray-300">
+        <button id="showSignup" type="button" class="tab-button px-6 py-3 font-medium text-primary bg-gray-200 rounded-r-full">
           Sign Up
         </button>
       </div>
       
+      <!-- Google Sign-In -->
+      <div class="mb-6">
+        <button id="googleSignInBtn" class="google-btn w-full flex items-center justify-center gap-3 px-6 py-3 bg-white rounded-xl font-medium text-gray-700 hover:bg-gray-50">
+          <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+            <path d="M19.9895 10.1871C19.9895 9.36767 19.9214 8.76973 19.7742 8.14966H10.1992V11.848H15.8195C15.7062 12.7671 15.0943 14.1512 13.7346 15.0813L13.7155 15.2051L16.7429 17.4969L16.9527 17.5174C18.879 15.7789 19.9895 13.221 19.9895 10.1871Z" fill="#4285F4"/>
+            <path d="M10.1993 19.9313C12.9527 19.9313 15.2643 19.0454 16.9527 17.5174L13.7346 15.0813C12.8734 15.6682 11.7176 16.0779 10.1993 16.0779C7.50243 16.0779 5.21352 14.3395 4.39759 11.9366L4.27799 11.9466L1.13003 14.3273L1.08887 14.4391C2.76588 17.6945 6.21061 19.9313 10.1993 19.9313Z" fill="#34A853"/>
+            <path d="M4.39748 11.9366C4.18219 11.3166 4.05759 10.6521 4.05759 9.96565C4.05759 9.27909 4.18219 8.61473 4.38615 7.99466L4.38045 7.8626L1.19304 5.44366L1.08875 5.49214C0.397576 6.84305 0.000976562 8.36008 0.000976562 9.96565C0.000976562 11.5712 0.397576 13.0882 1.08875 14.4391L4.39748 11.9366Z" fill="#FBBC05"/>
+            <path d="M10.1993 3.85336C12.1142 3.85336 13.406 4.66168 14.1425 5.33717L17.0207 2.59107C15.253 0.985496 12.9527 0 10.1993 0C6.2106 0 2.76588 2.23672 1.08887 5.49214L4.38626 7.99466C5.21352 5.59183 7.50242 3.85336 10.1993 3.85336Z" fill="#EB4335"/>
+          </svg>
+          <span>Continue with Google</span>
+        </button>
+        
+        <div class="divider">
+          <span>or</span>
+        </div>
+      </div>
+      
       <!-- Sign In Form -->
       <div id="signinForm">
-        <form method="POST" action="/login" class="space-y-6">
-          <input type="hidden" name="next" id="nextInputSignin" value="">
+        <form id="signinFormElement" class="space-y-6">
+          <input type="hidden" name="next" id="nextInputSignin">
           <div>
             <label class="block text-gray-700 font-medium mb-2">Email Address</label>
             <input name="email" type="email" required class="form-input w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent transition-all">
@@ -225,7 +220,7 @@
             <label class="block text-gray-700 font-medium mb-2">Password</label>
             <input name="password" type="password" required class="form-input w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-primary focus:border-transparent transition-all">
           </div>
-          <button class="w-full bg-primary hover:bg-secondary text-white font-bold py-4 rounded-xl shadow-lg transform hover:scale-105 transition-all">
+          <button type="submit" class="w-full bg-primary hover:bg-secondary text-white font-bold py-4 rounded-xl shadow-lg transform hover:scale-105 transition-all">
             <i class="fas fa-sign-in-alt mr-2"></i>Sign In
           </button>
         </form>
@@ -233,8 +228,8 @@
       
       <!-- Sign Up Form -->
       <div id="signupForm" class="hidden">
-        <form method="POST" action="/signup" class="space-y-6">
-          <input type="hidden" name="next" id="nextInputSignup" value="">
+        <form id="signupFormElement" class="space-y-6">
+          <input type="hidden" name="next" id="nextInputSignup">
           <div>
             <label class="block text-gray-700 font-medium mb-2">Full Name</label>
             <input name="name" type="text" required class="form-input w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-accent focus:border-transparent transition-all">
@@ -251,168 +246,287 @@
             <label class="block text-gray-700 font-medium mb-2">Confirm Password</label>
             <input name="confirm_password" type="password" required class="form-input w-full px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-accent focus:border-transparent transition-all">
           </div>
-          <button class="w-full bg-accent hover:bg-yellow-500 text-white font-bold py-4 rounded-xl shadow-lg transform hover:scale-105 transition-all">
+          <button type="submit" class="w-full bg-accent hover:bg-yellow-500 text-white font-bold py-4 rounded-xl shadow-lg transform hover:scale-105 transition-all">
             <i class="fas fa-user-plus mr-2"></i>Sign Up
           </button>
         </form>
       </div>
-      
-      <div class="mt-6 text-center">
-        <p class="text-sm text-gray-600">
-          Need help? <a href="contact.html" class="text-primary hover:text-secondary font-medium">Contact Support</a>
-        </p>
-      </div>
     </div>
   </div>
 </section>
 
-<!-- Benefits Section -->
-<section class="py-16 bg-white relative">
-  <div class="floating-elements">
-    <div class="floating-shape w-12 h-12 bg-primary/5 rounded-full" style="top: 20%; left: 5%; animation-delay: 1s;"></div>
-    <div class="floating-shape w-16 h-16 bg-accent/5 rounded-full" style="bottom: 30%; right: 10%; animation-delay: 4s;"></div>
-  </div>
-  
-  <div class="max-w-7xl mx-auto px-4 relative z-10">
-    <div class="text-center mb-16">
-      <div class="inline-flex items-center bg-primary/10 rounded-full px-6 py-3 mb-6">
-        <i class="fas fa-star text-primary mr-2"></i>
-        <span class="text-primary font-semibold">Student Benefits</span>
-      </div>
-      <h2 class="text-4xl font-bold text-primary mb-6">What's Waiting for You</h2>
-      <p class="text-xl text-gray-600 max-w-3xl mx-auto">Access premium training content and career resources designed to accelerate your professional growth.</p>
-    </div>
-    
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-      <div class="contact-card gradient-card rounded-2xl p-8 text-center group">
-        <div class="w-20 h-20 bg-gradient-to-r from-primary to-secondary rounded-2xl flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform pulse-glow">
-          <i class="fas fa-play-circle text-white text-2xl"></i>
-        </div>
-        <h3 class="text-xl font-bold text-gray-800 mb-4">Interactive Training</h3>
-        <p class="text-gray-600">Access hands-on training modules with real-world scenarios and practical exercises.</p>
-      </div>
-      
-      <div class="contact-card gradient-card rounded-2xl p-8 text-center group">
-        <div class="w-20 h-20 bg-gradient-to-r from-accent to-yellow-500 rounded-2xl flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform pulse-glow">
-          <i class="fas fa-chart-line text-white text-2xl"></i>
-        </div>
-        <h3 class="text-xl font-bold text-gray-800 mb-4">Progress Tracking</h3>
-        <p class="text-gray-600">Monitor your learning progress and celebrate milestones on your career journey.</p>
-      </div>
-      
-      <div class="contact-card gradient-card rounded-2xl p-8 text-center group">
-        <div class="w-20 h-20 bg-gradient-to-r from-green-500 to-emerald-500 rounded-2xl flex items-center justify-center mx-auto mb-6 group-hover:scale-110 transition-transform pulse-glow">
-          <i class="fas fa-handshake text-white text-2xl"></i>
-        </div>
-        <h3 class="text-xl font-bold text-gray-800 mb-4">Job Placement</h3>
-        <p class="text-gray-600">Connect with exclusive job opportunities and get direct placement support.</p>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- Footer -->
 <footer class="bg-gray-800 text-white py-12">
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-    <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
-      <div>
-        <a href="index.html" class="flex items-center mb-4">
-          <div class="h-8 w-8 rounded-full bg-blue-600 flex items-center justify-center mr-2">
-            <i class="fas fa-graduation-cap text-white"></i>
-          </div>
-          <span class="text-xl font-bold text-white">Path2<span class="text-accent">Hire</span></span>
-        </a>
-        <p class="text-gray-400 text-sm">Your trusted partner in career transformation. Empowering futures, one success story at a time.</p>
-        <div class="flex space-x-4 mt-6">
-          <a href="https://www.facebook.com/path2hire/" class="text-gray-400 hover:text-white"><i class="fab fa-facebook-f"></i></a>
-          <a href="https://x.com/Path2Hire/" class="text-gray-400 hover:text-white"><i class="fab fa-twitter"></i></a>
-          <a href="https://www.linkedin.com/company/path2hire/" class="text-gray-400 hover:text-white"><i class="fab fa-linkedin-in"></i></a>
-          <a href="https://www.instagram.com/path.2.hire/" class="text-gray-400 hover:text-white"><i class="fab fa-instagram"></i></a>
-        </div>
-      </div>
-      
-      <div>
-        <h3 class="text-lg font-semibold mb-4">Quick Links</h3>
-        <ul class="space-y-2">
-          <li><a href="index.html" class="text-gray-400 hover:text-white text-sm">Home</a></li>
-          <li><a href="about.html" class="text-gray-400 hover:text-white text-sm">About Us</a></li>
-          <li><a href="/training/index.html" class="text-gray-400 hover:text-white text-sm">Training Programs</a></li>
-          <li><a href="assessment-info.html" class="text-gray-400 hover:text-white text-sm">Career Assessment</a></li>
-          <li><a href="success.html" class="text-gray-400 hover:text-white text-sm">Success Stories</a></li>
-          <li><a href="contact.html" class="text-gray-400 hover:text-white text-sm">Contact Us</a></li>
-        </ul>
-      </div>
-      
-      <div>
-        <h3 class="text-lg font-semibold mb-4">Resources</h3>
-        <ul class="space-y-2">
-          <li><a href="/blog" class="text-gray-400 hover:text-white text-sm">Blog</a></li>
-          <li><a href="/faq" class="text-gray-400 hover:text-white text-sm">FAQ</a></li>
-          <li><a href="/privacy" class="text-gray-400 hover:text-white text-sm">Privacy Policy</a></li>
-          <li><a href="/terms" class="text-gray-400 hover:text-white text-sm">Terms of Service</a></li>
-        </ul>
-      </div>
-      
-      <div>
-        <h3 class="text-lg font-semibold mb-4">Contact Info</h3>
-        <p class="text-gray-400 text-sm mb-2"><i class="fas fa-map-marker-alt mr-2"></i>Kolkata</p>
-        <p class="text-gray-400 text-sm mb-2"><i class="fas fa-phone mr-2"></i>+919051539665</p>
-        <p class="text-gray-400 text-sm mb-2"><i class="fas fa-envelope mr-2"></i>contact@path2hire.com</p>
-      </div>
-    </div>
-    
-    <div class="border-t border-gray-700 mt-8 pt-8 text-center text-gray-500 text-sm">
+    <div class="text-center text-gray-400 text-sm">
       &copy; 2023 Path2Hire. All rights reserved.
     </div>
   </div>
 </footer>
 
-<script>
-  // Mobile menu toggle
-  document.getElementById("menuBtn").addEventListener("click", function() {
-    document.getElementById("mobileMenu").classList.toggle("hidden");
-  });
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-app.js";
+  import { getAuth, GoogleAuthProvider, signInWithPopup, signInWithRedirect, getRedirectResult, signInWithEmailAndPassword, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-auth.js";
 
-  // Tab functionality
-  const showSignin = document.getElementById('showSignin');
-  const showSignup = document.getElementById('showSignup');
+  const firebaseConfig = {
+    apiKey: "AIzaSyCZOrvr12gUe_A71VuJV0GtfuYKqy0a8zM",
+    authDomain: "path2hire-2025.firebaseapp.com",
+    projectId: "path2hire-2025",
+    storageBucket: "path2hire-2025.firebasestorage.app",
+    messagingSenderId: "140828011299",
+    appId: "1:140828011299:web:ff831df231b776a9b3fa96",
+    measurementId: "G-JBCDYY3DK2"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+  const provider = new GoogleAuthProvider();
+
+  // IMPORTANT: Declare URL params FIRST
+  const urlParams = new URLSearchParams(window.location.search);
+  const nextUrl = urlParams.get('next') || '/assessment';
+  const error = urlParams.get('error');
+  const errorSignup = urlParams.get('error_signup');
+  const errorExists = urlParams.get('error_exists');
+
+  // Get DOM elements
+  const errorMessage = document.getElementById('errorMessage');
+  const googleBtn = document.getElementById('googleSignInBtn');
+  const showSigninBtn = document.getElementById('showSignin');
+  const showSignupBtn = document.getElementById('showSignup');
   const signinForm = document.getElementById('signinForm');
   const signupForm = document.getElementById('signupForm');
-  
-  function toggleForms(show) {
-    if (show === 'signin') {
-      signinForm.classList.remove('hidden');
-      signupForm.classList.add('hidden');
-      showSignin.classList.add('bg-primary', 'text-white', 'active');
-      showSignin.classList.remove('bg-gray-200', 'text-primary');
-      showSignup.classList.add('bg-gray-200', 'text-primary');
-      showSignup.classList.remove('bg-primary', 'text-white', 'active');
+
+  // Set next URL in hidden inputs
+  document.getElementById('nextInputSignin').value = nextUrl;
+  document.getElementById('nextInputSignup').value = nextUrl;
+
+  // Check for redirect result on page load (AFTER urlParams is declared)
+  getRedirectResult(auth)
+    .then(async (result) => {
+      if (result) {
+        const user = result.user;
+        const idToken = await user.getIdToken();
+        
+        const response = await fetch("/firebase-login", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ 
+            token: idToken,
+            name: user.displayName || user.email.split('@')[0]
+          })
+        });
+
+        if (response.ok) {
+          window.location.href = nextUrl;
+        } else {
+          throw new Error('Server authentication failed');
+        }
+      }
+    })
+    .catch((error) => {
+      console.error("Redirect sign-in failed:", error);
+      errorMessage.textContent = 'Sign-in failed: ' + error.message;
+      errorMessage.classList.add('show');
+    });
+
+  // Display errors from URL params
+  if (error) {
+    errorMessage.textContent = 'Invalid email or password. Please try again.';
+    errorMessage.classList.add('show');
+  } else if (errorSignup) {
+    errorMessage.textContent = 'Passwords do not match or invalid input.';
+    errorMessage.classList.add('show');
+  } else if (errorExists) {
+    errorMessage.textContent = 'An account with this email already exists.';
+    errorMessage.classList.add('show');
+  }
+
+  // Tab switching
+  showSigninBtn.addEventListener('click', () => {
+    signinForm.classList.remove('hidden');
+    signupForm.classList.add('hidden');
+    showSigninBtn.classList.remove('bg-gray-200', 'text-primary');
+    showSigninBtn.classList.add('bg-primary', 'text-white');
+    showSignupBtn.classList.remove('bg-accent', 'text-white');
+    showSignupBtn.classList.add('bg-gray-200', 'text-primary');
+    errorMessage.classList.remove('show');
+  });
+
+  showSignupBtn.addEventListener('click', () => {
+    signupForm.classList.remove('hidden');
+    signinForm.classList.add('hidden');
+    showSignupBtn.classList.remove('bg-gray-200', 'text-primary');
+    showSignupBtn.classList.add('bg-accent', 'text-white');
+    showSigninBtn.classList.remove('bg-primary', 'text-white');
+    showSigninBtn.classList.add('bg-gray-200', 'text-primary');
+    errorMessage.classList.remove('show');
+  });
+
+  // Helper to show loading state
+  function setLoading(button, isLoading) {
+    if (isLoading) {
+      button.disabled = true;
+      button.innerHTML = '<span class="spinner"></span>Signing in...';
     } else {
-      signinForm.classList.add('hidden');
-      signupForm.classList.remove('hidden');
-      showSignup.classList.add('bg-primary', 'text-white', 'active');
-      showSignup.classList.remove('bg-gray-200', 'text-primary');
-      showSignin.classList.add('bg-gray-200', 'text-primary');
-      showSignin.classList.remove('bg-primary', 'text-white', 'active');
+      button.disabled = false;
     }
   }
-  
-  showSignin.addEventListener('click', () => toggleForms('signin'));
-  showSignup.addEventListener('click', () => toggleForms('signup'));
 
-  // Populate next hidden inputs from ?next= parameter
-  (function() {
+  // Google Sign-In with fallback to redirect
+  googleBtn.addEventListener('click', async (e) => {
+    e.preventDefault();
+    
+    console.log('Current domain:', window.location.hostname);
+    console.log('Current origin:', window.location.origin);
+    
+    setLoading(googleBtn, true);
+    errorMessage.classList.remove('show');
+    
     try {
-      const params = new URLSearchParams(window.location.search);
-      const nextVal = params.get('next') || '';
-      if (nextVal) {
-        const s = document.getElementById('nextInputSignin');
-        const u = document.getElementById('nextInputSignup');
-        if (s) s.value = nextVal;
-        if (u) u.value = nextVal;
+      const result = await signInWithPopup(auth, provider);
+      const user = result.user;
+      const idToken = await user.getIdToken();
+      
+      const response = await fetch("/firebase-login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ 
+          token: idToken,
+          name: user.displayName || user.email.split('@')[0]
+        })
+      });
+
+      if (response.ok) {
+        window.location.href = nextUrl;
+      } else {
+        const data = await response.json();
+        throw new Error(data.error || 'Server authentication failed');
       }
-    } catch(e) {}
-  })();
+    } catch (error) {
+      setLoading(googleBtn, false);
+      
+      if (error.code === 'auth/unauthorized-domain' || error.code === 'auth/popup-blocked') {
+        console.log('Popup failed, using redirect method...');
+        await signInWithRedirect(auth, provider);
+      } else {
+        console.error("Google Sign-In failed:", error);
+        errorMessage.textContent = 'Google Sign-In failed: ' + error.message;
+        errorMessage.classList.add('show');
+      }
+    }
+  });
+
+  // Email/Password Sign-In with Firebase
+  document.getElementById('signinFormElement').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    
+    const submitBtn = e.target.querySelector('button[type="submit"]');
+    const email = e.target.email.value;
+    const password = e.target.password.value;
+    
+    setLoading(submitBtn, true);
+    errorMessage.classList.remove('show');
+    
+    try {
+      const userCredential = await signInWithEmailAndPassword(auth, email, password);
+      const user = userCredential.user;
+      const idToken = await user.getIdToken();
+      
+      const response = await fetch("/firebase-login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ token: idToken })
+      });
+
+      if (response.ok) {
+        window.location.href = nextUrl;
+      } else {
+        const data = await response.json();
+        throw new Error(data.error || 'Server authentication failed');
+      }
+    } catch (error) {
+      setLoading(submitBtn, false);
+      submitBtn.innerHTML = '<i class="fas fa-sign-in-alt mr-2"></i>Sign In';
+      console.error("Login failed:", error);
+      
+      let errorMsg = 'Login failed: ';
+      if (error.code === 'auth/invalid-credential' || error.code === 'auth/wrong-password') {
+        errorMsg += 'Invalid email or password';
+      } else if (error.code === 'auth/user-not-found') {
+        errorMsg += 'No account found with this email';
+      } else if (error.code === 'auth/too-many-requests') {
+        errorMsg += 'Too many failed attempts. Try again later';
+      } else {
+        errorMsg += error.message;
+      }
+      
+      errorMessage.textContent = errorMsg;
+      errorMessage.classList.add('show');
+    }
+  });
+
+  // Email/Password Sign-Up with Firebase
+  document.getElementById('signupFormElement').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    
+    const submitBtn = e.target.querySelector('button[type="submit"]');
+    const name = e.target.name.value;
+    const email = e.target.email.value;
+    const password = e.target.password.value;
+    const confirm = e.target.confirm_password.value;
+    
+    if (password !== confirm) {
+      errorMessage.textContent = 'Passwords do not match!';
+      errorMessage.classList.add('show');
+      return;
+    }
+    
+    if (password.length < 6) {
+      errorMessage.textContent = 'Password must be at least 6 characters';
+      errorMessage.classList.add('show');
+      return;
+    }
+    
+    setLoading(submitBtn, true);
+    errorMessage.classList.remove('show');
+    
+    try {
+      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+      const user = userCredential.user;
+      const idToken = await user.getIdToken();
+      
+      const response = await fetch("/firebase-login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ token: idToken, name })
+      });
+
+      if (response.ok) {
+        window.location.href = nextUrl;
+      } else {
+        const data = await response.json();
+        throw new Error(data.error || 'Server authentication failed');
+      }
+    } catch (error) {
+      setLoading(submitBtn, false);
+      submitBtn.innerHTML = '<i class="fas fa-user-plus mr-2"></i>Sign Up';
+      console.error("Sign-up failed:", error);
+      
+      let errorMsg = 'Sign-up failed: ';
+      if (error.code === 'auth/email-already-in-use') {
+        errorMsg += 'An account with this email already exists';
+      } else if (error.code === 'auth/invalid-email') {
+        errorMsg += 'Invalid email address';
+      } else if (error.code === 'auth/weak-password') {
+        errorMsg += 'Password is too weak';
+      } else {
+        errorMsg += error.message;
+      }
+      
+      errorMessage.textContent = errorMsg;
+      errorMessage.classList.add('show');
+    }
+  });
 </script>
 
 </body>
