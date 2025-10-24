@@ -4,9 +4,10 @@ import pandas as pd
 import re
 from datetime import datetime, timedelta, timezone
 from werkzeug.security import generate_password_hash, check_password_hash
+import firebase_admin
+from firebase_admin import credentials, auth as firebase_auth, firestore
 # from authlib.integrations.flask_client import OAuth
 import razorpay
-import firebase_admin
 
 # ----------  keep the old helpers + add the new mapper ----------
 from career_report_generator import (
@@ -58,9 +59,11 @@ FIREBASE_CRED_FILE = os.path.join(BASE_DIR, "firebase-service-account.json")
 if os.path.exists(FIREBASE_CRED_FILE):
     cred = credentials.Certificate(FIREBASE_CRED_FILE)
     firebase_admin.initialize_app(cred)
+    db = firestore.client()  # ⭐ ADD THIS LINE
     FIREBASE_ENABLED = True
-    print("✅ Firebase initialized successfully.")
+    print("✅ Firebase initialized successfully with Firestore.")
 else:
+    db = None  # ⭐ ADD THIS LINE
     FIREBASE_ENABLED = False
     print("⚠️ Firebase service account file missing — Auth disabled.")
 
@@ -103,6 +106,63 @@ def firebase_login():
         print("Firebase verification failed:", e)
         return jsonify({"error": str(e)}), 401
     
+
+# ============================================================================
+# Contact route fuck
+# ============================================================================
+@app.route('/contact', methods=['POST'])
+def save_contact():
+    fullName = request.form.get('fullName', '').strip()
+    email = request.form.get('email', '').strip()
+    phone = request.form.get('phone', '').strip()
+    inquiryType = request.form.get('inquiryType', '')
+    background = request.form.get('background', '')
+    message = request.form.get('message', '')
+    
+    # Prepare data for Firebase
+    contact_data = {
+        'fullName': fullName,
+        'email': email,
+        'phone': phone,
+        'inquiryType': inquiryType,
+        'background': background,
+        'message': message,
+        'submittedAt': firestore.SERVER_TIMESTAMP,
+        'status': 'new',
+        'source': 'website'
+    }
+    
+    try:
+        # Save to Firebase Firestore
+        if FIREBASE_ENABLED and db:
+            doc_ref = db.collection('contacts').add(contact_data)
+            print(f"✅ Contact saved to Firebase: {doc_ref[1].id}")
+        
+        # Also save to Excel (backup)
+        excel_row = {
+            'Full Name': fullName,
+            'Email': email,
+            'Phone': phone,
+            'Inquiry Type': inquiryType,
+            'Background': background,
+            'Message': message,
+            'Submitted At': datetime.utcnow()
+        }
+        
+        if not os.path.exists(CONTACT_EXCEL):
+            pd.DataFrame([excel_row]).to_excel(CONTACT_EXCEL, index=False)
+        else:
+            df = pd.read_excel(CONTACT_EXCEL)
+            df = pd.concat([df, pd.DataFrame([excel_row])], ignore_index=True)
+            df.to_excel(CONTACT_EXCEL, index=False)
+        
+        return jsonify({'success': True, 'message': 'Contact form submitted successfully'}), 200
+        
+    except Exception as e:
+        print(f"❌ Error saving contact: {e}")
+        return jsonify({'success': False, 'error': str(e)}), 500
+
+
     
 # ============================================================================
 # RAZORPAY PAYMENT INTEGRATION
@@ -110,7 +170,7 @@ def firebase_login():
 
 RAZORPAY_KEY_ID = "rzp_live_RRLzuRNwQiqFcR"
 RAZORPAY_KEY_SECRET = "1Fct2RgdkxW97AWMTTRYsunC"
-ASSESSMENT_PRICE = int(os.environ.get('ASSESSMENT_PRICE', '100'))
+ASSESSMENT_PRICE = int(os.environ.get('ASSESSMENT_PRICE', '19900'))
 razorpay_client = razorpay.Client(auth=(RAZORPAY_KEY_ID, RAZORPAY_KEY_SECRET))
 
 PAYMENTS_DIR = os.path.join(BASE_DIR, 'payments')
@@ -753,81 +813,183 @@ def update_trainer_trainings():
 # CONTACT & CAREER ROUTES
 # ============================================================================
 
-@app.route('/contact', methods=['POST'])
-def save_contact():
-    fullName     = request.form.get('fullName', '').strip()
-    email        = request.form.get('email', '').strip()
-    phone        = request.form.get('phone', '').strip()
-    inquiryType  = request.form.get('inquiryType', '')
-    background   = request.form.get('background', '')
-    message      = request.form.get('message', '')
-
-    row = {
-        'Full Name': fullName,
-        'Email': email,
-        'Phone': phone,
-        'Inquiry Type': inquiryType,
-        'Background': background,
-        'Message': message,
-        'Submitted At': datetime.utcnow()
-    }
-
-    if not os.path.exists(CONTACT_EXCEL):
-        pd.DataFrame([row]).to_excel(CONTACT_EXCEL, index=False)
-    else:
-        df = pd.read_excel(CONTACT_EXCEL)
-        df = pd.concat([df, pd.DataFrame([row])], ignore_index=True)
-        df.to_excel(CONTACT_EXCEL, index=False)
-
-    return '', 200
-
 @app.route('/career', methods=['POST'])
 def save_career():
-    full_name          = request.form.get('full_name', '').strip()
-    email              = request.form.get('email', '').strip()
-    phone              = request.form.get('phone', '').strip()
-    position           = request.form.get('position', '').strip()
-    trainings          = request.form.get('trainings', '').strip()
-    current_ctc        = request.form.get('current_ctc', '').strip()
-    portfolio          = request.form.get('portfolio', '').strip()
-    location           = request.form.get('location', '').strip()
-    authorization      = request.form.get('authorization', '').strip()
+    full_name = request.form.get('full_name', '').strip()
+    email = request.form.get('email', '').strip()
+    phone = request.form.get('phone', '').strip()
+    position = request.form.get('position', '').strip()
+    trainings = request.form.get('trainings', '').strip()
+    current_ctc = request.form.get('current_ctc', '').strip()
+    portfolio = request.form.get('portfolio', '').strip()
+    location = request.form.get('location', '').strip()
+    authorization = request.form.get('authorization', '').strip()
     salary_expectation = request.form.get('salary_expectation', '').strip()
-    start_date         = request.form.get('start_date', '')
-    resume_file        = request.files.get('resume_file')
-    cover_letter_file  = request.files.get('cover_letter_file')
-
-    row = {
-        'Full Name': full_name,
-        'Email': email,
-        'Phone': phone,
-        'Position': position,
-        'Trainings': trainings,
-        'Current CTC': current_ctc,
-        'Portfolio': portfolio,
-        'Location': location,
-        'Work Authorization': authorization,
-        'Salary Expectation': salary_expectation,
-        'Start Date': start_date,
-        'Resume Filename': resume_file.filename if resume_file else '',
-        'Cover-Letter Filename': cover_letter_file.filename if cover_letter_file else '',
-        'Submitted At': datetime.utcnow()
-    }
-
-    if not os.path.exists(CAREER_EXCEL):
-        pd.DataFrame([row]).to_excel(CAREER_EXCEL, index=False)
-    else:
-        df = pd.read_excel(CAREER_EXCEL)
-        df = pd.concat([df, pd.DataFrame([row])], ignore_index=True)
-        df.to_excel(CAREER_EXCEL, index=False)
-
+    start_date = request.form.get('start_date', '')
+    resume_file = request.files.get('resume_file')
+    cover_letter_file = request.files.get('cover_letter_file')
+    
+    # Save files first
     ts = datetime.utcnow().strftime('%Y%m%d%H%M%S')
+    resume_filename = ''
+    cover_letter_filename = ''
+    
     if resume_file and resume_file.filename:
-        resume_file.save(os.path.join(CAREER_DIR, f"RESUME_{ts}_{resume_file.filename}"))
+        resume_filename = f"RESUME_{ts}_{resume_file.filename}"
+        resume_file.save(os.path.join(CAREER_DIR, resume_filename))
+    
     if cover_letter_file and cover_letter_file.filename:
-        cover_letter_file.save(os.path.join(CAREER_DIR, f"CL_{ts}_{cover_letter_file.filename}"))
+        cover_letter_filename = f"CL_{ts}_{cover_letter_file.filename}"
+        cover_letter_file.save(os.path.join(CAREER_DIR, cover_letter_filename))
+    
+    # Prepare data for Firebase
+    career_data = {
+        'fullName': full_name,
+        'email': email,
+        'phone': phone,
+        'position': position,
+        'trainings': trainings,
+        'currentCTC': current_ctc,
+        'portfolio': portfolio,
+        'location': location,
+        'workAuthorization': authorization,
+        'salaryExpectation': salary_expectation,
+        'startDate': start_date,
+        'resumeFilename': resume_filename,
+        'coverLetterFilename': cover_letter_filename,
+        'submittedAt': firestore.SERVER_TIMESTAMP,
+        'status': 'applied',
+        'source': 'website'
+    }
+    
+    try:
+        # Save to Firebase Firestore
+        if FIREBASE_ENABLED and db:
+            doc_ref = db.collection('career_applications').add(career_data)
+            print(f"✅ Career application saved to Firebase: {doc_ref[1].id}")
+        
+        # Also save to Excel (backup)
+        excel_row = {
+            'Full Name': full_name,
+            'Email': email,
+            'Phone': phone,
+            'Position': position,
+            'Trainings': trainings,
+            'Current CTC': current_ctc,
+            'Portfolio': portfolio,
+            'Location': location,
+            'Work Authorization': authorization,
+            'Salary Expectation': salary_expectation,
+            'Start Date': start_date,
+            'Resume Filename': resume_filename,
+            'Cover-Letter Filename': cover_letter_filename,
+            'Submitted At': datetime.utcnow()
+        }
+        
+        if not os.path.exists(CAREER_EXCEL):
+            pd.DataFrame([excel_row]).to_excel(CAREER_EXCEL, index=False)
+        else:
+            df = pd.read_excel(CAREER_EXCEL)
+            df = pd.concat([df, pd.DataFrame([excel_row])], ignore_index=True)
+            df.to_excel(CAREER_EXCEL, index=False)
+        
+        return jsonify({'success': True, 'message': 'Application submitted successfully'}), 200
+        
+    except Exception as e:
+        print(f"❌ Error saving career application: {e}")
+        return jsonify({'success': False, 'error': str(e)}), 500
+    
 
-    return '', 200
+
+# ============================================================================
+# ADMIN DASHBOARD & MANAGEMENT ROUTES
+# ============================================================================
+
+@app.route('/admin')
+@app.route('/admin/dashboard')
+def admin_dashboard():
+    """Admin dashboard home"""
+    if not session.get('logged_in') or session.get('user', {}).get('email') != 'admin':
+        return redirect('/login')
+    return render_template('admin_dashboard.html')
+
+@app.route('/admin/contacts')
+def admin_contacts():
+    """View all contact submissions"""
+    if not session.get('logged_in') or session.get('user', {}).get('email') != 'admin':
+        return redirect('/login')
+    
+    try:
+        if FIREBASE_ENABLED and db:
+            contacts_ref = db.collection('contacts').order_by('submittedAt', direction=firestore.Query.DESCENDING).limit(100)
+            contacts = []
+            for doc in contacts_ref.stream():
+                contact = doc.to_dict()
+                contact['id'] = doc.id
+                contacts.append(contact)
+            
+            return render_template('admin_contacts.html', contacts=contacts)
+        else:
+            return "Firebase not enabled", 503
+    except Exception as e:
+        return f"Error: {e}", 500
+
+@app.route('/admin/careers')
+def admin_careers():
+    """View all career applications"""
+    if not session.get('logged_in') or session.get('user', {}).get('email') != 'admin':
+        return redirect('/login')
+    
+    try:
+        if FIREBASE_ENABLED and db:
+            careers_ref = db.collection('career_applications').order_by('submittedAt', direction=firestore.Query.DESCENDING).limit(100)
+            applications = []
+            for doc in careers_ref.stream():
+                app = doc.to_dict()
+                app['id'] = doc.id
+                applications.append(app)
+            
+            return render_template('admin_careers.html', applications=applications)
+        else:
+            return "Firebase not enabled", 503
+    except Exception as e:
+        return f"Error: {e}", 500
+
+@app.route('/admin/contact/<contact_id>/status', methods=['POST'])
+def update_contact_status(contact_id):
+    """Update contact status"""
+    if not session.get('logged_in') or session.get('user', {}).get('email') != 'admin':
+        return jsonify({'error': 'Unauthorized'}), 401
+    
+    try:
+        status = request.json.get('status')
+        if FIREBASE_ENABLED and db:
+            db.collection('contacts').document(contact_id).update({
+                'status': status,
+                'updatedAt': firestore.SERVER_TIMESTAMP
+            })
+            return jsonify({'success': True})
+        return jsonify({'error': 'Firebase not enabled'}), 503
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+@app.route('/admin/career/<app_id>/status', methods=['POST'])
+def update_career_status(app_id):
+    """Update career application status"""
+    if not session.get('logged_in') or session.get('user', {}).get('email') != 'admin':
+        return jsonify({'error': 'Unauthorized'}), 401
+    
+    try:
+        status = request.json.get('status')
+        if FIREBASE_ENABLED and db:
+            db.collection('career_applications').document(app_id).update({
+                'status': status,
+                'updatedAt': firestore.SERVER_TIMESTAMP
+            })
+            return jsonify({'success': True})
+        return jsonify({'error': 'Firebase not enabled'}), 503
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
 
 # ============================================================================
 # AUTH ROUTES (LOGIN, SIGNUP, LOGOUT)
