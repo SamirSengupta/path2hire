@@ -1,11 +1,44 @@
 """
-Career Strengths Blueprint Report Generator for Skill2Hire
+Career Strengths Blueprint Report Generator for Path2Hire
 Maps assessment results to 10 key attributes and generates comprehensive reports
 FIXED: Changed BD references to BM to match actual assessment codes
 """
 
 from datetime import datetime
 import random
+
+# Abbreviation to full name mapping
+ABBREVIATION_MAP = {
+    'FAR': 'Financial & Analytical Reasoning',
+    'BM': 'Business & Market Acumen',
+    'CRM': 'Customer Relationship & Communication',
+    'MO': 'Motivation & Operational Orientation',
+    'BD': 'Business Development',  # Legacy abbreviation
+    'FA': 'Financial Analysis'  # Legacy abbreviation
+}
+
+def expand_abbreviations(text):
+    """Replace abbreviations with full names in text"""
+    if not isinstance(text, str):
+        return text
+    
+    import re
+    
+    # Process in reverse order (longer abbreviations first) to avoid partial replacements
+    sorted_abbrs = sorted(ABBREVIATION_MAP.items(), key=lambda x: -len(x[0]))
+    
+    for abbr, full_name in sorted_abbrs:
+        # Match abbreviations in parentheses: (BM), (FAR), etc. - keep the parentheses
+        text = re.sub(rf'\({re.escape(abbr)}\)', f'({full_name})', text)
+        # Match abbreviations with plus sign: BM +, FAR +, etc.
+        text = re.sub(rf'\b{re.escape(abbr)}\s*\+', f'{full_name} +', text)
+        # Match abbreviations when followed by + or - (in expressions)
+        text = re.sub(rf'\b{re.escape(abbr)}\b(?=\s*[+\-&])', full_name, text)
+        # Match standalone abbreviations at word boundaries (but not in the middle of words)
+        # Only replace if not followed by a lowercase letter (to avoid false matches)
+        text = re.sub(rf'\b{re.escape(abbr)}\b(?![a-z])', full_name, text)
+    
+    return text
 
 # ------------------------------------------------------------------
 #  WORD-DOC BULLETS  (copy-pasted from the 15 docx you supplied)
@@ -65,8 +98,8 @@ def map_assessment_to_report(scores: dict) -> dict:
 
 # ----------  individual skeleton builders (copy-pasted from Word files) ----------
 def _bm_crm_mo_track():
-    return {
-        "track_name": "Business & Market Acumen (BM) + Compliance & Risk Management (CRM) + Management & Operations (MO) Track",
+    track_data = {
+        "track_name": "Business & Market Acumen + Compliance & Risk Management + Management & Operations Track",
         "swot_strengths": [
             "Exceptional at navigating complex processes and regulations",
             "Persuasive communicator, adept at relationship-building",
@@ -94,7 +127,7 @@ def _bm_crm_mo_track():
             "High competition for stakeholder management positions",
             "Being seen as 'policy enforcer' can hinder relationship building"
         ],
-        "career_focus_title": "BM + CRM + MO",
+        "career_focus_title": "Business & Market Acumen + Compliance & Risk Management + Management & Operations",
         "career_focus_desc": (
             "Based on your assessment results, your strongest potential lies in roles that require a blend of business acumen, "
             "compliance oversight, and proactive operations management. You excel at understanding market dynamics, ensuring all activities "
@@ -153,6 +186,17 @@ def _bm_crm_mo_track():
             "ESG, data privacy, and corporate ethics"
         ]
     }
+    
+    # Expand abbreviations in all text fields
+    for key, value in track_data.items():
+        if isinstance(value, str):
+            track_data[key] = expand_abbreviations(value)
+        elif isinstance(value, list):
+            track_data[key] = [expand_abbreviations(item) if isinstance(item, str) else item for item in value]
+        elif isinstance(value, dict):
+            track_data[key] = {k: expand_abbreviations(v) if isinstance(v, str) else v for k, v in value.items()}
+    
+    return track_data
 
 
 # --------------  quick stubs for the remaining tracks  -----------------
@@ -258,7 +302,7 @@ def generate_career_blueprint_report(user_name, assessment_scores, attributes):
     swot = generate_swot_analysis(attributes, assessment_scores)
     
     # Generate the Markdown report
-    report = f"""# Your Personalized Career Strengths Blueprint - Skill2Hire
+    report = f"""# Your Personalized Career Strengths Blueprint - Path2Hire
 
 ## Based on Your Career Mapping Assessment Results
 
@@ -353,7 +397,7 @@ Based on your assessment results, here are your top 3 recommended career paths:
 ## Targeted Guidance & Next Steps
 
 ### Immediate Actions (Next 30 Days)
-1. **Enroll in Skill2Hire Training:** Focus on programs that align with your top career recommendations
+1. **Enroll in Path2Hire Training:** Focus on programs that align with your top career recommendations
 2. **Skill Assessment:** Take a deeper dive into your development areas with targeted practice
 3. **Network Building:** Connect with professionals in your recommended career fields
 
@@ -365,8 +409,8 @@ Based on your assessment results, here are your top 3 recommended career paths:
 6. **Career Transition:** Use your strengthened skills to pursue roles in your recommended career streams
 7. **Continuous Learning:** Stay updated with industry trends and continue skill development
 
-### Skill2Hire Training Recommendations
-Based on your profile, we recommend exploring these Skill2Hire programs:
+### Path2Hire Training Recommendations
+Based on your profile, we recommend exploring these Path2Hire programs:
 - **Financial Planning & Analysis (FP&A)** - Perfect for analytical minds
 - **QuickBooks Certification** - Essential for accounting operations
 - **US GAAP/IFRS** - Build strong accounting knowledge foundation
@@ -380,10 +424,11 @@ Based on your profile, we recommend exploring these Skill2Hire programs:
 
 **Learn with Purpose. Get Hired with Confidence.**
 
-**Contact Skill2Hire:**
-- Website: www.skill2hire.com
-- Email: info@skill2hire.com
-- Phone: +1-800-SKILL2H
+**Contact Path2Hire:**
+- Location: Kolkata
+- Email: contact@path2hire.com
+- Phone: +919051539665
+- Website: www.path2hire.com
 
 *To download this report as PDF, copy this Markdown content into a converter tool like markdown-to-pdf.com or print to PDF from your browser.*
 

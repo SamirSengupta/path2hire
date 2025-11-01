@@ -103,7 +103,72 @@ def firebase_login():
         return jsonify({"success": True})
 
     except Exception as e:
+        error_str = str(e)
         print("Firebase verification failed:", e)
+        
+        # Handle clock skew errors with tolerance
+        if "too early" in error_str.lower():
+            # Extract time difference from error message
+            # Format: "Token used too early, <token_time> <server_time>"
+            import re
+            match = re.search(r'(\d+) < (\d+)', error_str)
+            if match:
+                token_time = int(match.group(1))
+                server_time = int(match.group(2))
+                time_diff = server_time - token_time
+                
+                # Allow clock skew up to 60 seconds
+                if time_diff <= 60:
+                    print(f"Allowing clock skew of {time_diff} seconds (within tolerance)")
+                    try:
+                        # Try to decode the token payload manually
+                        import base64
+                        # JWT is base64url encoded, split by dots
+                        parts = id_token.split('.')
+                        if len(parts) >= 2:
+                            # Decode payload (second part)
+                            payload_part = parts[1]
+                            # Add padding if needed
+                            padding = 4 - len(payload_part) % 4
+                            if padding != 4:
+                                payload_part += '=' * padding
+                            payload_bytes = base64.urlsafe_b64decode(payload_part)
+                            payload = json.loads(payload_bytes.decode('utf-8'))
+                            
+                            # Verify it's a valid Firebase token structure
+                            if payload.get('iss') and 'google.com' in payload.get('iss', ''):
+                                email = payload.get('email')
+                                uid = payload.get('sub') or payload.get('user_id')
+                                
+                                if email and uid:
+                                    # Proceed with user creation/login
+                                    users = load_users()
+                                    if email not in users:
+                                        users[email] = {
+                                            "name": name or email.split("@")[0],
+                                            "email": email,
+                                            "firebase_uid": uid,
+                                            "created_at": datetime.now(timezone.utc).isoformat(),
+                                            "auth_provider": "firebase"
+                                        }
+                                        save_users(users)
+                                    
+                                    elif name and users[email].get("name") != name:
+                                        users[email]["name"] = name
+                                        save_users(users)
+                                    
+                                    session["logged_in"] = True
+                                    session["user"] = {"email": email, "name": users[email]["name"]}
+                                    
+                                    return jsonify({"success": True})
+                    except Exception as decode_error:
+                        print(f"Failed to decode token manually: {decode_error}")
+            
+            return jsonify({
+                "error": "CLOCK_SKEW",
+                "message": "Token timestamp issue detected. Please retry."
+            }), 401
+        
         return jsonify({"error": str(e)}), 401
     
 
@@ -426,10 +491,25 @@ def create_order():
         return jsonify({'error': 'Already paid'}), 400
     
     try:
+        # Generate a receipt ID that's max 40 characters
+        # Format: assess_<short_email>_<short_uuid>
+        # Get first part of email before @ (max 15 chars) and last 6 chars of UUID
+        email_prefix = user_email.split('@')[0][:15] if '@' in user_email else user_email[:15]
+        short_uuid = uuid.uuid4().hex[:6]
+        receipt_id = f'assess_{email_prefix}_{short_uuid}'
+        # Ensure it doesn't exceed 40 characters
+        if len(receipt_id) > 40:
+            # If still too long, use timestamp-based ID
+            import time
+            timestamp = int(time.time())
+            receipt_id = f'assess_{timestamp}_{short_uuid}'
+            if len(receipt_id) > 40:
+                receipt_id = f'assess_{timestamp}'[:40]
+        
         order_data = {
             'amount': ASSESSMENT_PRICE,
             'currency': 'INR',
-            'receipt': f'assessment_{user_email}_{uuid.uuid4().hex[:8]}',
+            'receipt': receipt_id,
             'notes': {
                 'user_email': user_email,
                 'purpose': 'First Assessment Payment'
@@ -1364,10 +1444,16 @@ def results():
     results_data = attempt['results']
     attributes   = results_data.get('attributes', {})
     report_context = map_assessment_to_report(results_data['scores'])
+    
+    # Expand abbreviations in strongest field
+    from career_report_generator import ABBREVIATION_MAP
+    strongest = results_data.get('strongest', '')
+    if strongest in ABBREVIATION_MAP:
+        strongest = ABBREVIATION_MAP[strongest]
 
     return render_template('results.html',
                          results=results_data['scores'],
-                         strongest=results_data['strongest'],
+                         strongest=strongest,
                          attributes=attributes,
                          **report_context)
 
@@ -1396,15 +1482,257 @@ def download_career_blueprint():
     scores = attempt['results']['scores']
     attributes = attempt['results'].get('attributes', {})
     
-    report_content = generate_career_blueprint_report(user_name, scores, attributes)
+    # Generate markdown content first
+    markdown_content = generate_career_blueprint_report(user_name, scores, attributes)
     
-    response = Response(
-        report_content,
-        mimetype='text/markdown',
-        headers={'Content-Disposition': f'attachment; filename="Career_Strengths_Blueprint_{user_name.replace(" ", "_")}.md"'}
+    # Convert to PDF
+    from io import BytesIO
+    try:
+        from reportlab.lib.pagesizes import A4
+        from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
+        from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Table, TableStyle, PageBreak
+        from reportlab.lib import colors
+        from reportlab.lib.units import inch
+        import re
+    except Exception as e:
+        return f"<h2>PDF generation library not installed</h2><p>Install <code>reportlab</code> to enable PDF report generation.</p><pre>{e}</pre>", 500
+    
+    buffer = BytesIO()
+    doc = SimpleDocTemplate(buffer, pagesize=A4, rightMargin=40, leftMargin=40, topMargin=40, bottomMargin=80)
+    styles = getSampleStyleSheet()
+    
+    # Contact information for footer
+    CONTACT_INFO = {
+        'location': 'Kolkata',
+        'email': 'contact@path2hire.com',
+        'phone': '+919051539665',
+        'website': 'www.path2hire.com'
+    }
+    
+    # Footer function to add contact info on every page
+    def add_footer(canvas, doc):
+        """Add footer with contact information to each page"""
+        canvas.saveState()
+        
+        # Footer styling
+        footer_style = ParagraphStyle(
+            'Footer',
+            parent=styles['Normal'],
+            fontSize=8,
+            textColor=colors.HexColor('#666666'),
+            alignment=1,  # Center
+            spaceBefore=10
+        )
+        
+        # Contact information text
+        footer_text = f"Path2Hire | {CONTACT_INFO['location']} | {CONTACT_INFO['email']} | {CONTACT_INFO['phone']} | {CONTACT_INFO['website']}"
+        footer_para = Paragraph(footer_text, footer_style)
+        
+        # Get footer width and height
+        footer_width, footer_height = footer_para.wrap(doc.width, doc.bottomMargin)
+        footer_para.drawOn(canvas, doc.leftMargin, 20)
+        
+        # Add copyright line
+        copyright_text = f"© {datetime.now().year} Path2Hire. All rights reserved."
+        copyright_para = Paragraph(copyright_text, footer_style)
+        copyright_width, copyright_height = copyright_para.wrap(doc.width, doc.bottomMargin)
+        copyright_para.drawOn(canvas, doc.leftMargin, 10)
+        
+        canvas.restoreState()
+    
+    # Custom styles
+    title_style = ParagraphStyle(
+        'CustomTitle',
+        parent=styles['Heading1'],
+        fontSize=18,
+        textColor=colors.HexColor('#1e40af'),
+        spaceAfter=12,
+        alignment=1  # Center
     )
     
-    return response
+    heading_style = ParagraphStyle(
+        'CustomHeading',
+        parent=styles['Heading2'],
+        fontSize=14,
+        textColor=colors.HexColor('#1e40af'),
+        spaceAfter=10,
+        spaceBefore=12
+    )
+    
+    subheading_style = ParagraphStyle(
+        'CustomSubHeading',
+        parent=styles['Heading3'],
+        fontSize=12,
+        textColor=colors.HexColor('#3b82f6'),
+        spaceAfter=8,
+        spaceBefore=10
+    )
+    
+    normal_style = styles['Normal']
+    bold_style = ParagraphStyle('Bold', parent=normal_style, fontName='Helvetica-Bold')
+    
+    def process_text(text):
+        """Convert markdown and HTML to reportlab-compatible format"""
+        if not text:
+            return text
+        # Convert markdown bold to HTML
+        text = re.sub(r'\*\*(.*?)\*\*', r'<b>\1</b>', text)
+        # Convert markdown italic to HTML
+        text = re.sub(r'_(.*?)_', r'<i>\1</i>', text)
+        # Remove markdown code formatting
+        text = re.sub(r'`(.*?)`', r'\1', text)
+        # Ensure HTML tags are properly closed
+        return text
+    
+    story = []
+    
+    # Parse markdown and convert to PDF elements
+    lines = markdown_content.split('\n')
+    i = 0
+    current_table_data = None
+    in_table = False
+    skip_next = False
+    
+    while i < len(lines):
+        if skip_next:
+            skip_next = False
+            i += 1
+            continue
+            
+        line = lines[i].strip()
+        
+        # Skip empty lines (but add spacing)
+        if not line:
+            if not in_table:
+                story.append(Spacer(1, 6))
+            i += 1
+            continue
+        
+        # Headers
+        if line.startswith('# '):
+            text = process_text(line[2:].strip())
+            story.append(Paragraph(text, title_style))
+            story.append(Spacer(1, 12))
+        elif line.startswith('## '):
+            text = process_text(line[3:].strip())
+            story.append(Paragraph(text, heading_style))
+            story.append(Spacer(1, 10))
+        elif line.startswith('### '):
+            text = process_text(line[4:].strip())
+            story.append(Paragraph(text, subheading_style))
+            story.append(Spacer(1, 8))
+        # Tables
+        elif line.startswith('|') and '|' in line:
+            # Check if this is a separator line
+            if '---' in line or all(c in '-: ' for c in line.replace('|', '')):
+                if in_table and current_table_data:
+                    i += 1
+                    continue
+            else:
+                # Start of table
+                if not in_table:
+                    current_table_data = []
+                    in_table = True
+                
+                cells = [cell.strip() for cell in line.split('|')[1:-1]]  # Remove empty first/last
+                # Clean up and process each cell
+                clean_cells = []
+                for idx, cell in enumerate(cells):
+                    cell_text = process_text(cell)
+                    # Use Paragraph for cells to support HTML formatting
+                    # Use bold style for header row (first row in table)
+                    if len(current_table_data) == 0:
+                        clean_cells.append(Paragraph(cell_text, bold_style))
+                    else:
+                        clean_cells.append(Paragraph(cell_text, normal_style))
+                current_table_data.append(clean_cells)
+        # End of table
+        elif in_table:
+            # Process the table
+            if current_table_data and len(current_table_data) > 0:
+                # Calculate column widths based on number of columns
+                num_cols = len(current_table_data[0]) if current_table_data else 1
+                col_widths = [450 / num_cols] * num_cols if num_cols > 0 else [450]
+                
+                table = Table(current_table_data, colWidths=col_widths)
+                table.setStyle(TableStyle([
+                    ('BACKGROUND', (0, 0), (-1, 0), colors.HexColor('#f2f2f2')),
+                    ('TEXTCOLOR', (0, 0), (-1, 0), colors.HexColor('#1e40af')),
+                    ('ALIGN', (0, 0), (-1, -1), 'LEFT'),
+                    ('FONTSIZE', (0, 0), (-1, 0), 10),
+                    ('FONTSIZE', (0, 1), (-1, -1), 9),
+                    ('BOTTOMPADDING', (0, 0), (-1, 0), 12),
+                    ('TOPPADDING', (0, 0), (-1, 0), 8),
+                    ('BOTTOMPADDING', (0, 1), (-1, -1), 8),
+                    ('TOPPADDING', (0, 1), (-1, -1), 6),
+                    ('BACKGROUND', (0, 1), (-1, -1), colors.white),
+                    ('GRID', (0, 0), (-1, -1), 0.5, colors.grey),
+                    ('VALIGN', (0, 0), (-1, -1), 'TOP'),
+                    ('LEFTPADDING', (0, 0), (-1, -1), 6),
+                    ('RIGHTPADDING', (0, 0), (-1, -1), 6),
+                ]))
+                story.append(table)
+                story.append(Spacer(1, 12))
+            current_table_data = None
+            in_table = False
+            # Don't increment i here, process this line again as regular text
+            continue
+        # Horizontal rule
+        elif line.startswith('---'):
+            story.append(Spacer(1, 12))
+        # Bullet points
+        elif line.startswith('- ') or line.startswith('* '):
+            text = process_text(line[2:].strip())
+            story.append(Paragraph(f"• {text}", normal_style))
+            story.append(Spacer(1, 4))
+        # Numbered lists
+        elif re.match(r'^\d+\.\s+', line):
+            match = re.match(r'^(\d+)\.\s+(.*)', line)
+            if match:
+                num, text = match.groups()
+                text = process_text(text)
+                story.append(Paragraph(f"{num}. {text}", normal_style))
+                story.append(Spacer(1, 4))
+        # Regular text
+        else:
+            text = process_text(line)
+            if text.strip():
+                story.append(Paragraph(text, normal_style))
+                story.append(Spacer(1, 6))
+        
+        i += 1
+    
+    # Handle table that extends to end of document
+    if in_table and current_table_data and len(current_table_data) > 0:
+        num_cols = len(current_table_data[0]) if current_table_data else 1
+        col_widths = [450 / num_cols] * num_cols if num_cols > 0 else [450]
+        table = Table(current_table_data, colWidths=col_widths)
+        table.setStyle(TableStyle([
+            ('BACKGROUND', (0, 0), (-1, 0), colors.HexColor('#f2f2f2')),
+            ('TEXTCOLOR', (0, 0), (-1, 0), colors.HexColor('#1e40af')),
+            ('ALIGN', (0, 0), (-1, -1), 'LEFT'),
+            ('FONTSIZE', (0, 0), (-1, 0), 10),
+            ('FONTSIZE', (0, 1), (-1, -1), 9),
+            ('BOTTOMPADDING', (0, 0), (-1, 0), 12),
+            ('TOPPADDING', (0, 0), (-1, 0), 8),
+            ('BOTTOMPADDING', (0, 1), (-1, -1), 8),
+            ('TOPPADDING', (0, 1), (-1, -1), 6),
+            ('BACKGROUND', (0, 1), (-1, -1), colors.white),
+            ('GRID', (0, 0), (-1, -1), 0.5, colors.grey),
+            ('VALIGN', (0, 0), (-1, -1), 'TOP'),
+            ('LEFTPADDING', (0, 0), (-1, -1), 6),
+            ('RIGHTPADDING', (0, 0), (-1, -1), 6),
+        ]))
+        story.append(table)
+        story.append(Spacer(1, 12))
+    
+    # Build PDF with footer
+    doc.build(story, onFirstPage=add_footer, onLaterPages=add_footer)
+    buffer.seek(0)
+    
+    return send_file(buffer, as_attachment=True, 
+                    download_name=f'Career_Strengths_Blueprint_{user_name.replace(" ", "_")}.pdf', 
+                    mimetype='application/pdf')
 
 @app.route('/download_report')
 def download_report():

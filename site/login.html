@@ -305,21 +305,12 @@
     .then(async (result) => {
       if (result) {
         const user = result.user;
-        const idToken = await user.getIdToken();
+        const authResult = await sendTokenWithRetry(user, user.displayName || user.email.split('@')[0]);
         
-        const response = await fetch("/firebase-login", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ 
-            token: idToken,
-            name: user.displayName || user.email.split('@')[0]
-          })
-        });
-
-        if (response.ok) {
+        if (authResult.success) {
           window.location.href = nextUrl;
         } else {
-          throw new Error('Server authentication failed');
+          throw new Error(authResult.error || 'Server authentication failed');
         }
       }
     })
@@ -372,6 +363,60 @@
     }
   }
 
+  // Helper function to send token with retry for clock skew
+  async function sendTokenWithRetry(user, name = null, maxRetries = 3) {
+    // Add a small initial delay to account for any clock differences
+    await new Promise(resolve => setTimeout(resolve, 500));
+    
+    for (let attempt = 0; attempt < maxRetries; attempt++) {
+      try {
+        // Wait progressively longer before getting fresh token to allow clock sync
+        if (attempt > 0) {
+          const delay = Math.min(2000 * attempt, 5000); // Up to 5 seconds
+          console.log(`Waiting ${delay}ms before retry ${attempt + 1}/${maxRetries}...`);
+          await new Promise(resolve => setTimeout(resolve, delay));
+        }
+        
+        // Force refresh token to get a new one with current timestamp
+        const idToken = await user.getIdToken(true);
+        
+        const response = await fetch("/firebase-login", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ 
+            token: idToken,
+            name: name || user.displayName || user.email.split('@')[0]
+          })
+        });
+
+        if (response.ok) {
+          return { success: true };
+        } else {
+          const data = await response.json();
+          const errorMsg = data.error || data.message || 'Server authentication failed';
+          
+          // Check if it's a clock skew error and we can retry
+          if ((errorMsg === 'CLOCK_SKEW' || 
+               errorMsg.toLowerCase().includes('too early') || 
+               errorMsg.toLowerCase().includes('clock')) && attempt < maxRetries - 1) {
+            console.log(`Clock skew detected, will retry with fresh token... (attempt ${attempt + 1}/${maxRetries})`);
+            continue;
+          }
+          
+          return { success: false, error: data.message || errorMsg };
+        }
+      } catch (error) {
+        if (attempt < maxRetries - 1) {
+          const delay = Math.min(2000 * (attempt + 1), 5000);
+          await new Promise(resolve => setTimeout(resolve, delay));
+          continue;
+        }
+        return { success: false, error: error.message };
+      }
+    }
+    return { success: false, error: 'Authentication failed after retries. Please check your system clock and try again.' };
+  }
+
   // Google Sign-In with fallback to redirect
   googleBtn.addEventListener('click', async (e) => {
     e.preventDefault();
@@ -385,22 +430,13 @@
     try {
       const result = await signInWithPopup(auth, provider);
       const user = result.user;
-      const idToken = await user.getIdToken();
       
-      const response = await fetch("/firebase-login", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ 
-          token: idToken,
-          name: user.displayName || user.email.split('@')[0]
-        })
-      });
-
-      if (response.ok) {
+      const authResult = await sendTokenWithRetry(user, user.displayName || user.email.split('@')[0]);
+      
+      if (authResult.success) {
         window.location.href = nextUrl;
       } else {
-        const data = await response.json();
-        throw new Error(data.error || 'Server authentication failed');
+        throw new Error(authResult.error);
       }
     } catch (error) {
       setLoading(googleBtn, false);
@@ -430,19 +466,13 @@
     try {
       const userCredential = await signInWithEmailAndPassword(auth, email, password);
       const user = userCredential.user;
-      const idToken = await user.getIdToken();
       
-      const response = await fetch("/firebase-login", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ token: idToken })
-      });
-
-      if (response.ok) {
+      const authResult = await sendTokenWithRetry(user);
+      
+      if (authResult.success) {
         window.location.href = nextUrl;
       } else {
-        const data = await response.json();
-        throw new Error(data.error || 'Server authentication failed');
+        throw new Error(authResult.error || 'Server authentication failed');
       }
     } catch (error) {
       setLoading(submitBtn, false);
